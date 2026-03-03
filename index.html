@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 Control de Servicios del Hogar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f1923;
+            --bg-card: #1a2733;
+            --bg-card-hover: #1e2f3d;
+            --bg-input: #0d1520;
+            --accent-electric: #00d4ff;
+            --accent-water: #4fc3f7;
+            --accent-cable: #ff8a65;
+            --accent-internet: #ab47bc;
+            --accent-green: #66bb6a;
+            --accent-yellow: #ffd54f;
+            --accent-red: #ef5350;
+            --text-primary: #e8f0f8;
+            --text-secondary: #8da4b8;
+            --text-muted: #5a7a92;
+            --border: #2a3f52;
+            --shadow: 0 8px 32px rgba(0,0,0,0.3);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, #0a1828 0%, #1a3a5c 50%, #0a1828 100%);
+            border-bottom: 2px solid var(--accent-electric);
+            padding: 20px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 26px;
+            color: var(--accent-electric);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .header h1 span { font-size: 30px; }
+
+        .header-status {
+            font-size: 14px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected { background: var(--accent-green); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ===== SETUP PANEL ===== */
+        .setup-panel {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .setup-card {
+            background: var(--bg-card);
+            border: 2px dashed var(--accent-electric);
+            border-radius: var(--radius);
+            padding: 32px;
+            text-align: center;
+        }
+
+        .setup-card h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            color: var(--accent-electric);
+            margin-bottom: 12px;
+        }
+
+        .setup-card p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            margin-bottom: 24px;
+        }
+
+        .setup-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 18px;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-input);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .setup-input:focus { border-color: var(--accent-electric); }
+
+        .setup-input::placeholder { color: var(--text-muted); }
+
+        .setup-steps {
+            text-align: left;
+            background: var(--bg-input);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .setup-steps h3 {
+            color: var(--accent-yellow);
+            font-size: 19px;
+            margin-bottom: 16px;
+        }
+
+        .setup-steps ol {
+            padding-left: 24px;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .setup-steps li { margin-bottom: 10px; }
+        .setup-steps code {
+            background: #1a2733;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: var(--accent-electric);
+            font-size: 15px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tab-btn:hover { background: var(--bg-card-hover); }
+
+        .tab-btn.active {
+            background: var(--accent-electric);
+            color: #0a1828;
+            border-color: var(--accent-electric);
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+        }
+
+        .tab-btn .tab-icon { font-size: 22px; display: block; margin-bottom: 2px; }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeUp 0.4s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon { font-size: 28px; }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-group { margin-bottom: 18px; }
+
+        .form-label {
+            display: block;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 20px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            background: var(--bg-input);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus, .form-select:focus { border-color: var(--accent-electric); }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%238da4b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 44px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-input[type="number"] { font-size: 24px; font-weight: 800; }
+
+        /* ===== CHECKBOX TOGGLE ===== */
+        .service-toggles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .toggle-item:hover { border-color: var(--text-muted); }
+        .toggle-item.active-luz { border-color: var(--accent-electric); background: rgba(0, 212, 255, 0.08); }
+        .toggle-item.active-agua { border-color: var(--accent-water); background: rgba(79, 195, 247, 0.08); }
+        .toggle-item.active-cable { border-color: var(--accent-cable); background: rgba(255, 138, 101, 0.08); }
+        .toggle-item.active-internet { border-color: var(--accent-internet); background: rgba(171, 71, 188, 0.08); }
+
+        .toggle-check {
+            width: 28px; height: 28px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .toggle-item.active-luz .toggle-check { background: var(--accent-electric); border-color: var(--accent-electric); }
+        .toggle-item.active-agua .toggle-check { background: var(--accent-water); border-color: var(--accent-water); }
+        .toggle-item.active-cable .toggle-check { background: var(--accent-cable); border-color: var(--accent-cable); }
+        .toggle-item.active-internet .toggle-check { background: var(--accent-internet); border-color: var(--accent-internet); }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 28px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-electric), #0098b8);
+            color: #0a1828;
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--accent-electric); }
+
+        .btn-danger {
+            background: rgba(239, 83, 80, 0.15);
+            color: var(--accent-red);
+            border: 2px solid var(--accent-red);
+        }
+
+        .btn-small {
+            padding: 10px 18px;
+            font-size: 16px;
+            width: auto;
+        }
+
+        /* ===== RESULT DISPLAY ===== */
+        .result-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 152, 184, 0.05));
+            border: 2px solid var(--accent-electric);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .result-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .result-amount {
+            font-family: 'Fredoka One', cursive;
+            font-size: 48px;
+            color: var(--accent-electric);
+            text-shadow: 0 0 24px rgba(0, 212, 255, 0.4);
+            margin: 8px 0;
+        }
+
+        .result-detail {
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        /* ===== TABLE ===== */
+        .history-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .history-table th {
+            text-align: left;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            font-weight: 700;
+        }
+
+        .history-table td {
+            padding: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            background: var(--bg-input);
+        }
+
+        .history-table tr td:first-child { border-radius: 10px 0 0 10px; }
+        .history-table tr td:last-child { border-radius: 0 10px 10px 0; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .badge-luz { background: rgba(0, 212, 255, 0.15); color: var(--accent-electric); }
+        .badge-agua { background: rgba(79, 195, 247, 0.15); color: var(--accent-water); }
+        .badge-cable { background: rgba(255, 138, 101, 0.15); color: var(--accent-cable); }
+        .badge-internet { background: rgba(171, 71, 188, 0.15); color: var(--accent-internet); }
+
+        .amount-cell {
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+        }
+
+        /* ===== SUMMARY CARDS ===== */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            background: var(--bg-input);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .summary-item .s-icon { font-size: 32px; margin-bottom: 6px; }
+        .summary-item .s-label { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .summary-item .s-value { font-family: 'Fredoka One', cursive; font-size: 28px; margin-top: 4px; }
+
+        .summary-item.luz .s-value { color: var(--accent-electric); }
+        .summary-item.agua .s-value { color: var(--accent-water); }
+        .summary-item.cable .s-value { color: var(--accent-cable); }
+        .summary-item.internet .s-value { color: var(--accent-internet); }
+
+        /* ===== USER CARDS ===== */
+        .user-card {
+            background: var(--bg-input);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 14px; }
+
+        .user-avatar {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            color: #0a1828;
+        }
+
+        .user-name { font-size: 20px; font-weight: 800; }
+        .user-services { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+
+        .user-actions { display: flex; gap: 8px; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .empty-icon { font-size: 56px; margin-bottom: 16px; }
+        .empty-state p { font-size: 18px; }
+
+        /* ===== LOADING ===== */
+        .loading-spinner {
+            display: inline-block;
+            width: 24px; height: 24px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent-electric);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            z-index: 300;
+            animation: toastIn 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .toast-success { background: var(--accent-green); color: #0a1828; }
+        .toast-error { background: var(--accent-red); color: white; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            body { font-size: 16px; }
+            .header h1 { font-size: 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .service-toggles { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .result-amount { font-size: 36px; }
+            .card { padding: 20px; }
+            .tab-btn { min-width: 0; font-size: 15px; padding: 12px 8px; }
+            .history-table th, .history-table td { padding: 10px 8px; font-size: 15px; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .hidden { display: none !important; }
+
+        .month-filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .month-filter label {
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 17px;
+        }
+
+        .total-row td {
+            background: rgba(0, 212, 255, 0.08) !important;
+            font-weight: 800;
+            border-top: 2px solid var(--accent-electric);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+    <div class="header-inner">
+        <h1><span>⚡</span> Control de Servicios</h1>
+        <div class="header-status">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Sin conectar</span>
+        </div>
+    </div>
+</header>
+
+<!-- ===== SETUP (shown when no Google Sheet URL) ===== -->
+<div id="setupView" class="setup-panel">
+    <div class="setup-card">
+        <h2>🔗 Conectar Google Sheets</h2>
+        <p>Primero necesitas crear una hoja de Google para guardar los datos.</p>
+
+        <div class="setup-steps">
+            <h3>📋 Pasos para configurar:</h3>
+            <ol>
+                <li>Abre <a href="https://sheets.google.com" target="_blank" style="color: var(--accent-electric);">Google Sheets</a> y crea una hoja nueva</li>
+                <li>Ve a <strong>Extensiones → Apps Script</strong></li>
+                <li>Borra todo el código y pega el código que aparece abajo</li>
+                <li>Haz clic en <strong>Implementar → Nueva implementación</strong></li>
+                <li>Selecciona <strong>"Aplicación web"</strong></li>
+                <li>En "Quién tiene acceso" elige <strong>"Cualquier persona"</strong></li>
+                <li>Copia la <strong>URL</strong> y pégala aquí abajo</li>
+            </ol>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <button class="btn btn-secondary" onclick="toggleScript()" id="toggleScriptBtn">
+                📄 Ver código de Apps Script
+            </button>
+            <div id="scriptCode" class="hidden" style="margin-top: 16px;">
+                <textarea class="setup-input" style="height: 300px; font-size: 13px; font-family: monospace; resize: vertical;" readonly id="appsScriptCode"></textarea>
+                <button class="btn btn-secondary btn-small" style="margin-top: 10px;" onclick="copyScript()">📋 Copiar código</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="setup-input" id="sheetUrl" placeholder="Pega aquí la URL de tu Apps Script...">
+        </div>
+
+        <button class="btn btn-primary" onclick="connectSheet()">
+            🔗 Conectar
+        </button>
+    </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="appView" class="container hidden">
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('registrar')">
+            <span class="tab-icon">📝</span> Registrar
+        </button>
+        <button class="tab-btn" onclick="switchTab('historial')">
+            <span class="tab-icon">📊</span> Historial
+        </button>
+        <button class="tab-btn" onclick="switchTab('usuarios')">
+            <span class="tab-icon">👥</span> Usuarios
+        </button>
+    </div>
+
+    <!-- TAB: REGISTRAR -->
+    <div id="tab-registrar">
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📝</span> Registrar Consumo
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">👤 Usuario</label>
+                <select class="form-select" id="regUsuario">
+                    <option value="">Selecciona usuario...</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">📅 Mes</label>
+                    <select class="form-select" id="regMes">
+                        <option value="Enero">Enero</option>
+                        <option value="Febrero">Febrero</option>
+                        <option value="Marzo">Marzo</option>
+                        <option value="Abril">Abril</option>
+                        <option value="Mayo">Mayo</option>
+                        <option value="Junio">Junio</option>
+                        <option value="Julio">Julio</option>
+                        <option value="Agosto">Agosto</option>
+                        <option value="Septiembre">Septiembre</option>
+                        <option value="Octubre">Octubre</option>
+                        <option value="Noviembre">Noviembre</option>
+                        <option value="Diciembre">Diciembre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">📆 Año</label>
+                    <select class="form-select" id="regAnio"></select>
+                </div>
+            </div>
+
+            <div class="card-title" style="margin-top: 10px; font-size: 18px;">
+                <span class="icon">⚡</span> Servicios a registrar
+            </div>
+
+            <div id="serviciosUsuario">
+                <div class="form-group">
+                    <label class="form-label">⚡ Kilowatts consumidos (kW)</label>
+                    <input type="number" class="form-input" id="regKw" placeholder="Ej: 150" min="0" step="0.01" oninput="calcularLuz()">
+                </div>
+
+                <div class="result-box" id="resultLuz" style="display:none;">
+                    <div class="result-label">Monto de luz a pagar</div>
+                    <div class="result-amount" id="montoLuz">S/ 0.00</div>
+                    <div class="result-detail" id="detalleLuz"></div>
+                </div>
+
+                <div class="form-group hidden" id="grupoAgua">
+                    <label class="form-label">💧 Monto de Agua (S/)</label>
+                    <input type="number" class="form-input" id="regAgua" placeholder="Ej: 35.50" min="0" step="0.01">
+                </div>
+
+                <div class="form-group hidden" id="grupoCable">
+                    <label class="form-label">📺 Monto de Cable (S/)</label>
+                    <input type="number" class="form-input" id="regCable" placeholder="Ej: 80.00" min="0" step="0.01">
+                </div>
+
+                <div class="form-group hidden" id="grupoInternet">
+                    <label class="form-label">🌐 Monto de Internet (S/)</label>
+                    <input type="number" class="form-input" id="regInternet" placeholder="Ej: 60.00" min="0" step="0.01">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="registrarConsumo()" id="btnRegistrar" style="margin-top: 16px;">
+                ✅ Registrar Consumo
+            </button>
+        </div>
+    </div>
+
+    <!-- TAB: HISTORIAL -->
+    <div id="tab-historial" class="hidden">
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📊</span> Resumen del Mes
+            </div>
+
+            <div class="month-filter">
+                <label>📅 Filtrar:</label>
+                <select class="form-select" id="filtroMes" style="width: auto; font-size: 17px;" onchange="filtrarHistorial()">
+                    <option value="">Todos los meses</option>
+                </select>
+                <select class="form-select" id="filtroAnio" style="width: auto; font-size: 17px;" onchange="filtrarHistorial()"></select>
+                <select class="form-select" id="filtroUsuarioHist" style="width: auto; font-size: 17px;" onchange="filtrarHistorial()">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="summary-grid" id="summaryGrid">
+                <div class="summary-item luz">
+                    <div class="s-icon">⚡</div>
+                    <div class="s-label">Luz</div>
+                    <div class="s-value" id="sumLuz">S/ 0</div>
+                </div>
+                <div class="summary-item agua">
+                    <div class="s-icon">💧</div>
+                    <div class="s-label">Agua</div>
+                    <div class="s-value" id="sumAgua">S/ 0</div>
+                </div>
+                <div class="summary-item cable">
+                    <div class="s-icon">📺</div>
+                    <div class="s-label">Cable</div>
+                    <div class="s-value" id="sumCable">S/ 0</div>
+                </div>
+                <div class="summary-item internet">
+                    <div class="s-icon">🌐</div>
+                    <div class="s-label">Internet</div>
+                    <div class="s-value" id="sumInternet">S/ 0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📋</span> Historial Detallado
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="history-table" id="historialTable">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Mes</th>
+                            <th>Servicio</th>
+                            <th>Detalle</th>
+                            <th>Monto</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="historialBody"></tbody>
+                </table>
+            </div>
+
+            <div class="empty-state hidden" id="emptyHistorial">
+                <div class="empty-icon">📭</div>
+                <p>No hay registros aún.<br>¡Registra tu primer consumo!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: USUARIOS -->
+    <div id="tab-usuarios" class="hidden">
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">👥</span> Gestión de Usuarios
+            </div>
+
+            <div id="listaUsuarios"></div>
+
+            <button class="btn btn-primary" onclick="mostrarModalUsuario()" style="margin-top: 16px;">
+                ➕ Agregar Usuario
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-title" style="color: var(--accent-yellow);">
+                <span class="icon">⚙️</span> Configuración
+            </div>
+            <div class="form-group">
+                <label class="form-label">💰 Precio por kW (S/)</label>
+                <input type="number" class="form-input" id="precioKw" value="0.80" step="0.01" min="0" onchange="guardarConfig()">
+            </div>
+            <p style="color: var(--text-muted); font-size: 15px; margin-top: 8px;">
+                Este valor se multiplica por los kW de cada usuario para calcular el monto de luz.
+            </p>
+
+            <button class="btn btn-danger btn-small" onclick="desconectar()" style="margin-top: 20px; width: auto;">
+                🔌 Desconectar Google Sheet
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: AGREGAR/EDITAR USUARIO ===== -->
+<div class="modal-overlay hidden" id="modalUsuario">
+    <div class="modal">
+        <h2 id="modalUsuarioTitle">➕ Agregar Usuario</h2>
+        <div class="form-group">
+            <label class="form-label">👤 Nombre del usuario</label>
+            <input type="text" class="form-input" id="inputNombreUsuario" placeholder="Ej: Jonathan">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" style="margin-bottom: 12px;">🏠 Servicios que paga</label>
+            <div class="service-toggles">
+                <div class="toggle-item active-luz" onclick="toggleService(this, 'luz')" data-service="luz" data-active="true">
+                    <div class="toggle-check">✓</div>
+                    <span>⚡ Luz</span>
+                </div>
+                <div class="toggle-item" onclick="toggleService(this, 'agua')" data-service="agua" data-active="false">
+                    <div class="toggle-check"></div>
+                    <span>💧 Agua</span>
+                </div>
+                <div class="toggle-item" onclick="toggleService(this, 'cable')" data-service="cable" data-active="false">
+                    <div class="toggle-check"></div>
+                    <span>📺 Cable</span>
+                </div>
+                <div class="toggle-item" onclick="toggleService(this, 'internet')" data-service="internet" data-active="false">
+                    <div class="toggle-check"></div>
+                    <span>🌐 Internet</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button class="btn btn-secondary" onclick="cerrarModalUsuario()">Cancelar</button>
+            <button class="btn btn-primary" onclick="guardarUsuario()">💾 Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: EDITAR REGISTRO ===== -->
+<div class="modal-overlay hidden" id="modalEditar">
+    <div class="modal">
+        <h2>✏️ Editar Registro</h2>
+        <div class="form-group" id="editFields"></div>
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+            <button class="btn btn-primary" onclick="guardarEdicion()">💾 Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== GOOGLE APPS SCRIPT CODE =====
+const APPS_SCRIPT_CODE = `// ===== CONTROL DE SERVICIOS DEL HOGAR =====
+// Pega este código en Apps Script de tu Google Sheet
+
+function doGet(e) {
+  return handleRequest(e);
+}
+
+function doPost(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
+  var params = e.parameter;
+  var action = params.action;
+  
+  var headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST",
+    "Access-Control-Allow-Headers": "Content-Type"
+  };
+
+  var result;
+
+  try {
+    switch(action) {
+      case 'getUsuarios':
+        result = getUsuarios();
+        break;
+      case 'addUsuario':
+        result = addUsuario(params.nombre, params.servicios);
+        break;
+      case 'deleteUsuario':
+        result = deleteUsuario(params.nombre);
+        break;
+      case 'addConsumo':
+        result = addConsumo(params.usuario, params.mes, params.anio, params.servicio, params.detalle, params.monto);
+        break;
+      case 'getHistorial':
+        result = getHistorial();
+        break;
+      case 'deleteRegistro':
+        result = deleteRegistro(parseInt(params.fila));
+        break;
+      case 'editRegistro':
+        result = editRegistro(parseInt(params.fila), params.monto, params.detalle);
+        break;
+      case 'getConfig':
+        result = getConfig();
+        break;
+      case 'setConfig':
+        result = setConfig(params.precioKw);
+        break;
+      case 'ping':
+        result = { success: true, message: 'Conectado' };
+        break;
+      default:
+        result = { success: false, message: 'Acción no válida' };
+    }
+  } catch(err) {
+    result = { success: false, message: err.toString() };
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function getOrCreateSheet(name) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    if (name === 'Usuarios') {
+      sheet.appendRow(['Nombre', 'Servicios', 'FechaRegistro']);
+    } else if (name === 'Historial') {
+      sheet.appendRow(['Usuario', 'Mes', 'Año', 'Servicio', 'Detalle', 'Monto', 'FechaRegistro']);
+    } else if (name === 'Config') {
+      sheet.appendRow(['Clave', 'Valor']);
+      sheet.appendRow(['precioKw', '0.80']);
+    }
+  }
+  return sheet;
+}
+
+function getUsuarios() {
+  var sheet = getOrCreateSheet('Usuarios');
+  var data = sheet.getDataRange().getValues();
+  var usuarios = [];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0]) {
+      usuarios.push({
+        nombre: data[i][0],
+        servicios: data[i][1] ? data[i][1].toString() : 'luz',
+        fila: i + 1
+      });
+    }
+  }
+  return { success: true, usuarios: usuarios };
+}
+
+function addUsuario(nombre, servicios) {
+  var sheet = getOrCreateSheet('Usuarios');
+  sheet.appendRow([nombre, servicios, new Date().toISOString()]);
+  return { success: true, message: 'Usuario agregado' };
+}
+
+function deleteUsuario(nombre) {
+  var sheet = getOrCreateSheet('Usuarios');
+  var data = sheet.getDataRange().getValues();
+  for (var i = data.length - 1; i >= 1; i--) {
+    if (data[i][0] === nombre) {
+      sheet.deleteRow(i + 1);
+    }
+  }
+  return { success: true, message: 'Usuario eliminado' };
+}
+
+function addConsumo(usuario, mes, anio, servicio, detalle, monto) {
+  var sheet = getOrCreateSheet('Historial');
+  sheet.appendRow([usuario, mes, anio, servicio, detalle, parseFloat(monto), new Date().toISOString()]);
+  return { success: true, message: 'Consumo registrado' };
+}
+
+function getHistorial() {
+  var sheet = getOrCreateSheet('Historial');
+  var data = sheet.getDataRange().getValues();
+  var registros = [];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0]) {
+      registros.push({
+        usuario: data[i][0],
+        mes: data[i][1],
+        anio: data[i][2],
+        servicio: data[i][3],
+        detalle: data[i][4],
+        monto: parseFloat(data[i][5]) || 0,
+        fila: i + 1
+      });
+    }
+  }
+  return { success: true, registros: registros };
+}
+
+function deleteRegistro(fila) {
+  var sheet = getOrCreateSheet('Historial');
+  sheet.deleteRow(fila);
+  return { success: true, message: 'Registro eliminado' };
+}
+
+function editRegistro(fila, monto, detalle) {
+  var sheet = getOrCreateSheet('Historial');
+  if (detalle) sheet.getRange(fila, 5).setValue(detalle);
+  sheet.getRange(fila, 6).setValue(parseFloat(monto));
+  return { success: true, message: 'Registro actualizado' };
+}
+
+function getConfig() {
+  var sheet = getOrCreateSheet('Config');
+  var data = sheet.getDataRange().getValues();
+  var config = {};
+  for (var i = 1; i < data.length; i++) {
+    config[data[i][0]] = data[i][1];
+  }
+  return { success: true, config: config };
+}
+
+function setConfig(precioKw) {
+  var sheet = getOrCreateSheet('Config');
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] === 'precioKw') {
+      sheet.getRange(i + 1, 2).setValue(parseFloat(precioKw));
+      return { success: true, message: 'Configuración guardada' };
+    }
+  }
+  sheet.appendRow(['precioKw', parseFloat(precioKw)]);
+  return { success: true, message: 'Configuración guardada' };
+}`;
+
+    // ===== STATE =====
+    let APP_URL = localStorage.getItem('servicios_app_url') || '';
+    let usuarios = [];
+    let historial = [];
+    let precioKw = 0.80;
+    let editingUsuario = null;
+    let editingRegistro = null;
+
+    // ===== INIT =====
+    document.getElementById('appsScriptCode').value = APPS_SCRIPT_CODE;
+
+    // Set current month & year
+    const now = new Date();
+    const mesActual = now.getMonth();
+    document.getElementById('regMes').selectedIndex = mesActual;
+
+    const anioSelect = document.getElementById('regAnio');
+    const filtroAnioSelect = document.getElementById('filtroAnio');
+    for (let y = now.getFullYear(); y >= now.getFullYear() - 3; y--) {
+        anioSelect.add(new Option(y, y));
+        filtroAnioSelect.add(new Option(y, y));
+    }
+
+    // Fill month filter
+    const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const filtroMesSelect = document.getElementById('filtroMes');
+    meses.forEach(m => filtroMesSelect.add(new Option(m, m)));
+    filtroMesSelect.value = meses[mesActual];
+
+    if (APP_URL) {
+        initApp();
+    }
+
+    // ===== SETUP FUNCTIONS =====
+    function toggleScript() {
+        const el = document.getElementById('scriptCode');
+        const btn = document.getElementById('toggleScriptBtn');
+        el.classList.toggle('hidden');
+        btn.textContent = el.classList.contains('hidden') ? '📄 Ver código de Apps Script' : '📄 Ocultar código';
+    }
+
+    function copyScript() {
+        navigator.clipboard.writeText(APPS_SCRIPT_CODE).then(() => showToast('✅ Código copiado'));
+    }
+
+    async function connectSheet() {
+        const url = document.getElementById('sheetUrl').value.trim();
+        if (!url) return showToast('❌ Pega la URL de tu Apps Script', 'error');
+
+        try {
+            const res = await callAPI(url, { action: 'ping' });
+            if (res.success) {
+                APP_URL = url;
+                localStorage.setItem('servicios_app_url', url);
+                showToast('✅ ¡Conectado correctamente!');
+                initApp();
+            } else {
+                showToast('❌ No se pudo conectar', 'error');
+            }
+        } catch (e) {
+            showToast('❌ Error de conexión. Verifica la URL', 'error');
+        }
+    }
+
+    function desconectar() {
+        if (confirm('¿Seguro que quieres desconectar? No se borran los datos de Google Sheets.')) {
+            localStorage.removeItem('servicios_app_url');
+            APP_URL = '';
+            document.getElementById('setupView').classList.remove('hidden');
+            document.getElementById('appView').classList.add('hidden');
+            document.getElementById('statusDot').classList.remove('connected');
+            document.getElementById('statusText').textContent = 'Sin conectar';
+        }
+    }
+
+    // ===== INIT APP =====
+    async function initApp() {
+        document.getElementById('setupView').classList.add('hidden');
+        document.getElementById('appView').classList.remove('hidden');
+        document.getElementById('statusDot').classList.add('connected');
+        document.getElementById('statusText').textContent = 'Conectado';
+
+        await cargarConfig();
+        await cargarUsuarios();
+        await cargarHistorial();
+    }
+
+    // ===== API CALLS =====
+    async function callAPI(url, params) {
+        const queryStr = new URLSearchParams(params).toString();
+        const fullUrl = url || APP_URL;
+        const res = await fetch(`${fullUrl}?${queryStr}`);
+        return await res.json();
+    }
+
+    // ===== CONFIG =====
+    async function cargarConfig() {
+        try {
+            const res = await callAPI(null, { action: 'getConfig' });
+            if (res.success && res.config) {
+                precioKw = parseFloat(res.config.precioKw) || 0.80;
+                document.getElementById('precioKw').value = precioKw;
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    async function guardarConfig() {
+        precioKw = parseFloat(document.getElementById('precioKw').value) || 0.80;
+        try {
+            await callAPI(null, { action: 'setConfig', precioKw: precioKw });
+            showToast('✅ Precio actualizado');
+        } catch (e) {
+            showToast('❌ Error al guardar', 'error');
+        }
+    }
+
+    // ===== USUARIOS =====
+    async function cargarUsuarios() {
+        try {
+            const res = await callAPI(null, { action: 'getUsuarios' });
+            if (res.success) {
+                usuarios = res.usuarios;
+                renderUsuarios();
+                llenarSelectUsuarios();
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    function renderUsuarios() {
+        const container = document.getElementById('listaUsuarios');
+        if (usuarios.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">👤</div>
+                    <p>No hay usuarios registrados.<br>Agrega al primer usuario.</p>
+                </div>`;
+            return;
+        }
+
+        const avatarColors = ['var(--accent-electric)', 'var(--accent-water)', 'var(--accent-cable)', 'var(--accent-internet)', 'var(--accent-green)', 'var(--accent-yellow)'];
+
+        container.innerHTML = usuarios.map((u, i) => {
+            const servicios = u.servicios.split(',').map(s => {
+                const icons = { luz: '⚡', agua: '💧', cable: '📺', internet: '🌐' };
+                return icons[s.trim()] || '';
+            }).join(' ');
+
+            return `
+            <div class="user-card">
+                <div class="user-info">
+                    <div class="user-avatar" style="background: ${avatarColors[i % avatarColors.length]}">
+                        ${u.nombre.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                        <div class="user-name">${u.nombre}</div>
+                        <div class="user-services">${servicios} ${u.servicios.replace(/,/g, ', ')}</div>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn btn-danger btn-small" onclick="eliminarUsuario('${u.nombre}')">🗑️</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function llenarSelectUsuarios() {
+        const regSelect = document.getElementById('regUsuario');
+        const filtroSelect = document.getElementById('filtroUsuarioHist');
+
+        regSelect.innerHTML = '<option value="">Selecciona usuario...</option>';
+        filtroSelect.innerHTML = '<option value="">Todos</option>';
+
+        usuarios.forEach(u => {
+            regSelect.add(new Option(u.nombre, u.nombre));
+            filtroSelect.add(new Option(u.nombre, u.nombre));
+        });
+
+        regSelect.onchange = () => mostrarServiciosUsuario();
+    }
+
+    function mostrarServiciosUsuario() {
+        const nombre = document.getElementById('regUsuario').value;
+        const user = usuarios.find(u => u.nombre === nombre);
+
+        document.getElementById('grupoAgua').classList.add('hidden');
+        document.getElementById('grupoCable').classList.add('hidden');
+        document.getElementById('grupoInternet').classList.add('hidden');
+
+        if (user) {
+            const servs = user.servicios.split(',').map(s => s.trim());
+            if (servs.includes('agua')) document.getElementById('grupoAgua').classList.remove('hidden');
+            if (servs.includes('cable')) document.getElementById('grupoCable').classList.remove('hidden');
+            if (servs.includes('internet')) document.getElementById('grupoInternet').classList.remove('hidden');
+        }
+    }
+
+    // ===== MODAL USUARIO =====
+    function mostrarModalUsuario() {
+        editingUsuario = null;
+        document.getElementById('modalUsuarioTitle').textContent = '➕ Agregar Usuario';
+        document.getElementById('inputNombreUsuario').value = '';
+
+        // Reset toggles
+        document.querySelectorAll('#modalUsuario .toggle-item').forEach(el => {
+            const s = el.dataset.service;
+            el.dataset.active = s === 'luz' ? 'true' : 'false';
+            el.className = 'toggle-item' + (s === 'luz' ? ' active-' + s : '');
+            el.querySelector('.toggle-check').textContent = s === 'luz' ? '✓' : '';
+        });
+
+        document.getElementById('modalUsuario').classList.remove('hidden');
+    }
+
+    function cerrarModalUsuario() {
+        document.getElementById('modalUsuario').classList.add('hidden');
+    }
+
+    function toggleService(el, service) {
+        if (service === 'luz') return; // Luz siempre activo
+        const active = el.dataset.active === 'true';
+        el.dataset.active = active ? 'false' : 'true';
+        el.className = 'toggle-item' + (!active ? ` active-${service}` : '');
+        el.querySelector('.toggle-check').textContent = !active ? '✓' : '';
+    }
+
+    async function guardarUsuario() {
+        const nombre = document.getElementById('inputNombreUsuario').value.trim();
+        if (!nombre) return showToast('❌ Escribe el nombre', 'error');
+
+        const servicios = [];
+        document.querySelectorAll('#modalUsuario .toggle-item').forEach(el => {
+            if (el.dataset.active === 'true') servicios.push(el.dataset.service);
+        });
+
+        try {
+            await callAPI(null, { action: 'addUsuario', nombre: nombre, servicios: servicios.join(',') });
+            showToast('✅ Usuario agregado');
+            cerrarModalUsuario();
+            await cargarUsuarios();
+        } catch (e) {
+            showToast('❌ Error al guardar', 'error');
+        }
+    }
+
+    async function eliminarUsuario(nombre) {
+        if (!confirm(`¿Eliminar a "${nombre}"? Sus registros de historial se mantienen.`)) return;
+        try {
+            await callAPI(null, { action: 'deleteUsuario', nombre: nombre });
+            showToast('✅ Usuario eliminado');
+            await cargarUsuarios();
+        } catch (e) {
+            showToast('❌ Error al eliminar', 'error');
+        }
+    }
+
+    // ===== REGISTRAR CONSUMO =====
+    function calcularLuz() {
+        const kw = parseFloat(document.getElementById('regKw').value) || 0;
+        const monto = kw * precioKw;
+        const resultBox = document.getElementById('resultLuz');
+
+        if (kw > 0) {
+            resultBox.style.display = 'block';
+            document.getElementById('montoLuz').textContent = `S/ ${monto.toFixed(2)}`;
+            document.getElementById('detalleLuz').textContent = `${kw} kW × S/ ${precioKw.toFixed(2)} = S/ ${monto.toFixed(2)}`;
+        } else {
+            resultBox.style.display = 'none';
+        }
+    }
+
+    async function registrarConsumo() {
+        const usuario = document.getElementById('regUsuario').value;
+        const mes = document.getElementById('regMes').value;
+        const anio = document.getElementById('regAnio').value;
+        const kw = parseFloat(document.getElementById('regKw').value) || 0;
+
+        if (!usuario) return showToast('❌ Selecciona un usuario', 'error');
+        if (kw <= 0) return showToast('❌ Ingresa los kW consumidos', 'error');
+
+        const btn = document.getElementById('btnRegistrar');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loading-spinner"></span> Guardando...';
+
+        try {
+            // Registrar luz siempre
+            const montoLuz = kw * precioKw;
+            await callAPI(null, {
+                action: 'addConsumo',
+                usuario, mes, anio,
+                servicio: 'Luz',
+                detalle: `${kw} kW × S/${precioKw.toFixed(2)}`,
+                monto: montoLuz.toFixed(2)
+            });
+
+            // Registrar agua si aplica
+            const agua = parseFloat(document.getElementById('regAgua').value) || 0;
+            if (agua > 0 && !document.getElementById('grupoAgua').classList.contains('hidden')) {
+                await callAPI(null, {
+                    action: 'addConsumo',
+                    usuario, mes, anio,
+                    servicio: 'Agua',
+                    detalle: `Consumo mensual`,
+                    monto: agua.toFixed(2)
+                });
+            }
+
+            // Registrar cable si aplica
+            const cable = parseFloat(document.getElementById('regCable').value) || 0;
+            if (cable > 0 && !document.getElementById('grupoCable').classList.contains('hidden')) {
+                await callAPI(null, {
+                    action: 'addConsumo',
+                    usuario, mes, anio,
+                    servicio: 'Cable',
+                    detalle: `Suscripción mensual`,
+                    monto: cable.toFixed(2)
+                });
+            }
+
+            // Registrar internet si aplica
+            const internet = parseFloat(document.getElementById('regInternet').value) || 0;
+            if (internet > 0 && !document.getElementById('grupoInternet').classList.contains('hidden')) {
+                await callAPI(null, {
+                    action: 'addConsumo',
+                    usuario, mes, anio,
+                    servicio: 'Internet',
+                    detalle: `Suscripción mensual`,
+                    monto: internet.toFixed(2)
+                });
+            }
+
+            showToast('✅ ¡Consumo registrado!');
+
+            // Reset form
+            document.getElementById('regKw').value = '';
+            document.getElementById('regAgua').value = '';
+            document.getElementById('regCable').value = '';
+            document.getElementById('regInternet').value = '';
+            document.getElementById('resultLuz').style.display = 'none';
+
+            await cargarHistorial();
+        } catch (e) {
+            showToast('❌ Error al registrar', 'error');
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '✅ Registrar Consumo';
+    }
+
+    // ===== HISTORIAL =====
+    async function cargarHistorial() {
+        try {
+            const res = await callAPI(null, { action: 'getHistorial' });
+            if (res.success) {
+                historial = res.registros;
+                filtrarHistorial();
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    function filtrarHistorial() {
+        const mesF = document.getElementById('filtroMes').value;
+        const anioF = document.getElementById('filtroAnio').value;
+        const userF = document.getElementById('filtroUsuarioHist').value;
+
+        let filtered = historial.filter(r => {
+            if (mesF && r.mes !== mesF) return false;
+            if (anioF && r.anio.toString() !== anioF) return false;
+            if (userF && r.usuario !== userF) return false;
+            return true;
+        });
+
+        // Summary
+        let sumLuz = 0, sumAgua = 0, sumCable = 0, sumInternet = 0;
+        filtered.forEach(r => {
+            if (r.servicio === 'Luz') sumLuz += r.monto;
+            else if (r.servicio === 'Agua') sumAgua += r.monto;
+            else if (r.servicio === 'Cable') sumCable += r.monto;
+            else if (r.servicio === 'Internet') sumInternet += r.monto;
+        });
+
+        document.getElementById('sumLuz').textContent = `S/ ${sumLuz.toFixed(2)}`;
+        document.getElementById('sumAgua').textContent = `S/ ${sumAgua.toFixed(2)}`;
+        document.getElementById('sumCable').textContent = `S/ ${sumCable.toFixed(2)}`;
+        document.getElementById('sumInternet').textContent = `S/ ${sumInternet.toFixed(2)}`;
+
+        renderHistorial(filtered);
+    }
+
+    function renderHistorial(data) {
+        const body = document.getElementById('historialBody');
+        const empty = document.getElementById('emptyHistorial');
+
+        if (data.length === 0) {
+            body.innerHTML = '';
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        empty.classList.add('hidden');
+
+        const badgeClass = { 'Luz': 'badge-luz', 'Agua': 'badge-agua', 'Cable': 'badge-cable', 'Internet': 'badge-internet' };
+
+        // Sort newest first
+        data.sort((a, b) => {
+            const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            const dateA = parseInt(a.anio) * 12 + meses.indexOf(a.mes);
+            const dateB = parseInt(b.anio) * 12 + meses.indexOf(b.mes);
+            return dateB - dateA;
+        });
+
+        let totalMonto = 0;
+        data.forEach(r => totalMonto += r.monto);
+
+        body.innerHTML = data.map(r => `
+            <tr>
+                <td><strong>${r.usuario}</strong></td>
+                <td>${r.mes} ${r.anio}</td>
+                <td><span class="badge ${badgeClass[r.servicio] || ''}">${r.servicio}</span></td>
+                <td style="color: var(--text-secondary); font-size: 15px;">${r.detalle}</td>
+                <td class="amount-cell" style="color: var(--accent-green);">S/ ${r.monto.toFixed(2)}</td>
+                <td>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="btn btn-secondary btn-small" style="padding: 6px 10px; font-size: 14px;" onclick="editarRegistro(${r.fila}, '${r.servicio}', ${r.monto}, '${r.detalle.replace(/'/g, "\\'")}')">✏️</button>
+                        <button class="btn btn-danger btn-small" style="padding: 6px 10px; font-size: 14px;" onclick="eliminarRegistro(${r.fila})">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('') + `
+            <tr class="total-row">
+                <td colspan="4" style="text-align: right; font-size: 18px;">TOTAL:</td>
+                <td class="amount-cell" style="color: var(--accent-electric); font-size: 22px;">S/ ${totalMonto.toFixed(2)}</td>
+                <td></td>
+            </tr>`;
+    }
+
+    // ===== EDITAR REGISTRO =====
+    function editarRegistro(fila, servicio, monto, detalle) {
+        editingRegistro = fila;
+
+        document.getElementById('editFields').innerHTML = `
+            <div class="form-group">
+                <label class="form-label">📌 Servicio</label>
+                <input type="text" class="form-input" value="${servicio}" disabled style="opacity: 0.6;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">📝 Detalle</label>
+                <input type="text" class="form-input" id="editDetalle" value="${detalle}">
+            </div>
+            <div class="form-group">
+                <label class="form-label">💰 Monto (S/)</label>
+                <input type="number" class="form-input" id="editMonto" value="${monto}" step="0.01" min="0">
+            </div>`;
+
+        document.getElementById('modalEditar').classList.remove('hidden');
+    }
+
+    function cerrarModalEditar() {
+        document.getElementById('modalEditar').classList.add('hidden');
+    }
+
+    async function guardarEdicion() {
+        const monto = document.getElementById('editMonto').value;
+        const detalle = document.getElementById('editDetalle').value;
+
+        try {
+            await callAPI(null, { action: 'editRegistro', fila: editingRegistro, monto: monto, detalle: detalle });
+            showToast('✅ Registro actualizado');
+            cerrarModalEditar();
+            await cargarHistorial();
+        } catch (e) {
+            showToast('❌ Error al editar', 'error');
+        }
+    }
+
+    async function eliminarRegistro(fila) {
+        if (!confirm('¿Eliminar este registro?')) return;
+        try {
+            await callAPI(null, { action: 'deleteRegistro', fila: fila });
+            showToast('✅ Registro eliminado');
+            await cargarHistorial();
+        } catch (e) {
+            showToast('❌ Error al eliminar', 'error');
+        }
+    }
+
+    // ===== TABS =====
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('[id^="tab-"]').forEach(t => t.classList.add('hidden'));
+
+        event.currentTarget.classList.add('active');
+        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+        if (tabName === 'historial') cargarHistorial();
+        if (tabName === 'usuarios') cargarUsuarios();
+    }
+
+    // ===== TOAST =====
+    function showToast(msg, type = 'success') {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
+
+</body>
+</html>
