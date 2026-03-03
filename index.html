@@ -1106,7 +1106,7 @@ function setConfig(precioKw) {
 }`;
 
     // ===== STATE =====
-    let APP_URL = localStorage.getItem('servicios_app_url') || '';
+    let APP_URL = 'https://script.google.com/macros/s/AKfycby2gEOPHYVQSe09deoVft7gWN4HlguLvvk_gSx-Xtpkxhw2LAxPuDGv73Kzsp2E_00zRA/exec';
     let usuarios = [];
     let historial = [];
     let precioKw = 0.80;
@@ -1134,9 +1134,8 @@ function setConfig(precioKw) {
     meses.forEach(m => filtroMesSelect.add(new Option(m, m)));
     filtroMesSelect.value = meses[mesActual];
 
-    if (APP_URL) {
-        initApp();
-    }
+    // Conectar directo sin pedir URL
+    initApp();
 
     // ===== SETUP FUNCTIONS =====
     function toggleScript() {
