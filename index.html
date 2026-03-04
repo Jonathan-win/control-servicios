@@ -244,6 +244,7 @@
                 <div class="lr-icon">📌</div>
                 <div><div class="lr-text">Última lectura registrada</div><div class="lr-value" id="lastReadVal">0</div><div class="lr-text" id="lastReadMes"></div></div>
             </div>
+            <div class="form-group"><label class="form-label">💰 Precio por kW para este usuario (S/)</label><input type="number" class="form-input" id="regPrecio" placeholder="0.80" value="0.80" step="0.01" min="0" oninput="calc()"><div class="form-hint">Se carga automático según el usuario, pero puedes cambiarlo si subió el precio</div></div>
             <div class="form-row">
                 <div class="form-group"><label class="form-label">📖 Lectura Anterior</label><input type="number" class="form-input" id="regLA" placeholder="Ej: 4500" min="0" step="0.01" oninput="calc()"><div class="form-hint">Medidor mes pasado</div></div>
                 <div class="form-group"><label class="form-label">📖 Lectura Actual</label><input type="number" class="form-input" id="regLC" placeholder="Ej: 4650" min="0" step="0.01" oninput="calc()"><div class="form-hint">Medidor ahora</div></div>
@@ -308,8 +309,8 @@
         </div>
         <div class="card">
             <div class="card-title" style="color:var(--yellow);margin-bottom:16px">⚙️ Configuración</div>
-            <div class="form-group"><label class="form-label">💰 Precio por kW (S/)</label><input type="number" class="form-input" id="precioKw" value="0.80" step="0.01" min="0" onchange="saveConfig()"></div>
-            <div class="form-hint" style="margin-top:4px">Consumo = Lectura Actual − Anterior | Monto = Consumo × Precio kW</div>
+            <div class="form-group"><label class="form-label">💰 Precio por kW por defecto (S/)</label><input type="number" class="form-input" id="precioKw" value="0.80" step="0.01" min="0" onchange="saveConfig()"><div class="form-hint">Se usa como valor inicial al crear usuarios nuevos. Cada usuario tiene su propio precio.</div></div>
+            <div class="form-hint" style="margin-top:8px">Consumo = Lectura Actual − Anterior<br>Monto = Consumo × Precio kW del usuario<br>Al registrar puedes ajustar el precio si subió ese mes.</div>
         </div>
     </div>
 </div>
@@ -318,6 +319,7 @@
 <div class="overlay hidden" id="mUser"><div class="modal">
     <h2 id="mUserTitle">➕ Agregar Usuario</h2>
     <div class="form-group"><label class="form-label">👤 Nombre</label><input type="text" class="form-input" id="iUserName" placeholder="Ej: Jonathan"></div>
+    <div class="form-group"><label class="form-label">💰 Precio por kW (S/)</label><input type="number" class="form-input" id="iUserPrecio" placeholder="Ej: 0.80" value="0.80" step="0.01" min="0"><div class="form-hint">Cada usuario puede tener un precio diferente</div></div>
     <div class="form-group"><label class="form-label" style="margin-bottom:10px">🏠 Servicios</label>
         <div class="toggles">
             <div class="toggle on-luz" onclick="tgl(this,'luz')" data-s="luz" data-on="1"><div class="t-check">✓</div><span>⚡ Luz</span></div>
@@ -359,13 +361,15 @@ function renderUsers(){
     const c=document.getElementById('userList'),cl=['var(--electric)','var(--water)','var(--cable)','var(--internet)','var(--green)','var(--yellow)'];
     if(!users.length){c.innerHTML='<div class="empty"><div class="e-icon">👤</div><p>Agrega tu primer usuario.</p></div>';return;}
     c.innerHTML=users.map((u,i)=>{const ic=u.servicios.split(',').map(s=>({luz:'⚡',agua:'💧',cable:'📺',internet:'🌐'}[s.trim()]||'')).join(' ');
-    return `<div class="user-card"><div class="user-left"><div class="user-avatar" style="background:${cl[i%cl.length]}">${u.nombre[0].toUpperCase()}</div><div><div class="user-name">${u.nombre}</div><div class="user-svc">${ic} ${u.servicios.replace(/,/g,', ')}</div></div></div><button class="btn btn-danger btn-sm" onclick="delUser('${u.nombre}')">🗑️</button></div>`;}).join('');
+    return `<div class="user-card"><div class="user-left"><div class="user-avatar" style="background:${cl[i%cl.length]}">${u.nombre[0].toUpperCase()}</div><div><div class="user-name">${u.nombre}</div><div class="user-svc">${ic} ${u.servicios.replace(/,/g,', ')} &nbsp;|&nbsp; 💰 S/ ${u.precioKw||'0.80'} por kW</div></div></div><button class="btn btn-danger btn-sm" onclick="delUser('${u.nombre}')">🗑️</button></div>`;}).join('');
 }
 function fillUserSels(){['regUsuario','fUser','fUserLect','chartUser'].forEach(id=>{const e=document.getElementById(id),f=e.options[0].text;e.innerHTML=`<option value="">${f}</option>`;users.forEach(u=>e.add(new Option(u.nombre,u.nombre)));});}
 function onUserChange(){
     const n=document.getElementById('regUsuario').value,u=users.find(x=>x.nombre===n);
     ['gAgua','gCable','gInternet'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-    if(u){const s=u.servicios.split(',').map(x=>x.trim());if(s.includes('agua'))document.getElementById('gAgua').classList.remove('hidden');if(s.includes('cable'))document.getElementById('gCable').classList.remove('hidden');if(s.includes('internet'))document.getElementById('gInternet').classList.remove('hidden');loadLastRead(n);}
+    if(u){const s=u.servicios.split(',').map(x=>x.trim());if(s.includes('agua'))document.getElementById('gAgua').classList.remove('hidden');if(s.includes('cable'))document.getElementById('gCable').classList.remove('hidden');if(s.includes('internet'))document.getElementById('gInternet').classList.remove('hidden');
+        document.getElementById('regPrecio').value=u.precioKw||pkw;
+        loadLastRead(n);}
 }
 function loadLastRead(n){
     const ul=lects.filter(l=>l.usuario===n).sort((a,b)=>(parseInt(b.anio)*12+MS.indexOf(b.mes))-(parseInt(a.anio)*12+MS.indexOf(a.mes)));
@@ -376,10 +380,11 @@ function loadLastRead(n){
 
 function calc(){
     const a=parseFloat(document.getElementById('regLA').value)||0,c=parseFloat(document.getElementById('regLC').value)||0,d=c-a;
+    const userPkw=parseFloat(document.getElementById('regPrecio').value)||pkw;
     const rb=document.getElementById('resultBox'),mv=document.getElementById('meterVis');
     if(c>0&&a>=0&&d>=0){mv.classList.remove('hidden');document.getElementById('mvAnt').textContent=a;document.getElementById('mvAct').textContent=c;
-        const m=d*pkw;rb.classList.remove('hidden');document.getElementById('rKw').textContent=`${d.toFixed(1)} kW`;
-        document.getElementById('rMonto').textContent=`S/ ${m.toFixed(2)}`;document.getElementById('rDetail').textContent=`${d.toFixed(1)} kW × S/ ${pkw.toFixed(2)} = S/ ${m.toFixed(2)}`;
+        const m=d*userPkw;rb.classList.remove('hidden');document.getElementById('rKw').textContent=`${d.toFixed(1)} kW`;
+        document.getElementById('rMonto').textContent=`S/ ${m.toFixed(2)}`;document.getElementById('rDetail').textContent=`${d.toFixed(1)} kW × S/ ${userPkw.toFixed(2)} = S/ ${m.toFixed(2)}`;
     }else{rb.classList.add('hidden');mv.classList.add('hidden');}
 }
 
@@ -389,9 +394,10 @@ async function registrar(){
     if(!u)return toast('❌ Selecciona usuario','error');if(lc<=0)return toast('❌ Ingresa lectura actual','error');if(d<0)return toast('❌ Lectura actual debe ser mayor','error');
     const btn=document.getElementById('btnReg');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Guardando...';
     try{
-        const m=(d*pkw).toFixed(2);
+        const userPkw=parseFloat(document.getElementById('regPrecio').value)||pkw;
+        const m=(d*userPkw).toFixed(2);
         await api({action:'addLectura',usuario:u,mes,anio,lectAnterior:la,lectActual:lc,consumo:d.toFixed(1),monto:m});
-        await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Luz',detalle:`${la} → ${lc} = ${d.toFixed(1)} kW`,monto:m});
+        await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Luz',detalle:`${la} → ${lc} = ${d.toFixed(1)} kW × S/${userPkw.toFixed(2)}`,monto:m});
         const agua=parseFloat(document.getElementById('regAgua').value)||0;
         if(agua>0&&!document.getElementById('gAgua').classList.contains('hidden'))await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Agua',detalle:'Mensual',monto:agua.toFixed(2)});
         const cable=parseFloat(document.getElementById('regCable').value)||0;
@@ -515,7 +521,7 @@ async function delReg(f){if(!confirm('¿Eliminar?'))return;await api({action:'de
 function openUserModal(){document.getElementById('mUserTitle').textContent='➕ Agregar Usuario';document.getElementById('iUserName').value='';document.querySelectorAll('#mUser .toggle').forEach(el=>{const s=el.dataset.s;el.dataset.on=s==='luz'?'1':'0';el.className='toggle'+(s==='luz'?' on-'+s:'');el.querySelector('.t-check').textContent=s==='luz'?'✓':'';});document.getElementById('mUser').classList.remove('hidden');}
 function closeModal(id){document.getElementById(id).classList.add('hidden');}
 function tgl(el,s){if(s==='luz')return;const on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.className='toggle'+(!on?` on-${s}`:'');el.querySelector('.t-check').textContent=!on?'✓':'';}
-async function saveUser(){const n=document.getElementById('iUserName').value.trim();if(!n)return toast('❌ Escribe nombre','error');const sv=[];document.querySelectorAll('#mUser .toggle').forEach(el=>{if(el.dataset.on==='1')sv.push(el.dataset.s);});await api({action:'addUsuario',nombre:n,servicios:sv.join(',')});toast('✅ Agregado');closeModal('mUser');await loadUsers();}
+async function saveUser(){const n=document.getElementById('iUserName').value.trim();if(!n)return toast('❌ Escribe nombre','error');const p=document.getElementById('iUserPrecio').value||'0.80';const sv=[];document.querySelectorAll('#mUser .toggle').forEach(el=>{if(el.dataset.on==='1')sv.push(el.dataset.s);});await api({action:'addUsuario',nombre:n,servicios:sv.join(','),precioKw:p});toast('✅ Agregado');closeModal('mUser');await loadUsers();}
 async function delUser(n){if(!confirm(`¿Eliminar "${n}"?`))return;await api({action:'deleteUsuario',nombre:n});toast('✅ Eliminado');await loadUsers();}
 
 // NAV
