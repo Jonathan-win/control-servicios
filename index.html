@@ -3,430 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Control de Servicios del Hogar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+    <title>⚡ Control de Servicios</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --bg-main: #0f1923;
-            --bg-card: #1a2733;
-            --bg-card-hover: #1e2f3d;
-            --bg-input: #0d1520;
-            --accent-electric: #00d4ff;
-            --accent-water: #4fc3f7;
-            --accent-cable: #ff8a65;
-            --accent-internet: #ab47bc;
-            --accent-green: #66bb6a;
-            --accent-yellow: #ffd54f;
-            --accent-red: #ef5350;
-            --text-primary: #e8f0f8;
-            --text-secondary: #8da4b8;
-            --text-muted: #5a7a92;
-            --border: #2a3f52;
-            --shadow: 0 8px 32px rgba(0,0,0,0.3);
-            --radius: 16px;
+            --bg: #080c14; --bg-card: #111827; --bg-card-alt: #0f172a;
+            --bg-input: #0c1220; --bg-hover: #1e293b;
+            --electric: #38bdf8; --electric-dim: rgba(56,189,248,0.12);
+            --water: #67e8f9; --water-dim: rgba(103,232,249,0.12);
+            --cable: #fb923c; --cable-dim: rgba(251,146,60,0.12);
+            --internet: #c084fc; --internet-dim: rgba(192,132,252,0.12);
+            --green: #4ade80; --green-dim: rgba(74,222,128,0.12);
+            --yellow: #facc15; --yellow-dim: rgba(250,204,21,0.12);
+            --red: #f87171; --red-dim: rgba(248,113,113,0.12);
+            --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b;
+            --border: #1e293b; --border2: #334155;
+            --radius: 14px; --shadow: 0 4px 24px rgba(0,0,0,0.4);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg-main); color: var(--text-primary); min-height: 100vh; font-size: 18px; line-height: 1.6; }
-        .header { background: linear-gradient(135deg, #0a1828 0%, #1a3a5c 50%, #0a1828 100%); border-bottom: 2px solid var(--accent-electric); padding: 18px 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,212,255,0.15); }
-        .header-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-        .header h1 { font-family: 'Fredoka One', cursive; font-size: 24px; color: var(--accent-electric); text-shadow: 0 0 20px rgba(0,212,255,0.4); }
-        .header h1 span { font-size: 28px; }
-        .header-status { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
-        .tabs { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
-        .tab-btn { flex: 1; min-width: 100px; padding: 14px 8px; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 700; border: 2px solid var(--border); border-radius: 12px; background: var(--bg-card); color: var(--text-secondary); cursor: pointer; transition: all 0.3s; text-align: center; }
-        .tab-btn:hover { background: var(--bg-card-hover); }
-        .tab-btn.active { background: var(--accent-electric); color: #0a1828; border-color: var(--accent-electric); box-shadow: 0 4px 16px rgba(0,212,255,0.3); }
-        .tab-btn .tab-icon { font-size: 20px; display: block; margin-bottom: 2px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; box-shadow: var(--shadow); animation: fadeUp 0.4s ease; }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-        .card-title { font-family: 'Fredoka One', cursive; font-size: 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .card-title .icon { font-size: 28px; }
-        .form-group { margin-bottom: 18px; }
-        .form-label { display: block; font-size: 17px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; }
-        .form-input, .form-select { width: 100%; padding: 14px 18px; font-size: 20px; font-family: 'Nunito', sans-serif; font-weight: 600; background: var(--bg-input); border: 2px solid var(--border); border-radius: 12px; color: var(--text-primary); outline: none; transition: border 0.3s; }
-        .form-input:focus, .form-select:focus { border-color: var(--accent-electric); }
-        .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%238da4b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 44px; -webkit-appearance: none; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .form-input[type="number"] { font-size: 24px; font-weight: 800; }
-        .form-hint { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
-        .reading-display { background: var(--bg-input); border: 2px solid var(--accent-yellow); border-radius: 14px; padding: 20px; margin-bottom: 18px; }
-        .reading-display .rd-label { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .reading-display .rd-value { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--accent-yellow); }
-        .meter-visual { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin: 18px 0; }
-        .meter-box { background: var(--bg-input); border: 2px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
-        .meter-box .m-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .meter-box .m-value { font-family: 'Fredoka One', cursive; font-size: 28px; }
-        .meter-box.anterior .m-value { color: var(--text-secondary); }
-        .meter-box.actual .m-value { color: var(--accent-electric); }
-        .meter-arrow { font-size: 28px; color: var(--accent-yellow); text-align: center; }
-        .result-box { background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,152,184,0.05)); border: 2px solid var(--accent-electric); border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 16px; }
-        .result-label { font-size: 14px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-        .result-amount { font-family: 'Fredoka One', cursive; font-size: 48px; color: var(--accent-electric); text-shadow: 0 0 24px rgba(0,212,255,0.4); margin: 8px 0; }
-        .result-detail { font-size: 16px; color: var(--text-muted); }
-        .service-toggles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
-        .toggle-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-input); border: 2px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.3s; font-size: 18px; font-weight: 700; }
-        .toggle-item:hover { border-color: var(--text-muted); }
-        .toggle-item.active-luz { border-color: var(--accent-electric); background: rgba(0,212,255,0.08); }
-        .toggle-item.active-agua { border-color: var(--accent-water); background: rgba(79,195,247,0.08); }
-        .toggle-item.active-cable { border-color: var(--accent-cable); background: rgba(255,138,101,0.08); }
-        .toggle-item.active-internet { border-color: var(--accent-internet); background: rgba(171,71,188,0.08); }
-        .toggle-check { width: 28px; height: 28px; border: 2px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; transition: all 0.3s; }
-        .toggle-item.active-luz .toggle-check { background: var(--accent-electric); border-color: var(--accent-electric); }
-        .toggle-item.active-agua .toggle-check { background: var(--accent-water); border-color: var(--accent-water); }
-        .toggle-item.active-cable .toggle-check { background: var(--accent-cable); border-color: var(--accent-cable); }
-        .toggle-item.active-internet .toggle-check { background: var(--accent-internet); border-color: var(--accent-internet); }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 28px; font-family: 'Nunito', sans-serif; font-size: 19px; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; width: 100%; }
-        .btn-primary { background: linear-gradient(135deg, var(--accent-electric), #0098b8); color: #0a1828; box-shadow: 0 4px 16px rgba(0,212,255,0.3); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,212,255,0.4); }
-        .btn-primary:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
-        .btn-secondary { background: var(--bg-input); color: var(--text-primary); border: 2px solid var(--border); }
-        .btn-secondary:hover { border-color: var(--accent-electric); }
-        .btn-danger { background: rgba(239,83,80,0.15); color: var(--accent-red); border: 2px solid var(--accent-red); }
-        .btn-small { padding: 10px 18px; font-size: 16px; width: auto; }
-        .history-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        .history-table th { text-align: left; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px; font-weight: 700; }
-        .history-table td { padding: 12px; font-size: 16px; font-weight: 600; background: var(--bg-input); }
-        .history-table tr td:first-child { border-radius: 10px 0 0 10px; }
-        .history-table tr td:last-child { border-radius: 0 10px 10px 0; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-        .badge-luz { background: rgba(0,212,255,0.15); color: var(--accent-electric); }
-        .badge-agua { background: rgba(79,195,247,0.15); color: var(--accent-water); }
-        .badge-cable { background: rgba(255,138,101,0.15); color: var(--accent-cable); }
-        .badge-internet { background: rgba(171,71,188,0.15); color: var(--accent-internet); }
-        .amount-cell { font-family: 'Fredoka One', cursive; font-size: 19px; }
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-        .summary-item { background: var(--bg-input); border-radius: 14px; padding: 20px; text-align: center; border: 2px solid var(--border); }
-        .summary-item .s-icon { font-size: 32px; margin-bottom: 6px; }
-        .summary-item .s-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .summary-item .s-value { font-family: 'Fredoka One', cursive; font-size: 26px; margin-top: 4px; }
-        .summary-item.luz .s-value { color: var(--accent-electric); }
-        .summary-item.agua .s-value { color: var(--accent-water); }
-        .summary-item.cable .s-value { color: var(--accent-cable); }
-        .summary-item.internet .s-value { color: var(--accent-internet); }
-        .user-card { background: var(--bg-input); border: 2px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-        .user-info { display: flex; align-items: center; gap: 14px; }
-        .user-avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; color: #0a1828; }
-        .user-name { font-size: 20px; font-weight: 800; }
-        .user-services { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
-        .user-actions { display: flex; gap: 8px; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-        .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        .modal h2 { font-family: 'Fredoka One', cursive; font-size: 24px; margin-bottom: 20px; }
-        .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); }
-        .empty-state .empty-icon { font-size: 56px; margin-bottom: 16px; }
-        .empty-state p { font-size: 18px; }
-        .loading-spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid var(--border); border-top-color: var(--accent-electric); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to{transform:rotate(360deg)} }
-        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 12px; font-size: 17px; font-weight: 700; z-index: 300; animation: toastIn 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-        .toast-success { background: var(--accent-green); color: #0a1828; }
-        .toast-error { background: var(--accent-red); color: white; }
-        @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(20px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-        .month-filter { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-        .month-filter label { font-weight: 700; color: var(--text-secondary); font-size: 17px; }
-        .total-row td { background: rgba(0,212,255,0.08) !important; font-weight: 800; border-top: 2px solid var(--accent-electric); }
-        .lectura-card { background: var(--bg-input); border: 2px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
-        .lectura-info { display: flex; flex-direction: column; gap: 4px; }
-        .lectura-mes { font-size: 18px; font-weight: 800; color: var(--text-primary); }
-        .lectura-detalle { font-size: 15px; color: var(--text-secondary); }
-        .lectura-monto { font-family: 'Fredoka One', cursive; font-size: 24px; color: var(--accent-electric); text-align: right; }
-        .lectura-kw { font-size: 14px; color: var(--accent-yellow); text-align: right; }
-        .hidden { display: none !important; }
-        @media (max-width: 600px) {
-            body { font-size: 16px; } .header h1 { font-size: 19px; } .form-row { grid-template-columns: 1fr; }
-            .service-toggles { grid-template-columns: 1fr; } .summary-grid { grid-template-columns: 1fr; }
-            .result-amount { font-size: 36px; } .card { padding: 20px; }
-            .tab-btn { min-width: 0; font-size: 14px; padding: 12px 6px; }
-            .meter-visual { grid-template-columns: 1fr; gap: 8px; } .meter-arrow { transform: rotate(90deg); }
-            .history-table th, .history-table td { padding: 10px 6px; font-size: 14px; }
-            .lectura-card { grid-template-columns: 1fr; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;line-height:1.6}
+
+        /* HEADER */
+        .header{background:linear-gradient(135deg,#0a1628,#162033,#0a1628);border-bottom:1px solid var(--border);padding:16px 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+        .header-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+        .logo{display:flex;align-items:center;gap:10px}
+        .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--electric),#0284c7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(56,189,248,0.25)}
+        .logo-text{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+        .logo-text span{color:var(--electric)}
+        .header-badge{font-size:12px;color:var(--text3);background:var(--bg-input);padding:4px 12px;border-radius:20px;border:1px solid var(--border);display:flex;align-items:center;gap:6px}
+        .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:glow 2s infinite}
+        @keyframes glow{0%,100%{opacity:1}50%{opacity:0.5}}
+
+        /* NAV */
+        .container{max-width:1000px;margin:0 auto;padding:16px}
+        .nav{display:flex;gap:4px;margin-bottom:20px;background:var(--bg-card);border-radius:12px;padding:4px;border:1px solid var(--border)}
+        .nav-btn{flex:1;padding:12px 8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:10px;background:transparent;color:var(--text3);cursor:pointer;transition:all 0.25s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+        .nav-btn:hover{color:var(--text2);background:var(--bg-hover)}
+        .nav-btn.active{background:var(--electric);color:#0c1220;box-shadow:0 2px 12px rgba(56,189,248,0.3)}
+        .nav-btn .nav-icon{font-size:18px}
+
+        /* CARDS */
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
+        .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+        .card-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+        /* FORMS */
+        .form-group{margin-bottom:16px}
+        .form-label{display:block;font-size:13px;font-weight:600;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+        .form-input,.form-select{width:100%;padding:12px 16px;font-size:18px;font-family:'DM Sans',sans-serif;font-weight:600;background:var(--bg-input);border:1.5px solid var(--border);border-radius:10px;color:var(--text);outline:none;transition:border 0.2s}
+        .form-input:focus,.form-select:focus{border-color:var(--electric)}
+        .form-select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2364748b'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:40px}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .form-hint{font-size:12px;color:var(--text3);margin-top:4px}
+        .form-input[type="number"]{font-size:22px;font-weight:800;letter-spacing:1px}
+
+        /* READING INFO */
+        .last-reading{background:var(--yellow-dim);border:1.5px solid rgba(250,204,21,0.25);border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+        .last-reading .lr-icon{font-size:24px}
+        .last-reading .lr-text{font-size:14px;color:var(--text2)}
+        .last-reading .lr-value{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--yellow)}
+
+        /* METER VISUAL */
+        .meter{display:grid;grid-template-columns:1fr 50px 1fr;gap:8px;align-items:center;margin:16px 0}
+        .meter-box{background:var(--bg-input);border:1.5px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+        .meter-box .mb-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+        .meter-box .mb-val{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800}
+        .meter-box.ant .mb-val{color:var(--text3)}
+        .meter-box.act .mb-val{color:var(--electric)}
+        .meter-mid{text-align:center;font-size:24px;color:var(--text3)}
+
+        /* RESULT */
+        .result{background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(14,165,233,0.04));border:1.5px solid rgba(56,189,248,0.2);border-radius:var(--radius);padding:20px;text-align:center;margin:16px 0}
+        .result .r-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:2px;font-weight:700}
+        .result .r-kw{font-family:'Outfit',sans-serif;font-size:30px;font-weight:800;color:var(--yellow);margin:4px 0}
+        .result .r-amount{font-family:'Outfit',sans-serif;font-size:44px;font-weight:900;color:var(--electric);text-shadow:0 0 30px rgba(56,189,248,0.3);margin:4px 0}
+        .result .r-detail{font-size:14px;color:var(--text3)}
+
+        /* BUTTONS */
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;border:none;border-radius:10px;cursor:pointer;transition:all 0.2s;width:100%}
+        .btn-primary{background:linear-gradient(135deg,var(--electric),#0284c7);color:#0c1220;box-shadow:0 4px 16px rgba(56,189,248,0.25)}
+        .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(56,189,248,0.35)}
+        .btn-primary:disabled{opacity:0.4;transform:none;cursor:not-allowed}
+        .btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border)}
+        .btn-ghost:hover{border-color:var(--electric);color:var(--text)}
+        .btn-danger{background:var(--red-dim);color:var(--red);border:1.5px solid rgba(248,113,113,0.25)}
+        .btn-sm{padding:8px 14px;font-size:13px;width:auto}
+        .btn-export{background:var(--green-dim);color:var(--green);border:1.5px solid rgba(74,222,128,0.25)}
+        .btn-export:hover{background:rgba(74,222,128,0.2)}
+
+        /* TOGGLE */
+        .toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+        .toggle{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg-input);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:16px;font-weight:600}
+        .toggle:hover{border-color:var(--text3)}
+        .toggle .t-check{width:24px;height:24px;border:2px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all 0.2s}
+        .toggle.on-luz{border-color:var(--electric);background:var(--electric-dim)}.toggle.on-luz .t-check{background:var(--electric);border-color:var(--electric);color:#0c1220}
+        .toggle.on-agua{border-color:var(--water);background:var(--water-dim)}.toggle.on-agua .t-check{background:var(--water);border-color:var(--water);color:#0c1220}
+        .toggle.on-cable{border-color:var(--cable);background:var(--cable-dim)}.toggle.on-cable .t-check{background:var(--cable);border-color:var(--cable);color:#0c1220}
+        .toggle.on-internet{border-color:var(--internet);background:var(--internet-dim)}.toggle.on-internet .t-check{background:var(--internet);border-color:var(--internet);color:#0c1220}
+
+        /* STATS */
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+        .stat{background:var(--bg-input);border:1.5px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+        .stat .st-icon{font-size:24px;margin-bottom:4px}
+        .stat .st-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+        .stat .st-val{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;margin-top:2px}
+        .stat.luz .st-val{color:var(--electric)}.stat.agua .st-val{color:var(--water)}.stat.cable .st-val{color:var(--cable)}.stat.internet .st-val{color:var(--internet)}
+
+        /* TABLE */
+        .tbl{width:100%;border-collapse:separate;border-spacing:0 6px}
+        .tbl th{text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;padding:8px 12px;font-weight:700}
+        .tbl td{padding:12px;font-size:14px;font-weight:500;background:var(--bg-input)}
+        .tbl tr td:first-child{border-radius:8px 0 0 8px}.tbl tr td:last-child{border-radius:0 8px 8px 0}
+        .badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700}
+        .badge-luz{background:var(--electric-dim);color:var(--electric)}.badge-agua{background:var(--water-dim);color:var(--water)}
+        .badge-cable{background:var(--cable-dim);color:var(--cable)}.badge-internet{background:var(--internet-dim);color:var(--internet)}
+        .amt{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700}
+        .total-row td{background:var(--electric-dim)!important;font-weight:800}
+
+        /* USER */
+        .user-card{background:var(--bg-input);border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+        .user-left{display:flex;align-items:center;gap:12px}
+        .user-avatar{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#0c1220}
+        .user-name{font-size:18px;font-weight:700}.user-svc{font-size:13px;color:var(--text3)}
+
+        /* LECTURA CARD */
+        .lect-card{background:var(--bg-input);border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+        .lect-user{font-size:16px;font-weight:700}.lect-detail{font-size:14px;color:var(--text2)}
+        .lect-amount{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:var(--electric);text-align:right}
+        .lect-kw{font-size:13px;color:var(--yellow);text-align:right}
+
+        /* CHART */
+        .chart-box{background:var(--bg-input);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+        .chart-box canvas{max-height:280px}
+
+        /* FILTERS */
+        .filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        .filters .form-select{width:auto;font-size:14px;padding:8px 36px 8px 12px}
+
+        /* EXPORT BAR */
+        .export-bar{display:flex;gap:8px;flex-wrap:wrap}
+
+        /* MODAL */
+        .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.15s}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:slideUp 0.25s}
+        @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .modal h2{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;margin-bottom:20px}
+
+        /* EMPTY */
+        .empty{text-align:center;padding:40px 20px;color:var(--text3)}
+        .empty .e-icon{font-size:48px;margin-bottom:12px}.empty p{font-size:16px}
+
+        /* LOADING */
+        .spinner{display:inline-block;width:20px;height:20px;border:2.5px solid var(--border);border-top-color:var(--electric);border-radius:50%;animation:spin 0.7s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* TOAST */
+        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;z-index:300;animation:toastIn 0.25s;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+        .toast-success{background:var(--green);color:#0c1220}.toast-error{background:var(--red);color:white}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+        .hidden{display:none!important}
+
+        @media(max-width:640px){
+            .form-row{grid-template-columns:1fr}.toggles{grid-template-columns:1fr}
+            .stats{grid-template-columns:1fr 1fr}.meter{grid-template-columns:1fr;gap:6px}
+            .meter-mid{transform:rotate(90deg)}.result .r-amount{font-size:32px}
+            .tbl th,.tbl td{padding:8px 6px;font-size:13px}.lect-card{grid-template-columns:1fr}
+            .nav-btn{font-size:12px;padding:10px 4px}
         }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
     </style>
 </head>
 <body>
-<header class="header"><div class="header-inner"><h1><span>⚡</span> Control de Servicios</h1><div class="header-status"><div class="status-dot"></div><span>Conectado</span></div></div></header>
+<header class="header"><div class="header-inner">
+    <div class="logo"><div class="logo-icon">⚡</div><div class="logo-text">Control<span>Servicios</span></div></div>
+    <div class="header-badge"><div class="dot"></div> Conectado</div>
+</div></header>
+
 <div class="container">
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('registrar',this)"><span class="tab-icon">📝</span> Registrar</button>
-        <button class="tab-btn" onclick="switchTab('lecturas',this)"><span class="tab-icon">🔌</span> Lecturas</button>
-        <button class="tab-btn" onclick="switchTab('historial',this)"><span class="tab-icon">📊</span> Historial</button>
-        <button class="tab-btn" onclick="switchTab('usuarios',this)"><span class="tab-icon">👥</span> Usuarios</button>
+    <nav class="nav">
+        <button class="nav-btn active" onclick="go('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</button>
+        <button class="nav-btn" onclick="go('registrar',this)"><span class="nav-icon">📝</span>Registrar</button>
+        <button class="nav-btn" onclick="go('lecturas',this)"><span class="nav-icon">🔌</span>Lecturas</button>
+        <button class="nav-btn" onclick="go('historial',this)"><span class="nav-icon">📋</span>Historial</button>
+        <button class="nav-btn" onclick="go('usuarios',this)"><span class="nav-icon">👥</span>Usuarios</button>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <div id="p-dashboard">
+        <div class="stats">
+            <div class="stat luz"><div class="st-icon">⚡</div><div class="st-label">Luz</div><div class="st-val" id="dLuz">S/ 0</div></div>
+            <div class="stat agua"><div class="st-icon">💧</div><div class="st-label">Agua</div><div class="st-val" id="dAgua">S/ 0</div></div>
+            <div class="stat cable"><div class="st-icon">📺</div><div class="st-label">Cable</div><div class="st-val" id="dCable">S/ 0</div></div>
+            <div class="stat internet"><div class="st-icon">🌐</div><div class="st-label">Internet</div><div class="st-val" id="dInternet">S/ 0</div></div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">📈 Consumo de Luz (kW por mes)</div>
+                <div class="filters">
+                    <select class="form-select" id="chartUser" onchange="updateCharts()"><option value="">Todos</option></select>
+                    <select class="form-select" id="chartYear" onchange="updateCharts()"></select>
+                </div>
+            </div>
+            <div class="chart-box"><canvas id="chartKw"></canvas></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><div class="card-title">💰 Gastos por Servicio (mes a mes)</div></div>
+            <div class="chart-box"><canvas id="chartGastos"></canvas></div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">📄 Resumen del Año</div>
+                <div class="export-bar">
+                    <button class="btn btn-export btn-sm" onclick="exportPDF()">📄 PDF</button>
+                    <button class="btn btn-export btn-sm" onclick="exportExcel()">📊 Excel</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="tbl" id="resumenTable"><thead><tr><th>Mes</th><th>Luz</th><th>Agua</th><th>Cable</th><th>Internet</th><th>Total</th></tr></thead><tbody id="resumenBody"></tbody></table>
+            </div>
+        </div>
     </div>
 
-    <div id="tab-registrar">
+    <!-- REGISTRAR -->
+    <div id="p-registrar" class="hidden">
         <div class="card">
-            <div class="card-title"><span class="icon">📝</span> Registrar Consumo Mensual</div>
-            <div class="form-group"><label class="form-label">👤 Usuario</label><select class="form-select" id="regUsuario" onchange="onUsuarioChange()"><option value="">Selecciona usuario...</option></select></div>
+            <div class="card-title" style="margin-bottom:20px">📝 Registrar Consumo Mensual</div>
+            <div class="form-group"><label class="form-label">👤 Usuario</label><select class="form-select" id="regUsuario" onchange="onUserChange()"><option value="">Selecciona...</option></select></div>
             <div class="form-row">
                 <div class="form-group"><label class="form-label">📅 Mes</label><select class="form-select" id="regMes"></select></div>
                 <div class="form-group"><label class="form-label">📆 Año</label><select class="form-select" id="regAnio"></select></div>
             </div>
-            <div class="card-title" style="margin-top:10px;font-size:18px;"><span class="icon">⚡</span> Lectura del Medidor</div>
-            <div id="lecturaAnteriorInfo" class="reading-display hidden">
-                <div class="rd-label">📌 Última lectura registrada</div>
-                <div class="rd-value" id="lecturaAnteriorValor">0</div>
-                <div class="form-hint" id="lecturaAnteriorMes"></div>
+            <div class="card-title" style="font-size:16px;margin:8px 0 16px">⚡ Lectura del Medidor</div>
+            <div id="lastReadInfo" class="last-reading hidden">
+                <div class="lr-icon">📌</div>
+                <div><div class="lr-text">Última lectura registrada</div><div class="lr-value" id="lastReadVal">0</div><div class="lr-text" id="lastReadMes"></div></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label class="form-label">📖 Lectura Anterior</label><input type="number" class="form-input" id="regLectAnterior" placeholder="Ej: 4500" min="0" step="0.01" oninput="calcularConsumo()"><div class="form-hint">Número del mes pasado</div></div>
-                <div class="form-group"><label class="form-label">📖 Lectura Actual</label><input type="number" class="form-input" id="regLectActual" placeholder="Ej: 4650" min="0" step="0.01" oninput="calcularConsumo()"><div class="form-hint">Número actual del medidor</div></div>
+                <div class="form-group"><label class="form-label">📖 Lectura Anterior</label><input type="number" class="form-input" id="regLA" placeholder="Ej: 4500" min="0" step="0.01" oninput="calc()"><div class="form-hint">Medidor mes pasado</div></div>
+                <div class="form-group"><label class="form-label">📖 Lectura Actual</label><input type="number" class="form-input" id="regLC" placeholder="Ej: 4650" min="0" step="0.01" oninput="calc()"><div class="form-hint">Medidor ahora</div></div>
             </div>
-            <div class="meter-visual" id="meterVisual" style="display:none;">
-                <div class="meter-box anterior"><div class="m-label">Anterior</div><div class="m-value" id="meterAnterior">0</div></div>
-                <div class="meter-arrow">➡️</div>
-                <div class="meter-box actual"><div class="m-label">Actual</div><div class="m-value" id="meterActual">0</div></div>
+            <div class="meter hidden" id="meterVis">
+                <div class="meter-box ant"><div class="mb-label">Anterior</div><div class="mb-val" id="mvAnt">0</div></div>
+                <div class="meter-mid">→</div>
+                <div class="meter-box act"><div class="mb-label">Actual</div><div class="mb-val" id="mvAct">0</div></div>
             </div>
-            <div class="result-box" id="resultLuz" style="display:none;">
-                <div class="result-label">Consumo del mes</div>
-                <div style="font-family:'Fredoka One',cursive;font-size:32px;color:var(--accent-yellow);margin:4px 0;" id="consumoKw">0 kW</div>
-                <div class="result-label" style="margin-top:12px;">Monto a pagar</div>
-                <div class="result-amount" id="montoLuz">S/ 0.00</div>
-                <div class="result-detail" id="detalleLuz"></div>
+            <div class="result hidden" id="resultBox">
+                <div class="r-label">Consumo del mes</div>
+                <div class="r-kw" id="rKw">0 kW</div>
+                <div class="r-label" style="margin-top:10px">Monto a pagar</div>
+                <div class="r-amount" id="rMonto">S/ 0.00</div>
+                <div class="r-detail" id="rDetail"></div>
             </div>
-            <div class="form-group hidden" id="grupoAgua" style="margin-top:18px;"><label class="form-label">💧 Monto de Agua (S/)</label><input type="number" class="form-input" id="regAgua" placeholder="Ej: 35.50" min="0" step="0.01"></div>
-            <div class="form-group hidden" id="grupoCable"><label class="form-label">📺 Monto de Cable (S/)</label><input type="number" class="form-input" id="regCable" placeholder="Ej: 80.00" min="0" step="0.01"></div>
-            <div class="form-group hidden" id="grupoInternet"><label class="form-label">🌐 Monto de Internet (S/)</label><input type="number" class="form-input" id="regInternet" placeholder="Ej: 60.00" min="0" step="0.01"></div>
-            <button class="btn btn-primary" onclick="registrarConsumo()" id="btnRegistrar" style="margin-top:18px;">✅ Registrar Todo</button>
+            <div class="form-group hidden" id="gAgua" style="margin-top:16px"><label class="form-label">💧 Agua (S/)</label><input type="number" class="form-input" id="regAgua" placeholder="Ej: 35.50" min="0" step="0.01"></div>
+            <div class="form-group hidden" id="gCable"><label class="form-label">📺 Cable (S/)</label><input type="number" class="form-input" id="regCable" placeholder="Ej: 80.00" min="0" step="0.01"></div>
+            <div class="form-group hidden" id="gInternet"><label class="form-label">🌐 Internet (S/)</label><input type="number" class="form-input" id="regInternet" placeholder="Ej: 60.00" min="0" step="0.01"></div>
+            <button class="btn btn-primary" onclick="registrar()" id="btnReg" style="margin-top:16px">✅ Registrar Todo</button>
         </div>
     </div>
 
-    <div id="tab-lecturas" class="hidden">
+    <!-- LECTURAS -->
+    <div id="p-lecturas" class="hidden">
         <div class="card">
-            <div class="card-title"><span class="icon">🔌</span> Historial de Lecturas del Medidor</div>
-            <div class="month-filter"><label>👤</label><select class="form-select" id="filtroUsuarioLect" style="width:auto;font-size:17px;" onchange="renderLecturas()"><option value="">Todos</option></select></div>
-            <div id="lecturasContainer"></div>
-            <div class="empty-state hidden" id="emptyLecturas"><div class="empty-icon">🔌</div><p>No hay lecturas registradas aún.</p></div>
+            <div class="card-header"><div class="card-title">🔌 Historial de Lecturas</div>
+                <div class="filters"><select class="form-select" id="fUserLect" onchange="renderLect()"><option value="">Todos</option></select></div>
+            </div>
+            <div id="lectContainer"></div>
+            <div class="empty hidden" id="emptyLect"><div class="e-icon">🔌</div><p>No hay lecturas aún.</p></div>
         </div>
     </div>
 
-    <div id="tab-historial" class="hidden">
+    <!-- HISTORIAL -->
+    <div id="p-historial" class="hidden">
         <div class="card">
-            <div class="card-title"><span class="icon">📊</span> Resumen del Mes</div>
-            <div class="month-filter">
-                <label>📅</label>
-                <select class="form-select" id="filtroMes" style="width:auto;font-size:17px;" onchange="filtrarHistorial()"></select>
-                <select class="form-select" id="filtroAnio" style="width:auto;font-size:17px;" onchange="filtrarHistorial()"></select>
-                <select class="form-select" id="filtroUsuarioHist" style="width:auto;font-size:17px;" onchange="filtrarHistorial()"><option value="">Todos</option></select>
+            <div class="card-header"><div class="card-title">📋 Historial de Pagos</div>
+                <div class="filters">
+                    <select class="form-select" id="fMes" onchange="filtHist()"></select>
+                    <select class="form-select" id="fAnio" onchange="filtHist()"></select>
+                    <select class="form-select" id="fUser" onchange="filtHist()"><option value="">Todos</option></select>
+                </div>
             </div>
-            <div class="summary-grid">
-                <div class="summary-item luz"><div class="s-icon">⚡</div><div class="s-label">Luz</div><div class="s-value" id="sumLuz">S/ 0</div></div>
-                <div class="summary-item agua"><div class="s-icon">💧</div><div class="s-label">Agua</div><div class="s-value" id="sumAgua">S/ 0</div></div>
-                <div class="summary-item cable"><div class="s-icon">📺</div><div class="s-label">Cable</div><div class="s-value" id="sumCable">S/ 0</div></div>
-                <div class="summary-item internet"><div class="s-icon">🌐</div><div class="s-label">Internet</div><div class="s-value" id="sumInternet">S/ 0</div></div>
+            <div class="stats" id="histStats">
+                <div class="stat luz"><div class="st-icon">⚡</div><div class="st-label">Luz</div><div class="st-val" id="hLuz">S/ 0</div></div>
+                <div class="stat agua"><div class="st-icon">💧</div><div class="st-label">Agua</div><div class="st-val" id="hAgua">S/ 0</div></div>
+                <div class="stat cable"><div class="st-icon">📺</div><div class="st-label">Cable</div><div class="st-val" id="hCable">S/ 0</div></div>
+                <div class="stat internet"><div class="st-icon">🌐</div><div class="st-label">Internet</div><div class="st-val" id="hInternet">S/ 0</div></div>
             </div>
-        </div>
-        <div class="card">
-            <div class="card-title"><span class="icon">📋</span> Historial Detallado</div>
-            <div style="overflow-x:auto;"><table class="history-table"><thead><tr><th>Usuario</th><th>Mes</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody id="historialBody"></tbody></table></div>
-            <div class="empty-state hidden" id="emptyHistorial"><div class="empty-icon">📭</div><p>No hay registros aún.</p></div>
+            <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Usuario</th><th>Mes</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody id="histBody"></tbody></table></div>
+            <div class="empty hidden" id="emptyHist"><div class="e-icon">📭</div><p>No hay registros.</p></div>
         </div>
     </div>
 
-    <div id="tab-usuarios" class="hidden">
+    <!-- USUARIOS -->
+    <div id="p-usuarios" class="hidden">
         <div class="card">
-            <div class="card-title"><span class="icon">👥</span> Gestión de Usuarios</div>
-            <div id="listaUsuarios"></div>
-            <button class="btn btn-primary" onclick="mostrarModalUsuario()" style="margin-top:16px;">➕ Agregar Usuario</button>
+            <div class="card-title" style="margin-bottom:20px">👥 Usuarios</div>
+            <div id="userList"></div>
+            <button class="btn btn-primary" onclick="openUserModal()" style="margin-top:16px">➕ Agregar Usuario</button>
         </div>
         <div class="card">
-            <div class="card-title" style="color:var(--accent-yellow);"><span class="icon">⚙️</span> Configuración</div>
-            <div class="form-group"><label class="form-label">💰 Precio por kW (S/)</label><input type="number" class="form-input" id="precioKw" value="0.80" step="0.01" min="0" onchange="guardarConfig()"></div>
-            <p style="color:var(--text-muted);font-size:15px;margin-top:8px;">Consumo = Lectura Actual − Lectura Anterior<br>Monto = Consumo × Precio por kW</p>
+            <div class="card-title" style="color:var(--yellow);margin-bottom:16px">⚙️ Configuración</div>
+            <div class="form-group"><label class="form-label">💰 Precio por kW (S/)</label><input type="number" class="form-input" id="precioKw" value="0.80" step="0.01" min="0" onchange="saveConfig()"></div>
+            <div class="form-hint" style="margin-top:4px">Consumo = Lectura Actual − Anterior | Monto = Consumo × Precio kW</div>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay hidden" id="modalUsuario"><div class="modal">
-    <h2 id="modalUsuarioTitle">➕ Agregar Usuario</h2>
-    <div class="form-group"><label class="form-label">👤 Nombre</label><input type="text" class="form-input" id="inputNombreUsuario" placeholder="Ej: Jonathan"></div>
-    <div class="form-group"><label class="form-label" style="margin-bottom:12px;">🏠 Servicios que paga</label>
-        <div class="service-toggles">
-            <div class="toggle-item active-luz" onclick="toggleService(this,'luz')" data-service="luz" data-active="true"><div class="toggle-check">✓</div><span>⚡ Luz</span></div>
-            <div class="toggle-item" onclick="toggleService(this,'agua')" data-service="agua" data-active="false"><div class="toggle-check"></div><span>💧 Agua</span></div>
-            <div class="toggle-item" onclick="toggleService(this,'cable')" data-service="cable" data-active="false"><div class="toggle-check"></div><span>📺 Cable</span></div>
-            <div class="toggle-item" onclick="toggleService(this,'internet')" data-service="internet" data-active="false"><div class="toggle-check"></div><span>🌐 Internet</span></div>
+<!-- MODALS -->
+<div class="overlay hidden" id="mUser"><div class="modal">
+    <h2 id="mUserTitle">➕ Agregar Usuario</h2>
+    <div class="form-group"><label class="form-label">👤 Nombre</label><input type="text" class="form-input" id="iUserName" placeholder="Ej: Jonathan"></div>
+    <div class="form-group"><label class="form-label" style="margin-bottom:10px">🏠 Servicios</label>
+        <div class="toggles">
+            <div class="toggle on-luz" onclick="tgl(this,'luz')" data-s="luz" data-on="1"><div class="t-check">✓</div><span>⚡ Luz</span></div>
+            <div class="toggle" onclick="tgl(this,'agua')" data-s="agua" data-on="0"><div class="t-check"></div><span>💧 Agua</span></div>
+            <div class="toggle" onclick="tgl(this,'cable')" data-s="cable" data-on="0"><div class="t-check"></div><span>📺 Cable</span></div>
+            <div class="toggle" onclick="tgl(this,'internet')" data-s="internet" data-on="0"><div class="t-check"></div><span>🌐 Internet</span></div>
         </div>
     </div>
-    <div style="display:flex;gap:12px;margin-top:20px;"><button class="btn btn-secondary" onclick="cerrarModalUsuario()">Cancelar</button><button class="btn btn-primary" onclick="guardarUsuario()">💾 Guardar</button></div>
+    <div style="display:flex;gap:10px;margin-top:20px"><button class="btn btn-ghost" onclick="closeModal('mUser')">Cancelar</button><button class="btn btn-primary" onclick="saveUser()">💾 Guardar</button></div>
 </div></div>
 
-<div class="modal-overlay hidden" id="modalEditar"><div class="modal">
+<div class="overlay hidden" id="mEdit"><div class="modal">
     <h2>✏️ Editar Registro</h2><div id="editFields"></div>
-    <div style="display:flex;gap:12px;margin-top:20px;"><button class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button><button class="btn btn-primary" onclick="guardarEdicion()">💾 Guardar</button></div>
+    <div style="display:flex;gap:10px;margin-top:20px"><button class="btn btn-ghost" onclick="closeModal('mEdit')">Cancelar</button><button class="btn btn-primary" onclick="saveEdit()">💾 Guardar</button></div>
 </div></div>
 
 <script>
-const APP_URL='https://script.google.com/macros/s/AKfycby2gEOPHYVQSe09deoVft7gWN4HlguLvvk_gSx-Xtpkxhw2LAxPuDGv73Kzsp2E_00zRA/exec';
-let usuarios=[],historial=[],lecturas=[],precioKw=0.80,editingRegistro=null;
-const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-const now=new Date();
+const APP='https://script.google.com/macros/s/AKfycby2gEOPHYVQSe09deoVft7gWN4HlguLvvk_gSx-Xtpkxhw2LAxPuDGv73Kzsp2E_00zRA/exec';
+let users=[],hist=[],lects=[],pkw=0.80,editRow=null,chartKw=null,chartGastos=null;
+const MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const N=new Date();
 
-function initSelects(){
-    const rM=document.getElementById('regMes'),fM=document.getElementById('filtroMes');
-    rM.innerHTML='';fM.innerHTML='<option value="">Todos</option>';
-    MESES.forEach(m=>{rM.add(new Option(m,m));fM.add(new Option(m,m));});
-    rM.selectedIndex=now.getMonth();fM.value=MESES[now.getMonth()];
-    const rA=document.getElementById('regAnio'),fA=document.getElementById('filtroAnio');
-    rA.innerHTML='';fA.innerHTML='';
-    for(let y=now.getFullYear();y>=now.getFullYear()-3;y--){rA.add(new Option(y,y));fA.add(new Option(y,y));}
+// INIT SELECTS
+function initSel(){
+    ['regMes','fMes'].forEach(id=>{const e=document.getElementById(id);e.innerHTML=id==='fMes'?'<option value="">Todos</option>':'';MS.forEach(m=>e.add(new Option(m,m)));if(id==='regMes')e.selectedIndex=N.getMonth();if(id==='fMes')e.value=MS[N.getMonth()];});
+    ['regAnio','fAnio','chartYear'].forEach(id=>{const e=document.getElementById(id);e.innerHTML='';for(let y=N.getFullYear();y>=N.getFullYear()-3;y--)e.add(new Option(y,y));});
 }
-initSelects();
+initSel();
 
-async function callAPI(p){const q=new URLSearchParams(p).toString();const r=await fetch(`${APP_URL}?${q}`);return await r.json();}
+async function api(p){const r=await fetch(`${APP}?${new URLSearchParams(p)}`);return r.json();}
 
-async function initApp(){try{await cargarConfig();await cargarUsuarios();await cargarHistorial();await cargarLecturas();}catch(e){console.error(e);}}
+async function init(){try{await loadConfig();await loadUsers();await loadHist();await loadLect();updateDashboard();}catch(e){console.error(e);}}
 
-async function cargarConfig(){const r=await callAPI({action:'getConfig'});if(r.success&&r.config){precioKw=parseFloat(r.config.precioKw)||0.80;document.getElementById('precioKw').value=precioKw;}}
-async function guardarConfig(){precioKw=parseFloat(document.getElementById('precioKw').value)||0.80;await callAPI({action:'setConfig',precioKw});showToast('✅ Precio actualizado');}
+async function loadConfig(){const r=await api({action:'getConfig'});if(r.success&&r.config){pkw=parseFloat(r.config.precioKw)||0.80;document.getElementById('precioKw').value=pkw;}}
+async function saveConfig(){pkw=parseFloat(document.getElementById('precioKw').value)||0.80;await api({action:'setConfig',precioKw:pkw});toast('✅ Precio actualizado');}
 
-async function cargarUsuarios(){const r=await callAPI({action:'getUsuarios'});if(r.success){usuarios=r.usuarios;renderUsuarios();llenarSelectUsuarios();}}
-function renderUsuarios(){
-    const c=document.getElementById('listaUsuarios'),colors=['var(--accent-electric)','var(--accent-water)','var(--accent-cable)','var(--accent-internet)','var(--accent-green)','var(--accent-yellow)'];
-    if(!usuarios.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">👤</div><p>No hay usuarios. Agrega uno.</p></div>';return;}
-    c.innerHTML=usuarios.map((u,i)=>{
-        const icons=u.servicios.split(',').map(s=>({luz:'⚡',agua:'💧',cable:'📺',internet:'🌐'}[s.trim()]||'')).join(' ');
-        return `<div class="user-card"><div class="user-info"><div class="user-avatar" style="background:${colors[i%colors.length]}">${u.nombre.charAt(0).toUpperCase()}</div><div><div class="user-name">${u.nombre}</div><div class="user-services">${icons} ${u.servicios.replace(/,/g,', ')}</div></div></div><div class="user-actions"><button class="btn btn-danger btn-small" onclick="eliminarUsuario('${u.nombre}')">🗑️</button></div></div>`;
-    }).join('');
+async function loadUsers(){const r=await api({action:'getUsuarios'});if(r.success){users=r.usuarios;renderUsers();fillUserSels();}}
+function renderUsers(){
+    const c=document.getElementById('userList'),cl=['var(--electric)','var(--water)','var(--cable)','var(--internet)','var(--green)','var(--yellow)'];
+    if(!users.length){c.innerHTML='<div class="empty"><div class="e-icon">👤</div><p>Agrega tu primer usuario.</p></div>';return;}
+    c.innerHTML=users.map((u,i)=>{const ic=u.servicios.split(',').map(s=>({luz:'⚡',agua:'💧',cable:'📺',internet:'🌐'}[s.trim()]||'')).join(' ');
+    return `<div class="user-card"><div class="user-left"><div class="user-avatar" style="background:${cl[i%cl.length]}">${u.nombre[0].toUpperCase()}</div><div><div class="user-name">${u.nombre}</div><div class="user-svc">${ic} ${u.servicios.replace(/,/g,', ')}</div></div></div><button class="btn btn-danger btn-sm" onclick="delUser('${u.nombre}')">🗑️</button></div>`;}).join('');
 }
-function llenarSelectUsuarios(){
-    ['regUsuario','filtroUsuarioHist','filtroUsuarioLect'].forEach(id=>{
-        const el=document.getElementById(id),first=el.options[0].text;
-        el.innerHTML=`<option value="">${first}</option>`;
-        usuarios.forEach(u=>el.add(new Option(u.nombre,u.nombre)));
-    });
+function fillUserSels(){['regUsuario','fUser','fUserLect','chartUser'].forEach(id=>{const e=document.getElementById(id),f=e.options[0].text;e.innerHTML=`<option value="">${f}</option>`;users.forEach(u=>e.add(new Option(u.nombre,u.nombre)));});}
+function onUserChange(){
+    const n=document.getElementById('regUsuario').value,u=users.find(x=>x.nombre===n);
+    ['gAgua','gCable','gInternet'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+    if(u){const s=u.servicios.split(',').map(x=>x.trim());if(s.includes('agua'))document.getElementById('gAgua').classList.remove('hidden');if(s.includes('cable'))document.getElementById('gCable').classList.remove('hidden');if(s.includes('internet'))document.getElementById('gInternet').classList.remove('hidden');loadLastRead(n);}
 }
-function onUsuarioChange(){
-    const nombre=document.getElementById('regUsuario').value;
-    const user=usuarios.find(u=>u.nombre===nombre);
-    ['grupoAgua','grupoCable','grupoInternet'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-    if(user){
-        const s=user.servicios.split(',').map(s=>s.trim());
-        if(s.includes('agua'))document.getElementById('grupoAgua').classList.remove('hidden');
-        if(s.includes('cable'))document.getElementById('grupoCable').classList.remove('hidden');
-        if(s.includes('internet'))document.getElementById('grupoInternet').classList.remove('hidden');
-        cargarUltimaLectura(nombre);
-    }
-}
-function cargarUltimaLectura(nombre){
-    const ul=lecturas.filter(l=>l.usuario===nombre).sort((a,b)=>{
-        return(parseInt(b.anio)*12+MESES.indexOf(b.mes))-(parseInt(a.anio)*12+MESES.indexOf(a.mes));
-    });
-    const info=document.getElementById('lecturaAnteriorInfo'),inp=document.getElementById('regLectAnterior');
-    if(ul.length>0){
-        info.classList.remove('hidden');
-        document.getElementById('lecturaAnteriorValor').textContent=ul[0].lectActual;
-        document.getElementById('lecturaAnteriorMes').textContent=`${ul[0].mes} ${ul[0].anio}`;
-        inp.value=ul[0].lectActual;
-        calcularConsumo();
-    }else{info.classList.add('hidden');inp.value='';}
+function loadLastRead(n){
+    const ul=lects.filter(l=>l.usuario===n).sort((a,b)=>(parseInt(b.anio)*12+MS.indexOf(b.mes))-(parseInt(a.anio)*12+MS.indexOf(a.mes)));
+    const info=document.getElementById('lastReadInfo'),inp=document.getElementById('regLA');
+    if(ul.length){info.classList.remove('hidden');document.getElementById('lastReadVal').textContent=ul[0].lectActual;document.getElementById('lastReadMes').textContent=`${ul[0].mes} ${ul[0].anio}`;inp.value=ul[0].lectActual;calc();}
+    else{info.classList.add('hidden');inp.value='';}
 }
 
-function calcularConsumo(){
-    const ant=parseFloat(document.getElementById('regLectAnterior').value)||0;
-    const act=parseFloat(document.getElementById('regLectActual').value)||0;
-    const consumo=act-ant,rb=document.getElementById('resultLuz'),mv=document.getElementById('meterVisual');
-    if(act>0&&ant>=0&&consumo>=0){
-        mv.style.display='grid';
-        document.getElementById('meterAnterior').textContent=ant;
-        document.getElementById('meterActual').textContent=act;
-        const monto=consumo*precioKw;
-        rb.style.display='block';
-        document.getElementById('consumoKw').textContent=`${consumo.toFixed(1)} kW`;
-        document.getElementById('montoLuz').textContent=`S/ ${monto.toFixed(2)}`;
-        document.getElementById('detalleLuz').textContent=`${consumo.toFixed(1)} kW × S/ ${precioKw.toFixed(2)} = S/ ${monto.toFixed(2)}`;
-    }else{rb.style.display='none';mv.style.display='none';}
+function calc(){
+    const a=parseFloat(document.getElementById('regLA').value)||0,c=parseFloat(document.getElementById('regLC').value)||0,d=c-a;
+    const rb=document.getElementById('resultBox'),mv=document.getElementById('meterVis');
+    if(c>0&&a>=0&&d>=0){mv.classList.remove('hidden');document.getElementById('mvAnt').textContent=a;document.getElementById('mvAct').textContent=c;
+        const m=d*pkw;rb.classList.remove('hidden');document.getElementById('rKw').textContent=`${d.toFixed(1)} kW`;
+        document.getElementById('rMonto').textContent=`S/ ${m.toFixed(2)}`;document.getElementById('rDetail').textContent=`${d.toFixed(1)} kW × S/ ${pkw.toFixed(2)} = S/ ${m.toFixed(2)}`;
+    }else{rb.classList.add('hidden');mv.classList.add('hidden');}
 }
 
-async function registrarConsumo(){
-    const usuario=document.getElementById('regUsuario').value,mes=document.getElementById('regMes').value,anio=document.getElementById('regAnio').value;
-    const la=parseFloat(document.getElementById('regLectAnterior').value)||0,lc=parseFloat(document.getElementById('regLectActual').value)||0,consumo=lc-la;
-    if(!usuario)return showToast('❌ Selecciona un usuario','error');
-    if(lc<=0)return showToast('❌ Ingresa la lectura actual','error');
-    if(consumo<0)return showToast('❌ La lectura actual debe ser mayor','error');
-    const btn=document.getElementById('btnRegistrar');btn.disabled=true;btn.innerHTML='<span class="loading-spinner"></span> Guardando...';
+async function registrar(){
+    const u=document.getElementById('regUsuario').value,mes=document.getElementById('regMes').value,anio=document.getElementById('regAnio').value;
+    const la=parseFloat(document.getElementById('regLA').value)||0,lc=parseFloat(document.getElementById('regLC').value)||0,d=lc-la;
+    if(!u)return toast('❌ Selecciona usuario','error');if(lc<=0)return toast('❌ Ingresa lectura actual','error');if(d<0)return toast('❌ Lectura actual debe ser mayor','error');
+    const btn=document.getElementById('btnReg');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Guardando...';
     try{
-        const monto=(consumo*precioKw).toFixed(2);
-        await callAPI({action:'addLectura',usuario,mes,anio,lectAnterior:la,lectActual:lc,consumo:consumo.toFixed(1),monto});
-        await callAPI({action:'addConsumo',usuario,mes,anio,servicio:'Luz',detalle:`Lect: ${la} → ${lc} = ${consumo.toFixed(1)} kW`,monto});
+        const m=(d*pkw).toFixed(2);
+        await api({action:'addLectura',usuario:u,mes,anio,lectAnterior:la,lectActual:lc,consumo:d.toFixed(1),monto:m});
+        await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Luz',detalle:`${la} → ${lc} = ${d.toFixed(1)} kW`,monto:m});
         const agua=parseFloat(document.getElementById('regAgua').value)||0;
-        if(agua>0&&!document.getElementById('grupoAgua').classList.contains('hidden'))await callAPI({action:'addConsumo',usuario,mes,anio,servicio:'Agua',detalle:'Consumo mensual',monto:agua.toFixed(2)});
+        if(agua>0&&!document.getElementById('gAgua').classList.contains('hidden'))await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Agua',detalle:'Mensual',monto:agua.toFixed(2)});
         const cable=parseFloat(document.getElementById('regCable').value)||0;
-        if(cable>0&&!document.getElementById('grupoCable').classList.contains('hidden'))await callAPI({action:'addConsumo',usuario,mes,anio,servicio:'Cable',detalle:'Suscripción mensual',monto:cable.toFixed(2)});
-        const internet=parseFloat(document.getElementById('regInternet').value)||0;
-        if(internet>0&&!document.getElementById('grupoInternet').classList.contains('hidden'))await callAPI({action:'addConsumo',usuario,mes,anio,servicio:'Internet',detalle:'Suscripción mensual',monto:internet.toFixed(2)});
-        showToast('✅ ¡Registrado correctamente!');
-        ['regLectAnterior','regLectActual','regAgua','regCable','regInternet'].forEach(id=>document.getElementById(id).value='');
-        document.getElementById('resultLuz').style.display='none';document.getElementById('meterVisual').style.display='none';
-        await cargarHistorial();await cargarLecturas();
-    }catch(e){showToast('❌ Error al registrar','error');}
+        if(cable>0&&!document.getElementById('gCable').classList.contains('hidden'))await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Cable',detalle:'Mensual',monto:cable.toFixed(2)});
+        const net=parseFloat(document.getElementById('regInternet').value)||0;
+        if(net>0&&!document.getElementById('gInternet').classList.contains('hidden'))await api({action:'addConsumo',usuario:u,mes,anio,servicio:'Internet',detalle:'Mensual',monto:net.toFixed(2)});
+        toast('✅ ¡Registrado!');['regLA','regLC','regAgua','regCable','regInternet'].forEach(id=>document.getElementById(id).value='');
+        document.getElementById('resultBox').classList.add('hidden');document.getElementById('meterVis').classList.add('hidden');
+        await loadHist();await loadLect();updateDashboard();
+    }catch(e){toast('❌ Error','error');}
     btn.disabled=false;btn.innerHTML='✅ Registrar Todo';
 }
 
-async function cargarLecturas(){try{const r=await callAPI({action:'getLecturas'});if(r.success){lecturas=r.lecturas;renderLecturas();}}catch(e){console.error(e);}}
-function renderLecturas(){
-    const c=document.getElementById('lecturasContainer'),empty=document.getElementById('emptyLecturas'),f=document.getElementById('filtroUsuarioLect').value;
-    let data=lecturas;if(f)data=data.filter(l=>l.usuario===f);
-    if(!data.length){c.innerHTML='';empty.classList.remove('hidden');return;}
-    empty.classList.add('hidden');
-    data.sort((a,b)=>(parseInt(b.anio)*12+MESES.indexOf(b.mes))-(parseInt(a.anio)*12+MESES.indexOf(a.mes)));
-    c.innerHTML=data.map(l=>`<div class="lectura-card"><div class="lectura-info"><div class="lectura-mes">👤 ${l.usuario} — ${l.mes} ${l.anio}</div><div class="lectura-detalle">📖 Lectura: <strong>${l.lectAnterior}</strong> → <strong>${l.lectActual}</strong> &nbsp;|&nbsp; Consumo: <strong style="color:var(--accent-yellow);">${l.consumo} kW</strong></div></div><div><div class="lectura-monto">S/ ${parseFloat(l.monto).toFixed(2)}</div><div class="lectura-kw">${l.consumo} kW</div></div></div>`).join('');
+async function loadLect(){try{const r=await api({action:'getLecturas'});if(r.success){lects=r.lecturas;renderLect();}}catch(e){}}
+function renderLect(){
+    const c=document.getElementById('lectContainer'),emp=document.getElementById('emptyLect'),f=document.getElementById('fUserLect').value;
+    let d=lects;if(f)d=d.filter(l=>l.usuario===f);
+    if(!d.length){c.innerHTML='';emp.classList.remove('hidden');return;}emp.classList.add('hidden');
+    d.sort((a,b)=>(parseInt(b.anio)*12+MS.indexOf(b.mes))-(parseInt(a.anio)*12+MS.indexOf(a.mes)));
+    c.innerHTML=d.map(l=>`<div class="lect-card"><div><div class="lect-user">👤 ${l.usuario} — ${l.mes} ${l.anio}</div><div class="lect-detail">📖 ${l.lectAnterior} → ${l.lectActual} &nbsp;|&nbsp; <strong style="color:var(--yellow)">${l.consumo} kW</strong></div></div><div><div class="lect-amount">S/ ${parseFloat(l.monto).toFixed(2)}</div><div class="lect-kw">${l.consumo} kW</div></div></div>`).join('');
 }
 
-async function cargarHistorial(){const r=await callAPI({action:'getHistorial'});if(r.success){historial=r.registros;filtrarHistorial();}}
-function filtrarHistorial(){
-    const mF=document.getElementById('filtroMes').value,aF=document.getElementById('filtroAnio').value,uF=document.getElementById('filtroUsuarioHist').value;
-    let f=historial.filter(r=>{if(mF&&r.mes!==mF)return false;if(aF&&r.anio.toString()!==aF)return false;if(uF&&r.usuario!==uF)return false;return true;});
-    let sL=0,sA=0,sC=0,sI=0;
-    f.forEach(r=>{if(r.servicio==='Luz')sL+=r.monto;else if(r.servicio==='Agua')sA+=r.monto;else if(r.servicio==='Cable')sC+=r.monto;else if(r.servicio==='Internet')sI+=r.monto;});
-    document.getElementById('sumLuz').textContent=`S/ ${sL.toFixed(2)}`;document.getElementById('sumAgua').textContent=`S/ ${sA.toFixed(2)}`;
-    document.getElementById('sumCable').textContent=`S/ ${sC.toFixed(2)}`;document.getElementById('sumInternet').textContent=`S/ ${sI.toFixed(2)}`;
-    renderHistorial(f);
+async function loadHist(){const r=await api({action:'getHistorial'});if(r.success){hist=r.registros;filtHist();}}
+function filtHist(){
+    const mf=document.getElementById('fMes').value,af=document.getElementById('fAnio').value,uf=document.getElementById('fUser').value;
+    let f=hist.filter(r=>{if(mf&&r.mes!==mf)return false;if(af&&r.anio.toString()!==af)return false;if(uf&&r.usuario!==uf)return false;return true;});
+    let sL=0,sA=0,sC=0,sI=0;f.forEach(r=>{if(r.servicio==='Luz')sL+=r.monto;else if(r.servicio==='Agua')sA+=r.monto;else if(r.servicio==='Cable')sC+=r.monto;else if(r.servicio==='Internet')sI+=r.monto;});
+    document.getElementById('hLuz').textContent=`S/ ${sL.toFixed(2)}`;document.getElementById('hAgua').textContent=`S/ ${sA.toFixed(2)}`;
+    document.getElementById('hCable').textContent=`S/ ${sC.toFixed(2)}`;document.getElementById('hInternet').textContent=`S/ ${sI.toFixed(2)}`;
+    renderHist(f);
 }
-function renderHistorial(data){
-    const body=document.getElementById('historialBody'),empty=document.getElementById('emptyHistorial');
-    if(!data.length){body.innerHTML='';empty.classList.remove('hidden');return;}
-    empty.classList.add('hidden');
+function renderHist(data){
+    const body=document.getElementById('histBody'),emp=document.getElementById('emptyHist');
+    if(!data.length){body.innerHTML='';emp.classList.remove('hidden');return;}emp.classList.add('hidden');
     const bc={'Luz':'badge-luz','Agua':'badge-agua','Cable':'badge-cable','Internet':'badge-internet'};
-    data.sort((a,b)=>(parseInt(b.anio)*12+MESES.indexOf(b.mes))-(parseInt(a.anio)*12+MESES.indexOf(a.mes)));
-    let total=0;data.forEach(r=>total+=r.monto);
-    body.innerHTML=data.map(r=>`<tr><td><strong>${r.usuario}</strong></td><td>${r.mes} ${r.anio}</td><td><span class="badge ${bc[r.servicio]||''}">${r.servicio}</span></td><td style="color:var(--text-secondary);font-size:14px;">${r.detalle}</td><td class="amount-cell" style="color:var(--accent-green);">S/ ${r.monto.toFixed(2)}</td><td><div style="display:flex;gap:6px;"><button class="btn btn-secondary btn-small" style="padding:6px 10px;font-size:14px;" onclick="editarRegistro(${r.fila},'${r.servicio}',${r.monto},'${r.detalle.replace(/'/g,"\\'")}')">✏️</button><button class="btn btn-danger btn-small" style="padding:6px 10px;font-size:14px;" onclick="eliminarRegistro(${r.fila})">🗑️</button></div></td></tr>`).join('')+`<tr class="total-row"><td colspan="4" style="text-align:right;font-size:18px;">TOTAL:</td><td class="amount-cell" style="color:var(--accent-electric);font-size:22px;">S/ ${total.toFixed(2)}</td><td></td></tr>`;
+    data.sort((a,b)=>(parseInt(b.anio)*12+MS.indexOf(b.mes))-(parseInt(a.anio)*12+MS.indexOf(a.mes)));
+    let tot=0;data.forEach(r=>tot+=r.monto);
+    body.innerHTML=data.map(r=>`<tr><td><strong>${r.usuario}</strong></td><td>${r.mes.substring(0,3)} ${r.anio}</td><td><span class="badge ${bc[r.servicio]||''}">${r.servicio}</span></td><td style="color:var(--text3);font-size:13px">${r.detalle}</td><td class="amt" style="color:var(--green)">S/ ${r.monto.toFixed(2)}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="openEdit(${r.fila},'${r.servicio}',${r.monto},'${r.detalle.replace(/'/g,"\\'")}')">✏️</button><button class="btn btn-danger btn-sm" onclick="delReg(${r.fila})">🗑️</button></div></td></tr>`).join('')+`<tr class="total-row"><td colspan="4" style="text-align:right;font-size:16px;font-weight:800">TOTAL</td><td class="amt" style="color:var(--electric);font-size:20px">S/ ${tot.toFixed(2)}</td><td></td></tr>`;
 }
 
-function editarRegistro(fila,servicio,monto,detalle){
-    editingRegistro=fila;
-    document.getElementById('editFields').innerHTML=`<div class="form-group"><label class="form-label">📌 Servicio</label><input type="text" class="form-input" value="${servicio}" disabled style="opacity:0.6;"></div><div class="form-group"><label class="form-label">📝 Detalle</label><input type="text" class="form-input" id="editDetalle" value="${detalle}"></div><div class="form-group"><label class="form-label">💰 Monto (S/)</label><input type="number" class="form-input" id="editMonto" value="${monto}" step="0.01" min="0"></div>`;
-    document.getElementById('modalEditar').classList.remove('hidden');
+// DASHBOARD
+function updateDashboard(){
+    const yr=document.getElementById('chartYear').value||N.getFullYear();const uf=document.getElementById('chartUser').value;
+    const yrData=hist.filter(r=>r.anio.toString()===yr.toString()&&(!uf||r.usuario===uf));
+    let tL=0,tA=0,tC=0,tI=0;
+    yrData.forEach(r=>{if(r.servicio==='Luz')tL+=r.monto;else if(r.servicio==='Agua')tA+=r.monto;else if(r.servicio==='Cable')tC+=r.monto;else if(r.servicio==='Internet')tI+=r.monto;});
+    document.getElementById('dLuz').textContent=`S/ ${tL.toFixed(0)}`;document.getElementById('dAgua').textContent=`S/ ${tA.toFixed(0)}`;
+    document.getElementById('dCable').textContent=`S/ ${tC.toFixed(0)}`;document.getElementById('dInternet').textContent=`S/ ${tI.toFixed(0)}`;
+    updateCharts();buildResumen();
 }
-function cerrarModalEditar(){document.getElementById('modalEditar').classList.add('hidden');}
-async function guardarEdicion(){await callAPI({action:'editRegistro',fila:editingRegistro,monto:document.getElementById('editMonto').value,detalle:document.getElementById('editDetalle').value});showToast('✅ Actualizado');cerrarModalEditar();await cargarHistorial();}
-async function eliminarRegistro(fila){if(!confirm('¿Eliminar este registro?'))return;await callAPI({action:'deleteRegistro',fila});showToast('✅ Eliminado');await cargarHistorial();}
-
-function mostrarModalUsuario(){
-    document.getElementById('modalUsuarioTitle').textContent='➕ Agregar Usuario';document.getElementById('inputNombreUsuario').value='';
-    document.querySelectorAll('#modalUsuario .toggle-item').forEach(el=>{const s=el.dataset.service;el.dataset.active=s==='luz'?'true':'false';el.className='toggle-item'+(s==='luz'?' active-'+s:'');el.querySelector('.toggle-check').textContent=s==='luz'?'✓':'';});
-    document.getElementById('modalUsuario').classList.remove('hidden');
+function updateCharts(){
+    const yr=document.getElementById('chartYear').value||N.getFullYear();const uf=document.getElementById('chartUser').value;
+    const yrLects=lects.filter(l=>l.anio.toString()===yr.toString()&&(!uf||l.usuario===uf));
+    const yrHist=hist.filter(r=>r.anio.toString()===yr.toString()&&(!uf||r.usuario===uf));
+    const kwData=MS.map(m=>{let t=0;yrLects.filter(l=>l.mes===m).forEach(l=>t+=parseFloat(l.consumo)||0);return t;});
+    const luzData=MS.map(m=>{let t=0;yrHist.filter(r=>r.mes===m&&r.servicio==='Luz').forEach(r=>t+=r.monto);return t;});
+    const aguaData=MS.map(m=>{let t=0;yrHist.filter(r=>r.mes===m&&r.servicio==='Agua').forEach(r=>t+=r.monto);return t;});
+    const cableData=MS.map(m=>{let t=0;yrHist.filter(r=>r.mes===m&&r.servicio==='Cable').forEach(r=>t+=r.monto);return t;});
+    const netData=MS.map(m=>{let t=0;yrHist.filter(r=>r.mes===m&&r.servicio==='Internet').forEach(r=>t+=r.monto);return t;});
+    const labels=MS.map(m=>m.substring(0,3));
+    const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{family:'DM Sans'}}}},scales:{x:{ticks:{color:'#64748b',font:{family:'DM Sans'}},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b',font:{family:'DM Sans'}},grid:{color:'#1e293b'}}}};
+    if(chartKw)chartKw.destroy();
+    chartKw=new Chart(document.getElementById('chartKw'),{type:'bar',data:{labels,datasets:[{label:'kW consumidos',data:kwData,backgroundColor:'rgba(56,189,248,0.6)',borderColor:'#38bdf8',borderWidth:2,borderRadius:6}]},options:{...chartOpts,plugins:{...chartOpts.plugins,legend:{display:false}}}});
+    if(chartGastos)chartGastos.destroy();
+    chartGastos=new Chart(document.getElementById('chartGastos'),{type:'line',data:{labels,datasets:[
+        {label:'Luz',data:luzData,borderColor:'#38bdf8',backgroundColor:'rgba(56,189,248,0.1)',fill:true,tension:0.4},
+        {label:'Agua',data:aguaData,borderColor:'#67e8f9',backgroundColor:'rgba(103,232,249,0.1)',fill:true,tension:0.4},
+        {label:'Cable',data:cableData,borderColor:'#fb923c',backgroundColor:'rgba(251,146,60,0.1)',fill:true,tension:0.4},
+        {label:'Internet',data:netData,borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,0.1)',fill:true,tension:0.4}
+    ]},options:chartOpts});
 }
-function cerrarModalUsuario(){document.getElementById('modalUsuario').classList.add('hidden');}
-function toggleService(el,service){if(service==='luz')return;const a=el.dataset.active==='true';el.dataset.active=a?'false':'true';el.className='toggle-item'+(!a?` active-${service}`:'');el.querySelector('.toggle-check').textContent=!a?'✓':'';}
-async function guardarUsuario(){
-    const nombre=document.getElementById('inputNombreUsuario').value.trim();if(!nombre)return showToast('❌ Escribe el nombre','error');
-    const servicios=[];document.querySelectorAll('#modalUsuario .toggle-item').forEach(el=>{if(el.dataset.active==='true')servicios.push(el.dataset.service);});
-    await callAPI({action:'addUsuario',nombre,servicios:servicios.join(',')});showToast('✅ Usuario agregado');cerrarModalUsuario();await cargarUsuarios();
+function buildResumen(){
+    const yr=document.getElementById('chartYear').value||N.getFullYear();const uf=document.getElementById('chartUser').value;
+    const yrHist=hist.filter(r=>r.anio.toString()===yr.toString()&&(!uf||r.usuario===uf));
+    const body=document.getElementById('resumenBody');let gTotal=0;
+    body.innerHTML=MS.map(m=>{
+        let l=0,a=0,c=0,n=0;yrHist.filter(r=>r.mes===m).forEach(r=>{if(r.servicio==='Luz')l+=r.monto;else if(r.servicio==='Agua')a+=r.monto;else if(r.servicio==='Cable')c+=r.monto;else if(r.servicio==='Internet')n+=r.monto;});
+        const t=l+a+c+n;gTotal+=t;if(t===0)return '';
+        return `<tr><td><strong>${m.substring(0,3)}</strong></td><td class="amt" style="color:var(--electric)">S/ ${l.toFixed(2)}</td><td class="amt" style="color:var(--water)">S/ ${a.toFixed(2)}</td><td class="amt" style="color:var(--cable)">S/ ${c.toFixed(2)}</td><td class="amt" style="color:var(--internet)">S/ ${n.toFixed(2)}</td><td class="amt" style="color:var(--green)">S/ ${t.toFixed(2)}</td></tr>`;
+    }).join('')+`<tr class="total-row"><td><strong>TOTAL</strong></td><td colspan="4"></td><td class="amt" style="color:var(--electric);font-size:18px">S/ ${gTotal.toFixed(2)}</td></tr>`;
 }
-async function eliminarUsuario(nombre){if(!confirm(`¿Eliminar a "${nombre}"?`))return;await callAPI({action:'deleteUsuario',nombre});showToast('✅ Eliminado');await cargarUsuarios();}
 
-function switchTab(name,btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[id^="tab-"]').forEach(t=>t.classList.add('hidden'));btn.classList.add('active');document.getElementById(`tab-${name}`).classList.remove('hidden');if(name==='historial')cargarHistorial();if(name==='lecturas')cargarLecturas();if(name==='usuarios')cargarUsuarios();}
+// EXPORT PDF
+function exportPDF(){
+    const{jsPDF}=window.jspdf;const doc=new jsPDF();const yr=document.getElementById('chartYear').value||N.getFullYear();
+    doc.setFontSize(18);doc.text(`Control de Servicios - ${yr}`,14,20);doc.setFontSize(11);doc.text(`Generado: ${new Date().toLocaleDateString('es-PE')}`,14,28);
+    const yrHist=hist.filter(r=>r.anio.toString()===yr.toString());
+    const rows=MS.map(m=>{let l=0,a=0,c=0,n=0;yrHist.filter(r=>r.mes===m).forEach(r=>{if(r.servicio==='Luz')l+=r.monto;else if(r.servicio==='Agua')a+=r.monto;else if(r.servicio==='Cable')c+=r.monto;else if(r.servicio==='Internet')n+=r.monto;});return[m,`S/ ${l.toFixed(2)}`,`S/ ${a.toFixed(2)}`,`S/ ${c.toFixed(2)}`,`S/ ${n.toFixed(2)}`,`S/ ${(l+a+c+n).toFixed(2)}`];}).filter(r=>r[5]!=='S/ 0.00');
+    doc.autoTable({head:[['Mes','Luz','Agua','Cable','Internet','Total']],body:rows,startY:35,theme:'grid',headStyles:{fillColor:[56,189,248],textColor:[12,18,32]},styles:{font:'helvetica',fontSize:10}});
+    // Lecturas
+    const yrLects=lects.filter(l=>l.anio.toString()===yr.toString());
+    if(yrLects.length){const startY=doc.lastAutoTable.finalY+15;doc.setFontSize(14);doc.text('Lecturas del Medidor',14,startY);
+        const lectRows=yrLects.map(l=>[l.usuario,l.mes,l.lectAnterior,l.lectActual,`${l.consumo} kW`,`S/ ${parseFloat(l.monto).toFixed(2)}`]);
+        doc.autoTable({head:[['Usuario','Mes','Anterior','Actual','Consumo','Monto']],body:lectRows,startY:startY+5,theme:'grid',headStyles:{fillColor:[250,204,21],textColor:[12,18,32]},styles:{fontSize:9}});
+    }
+    doc.save(`servicios-${yr}.pdf`);toast('✅ PDF descargado');
+}
 
-function showToast(msg,type='success'){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className=`toast toast-${type}`;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+// EXPORT EXCEL
+function exportExcel(){
+    const yr=document.getElementById('chartYear').value||N.getFullYear();
+    const yrHist=hist.filter(r=>r.anio.toString()===yr.toString());
+    const wsData=[['Mes','Servicio','Usuario','Detalle','Monto']];
+    yrHist.forEach(r=>wsData.push([`${r.mes} ${r.anio}`,r.servicio,r.usuario,r.detalle,r.monto]));
+    const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(wsData);
+    XLSX.utils.book_append_sheet(wb,ws,'Historial');
+    // Lecturas sheet
+    const lectData=[['Usuario','Mes','Año','Lect. Anterior','Lect. Actual','Consumo kW','Monto']];
+    lects.filter(l=>l.anio.toString()===yr.toString()).forEach(l=>lectData.push([l.usuario,l.mes,l.anio,l.lectAnterior,l.lectActual,l.consumo,l.monto]));
+    const ws2=XLSX.utils.aoa_to_sheet(lectData);XLSX.utils.book_append_sheet(wb,ws2,'Lecturas');
+    XLSX.utils.book_append_sheet(wb,ws,'Historial');
+    XLSX.writeFile(wb,`servicios-${yr}.xlsx`);toast('✅ Excel descargado');
+}
 
-initApp();
+// EDIT/DELETE
+function openEdit(fila,serv,monto,det){editRow=fila;document.getElementById('editFields').innerHTML=`<div class="form-group"><label class="form-label">Servicio</label><input type="text" class="form-input" value="${serv}" disabled style="opacity:0.5"></div><div class="form-group"><label class="form-label">Detalle</label><input type="text" class="form-input" id="edDet" value="${det}"></div><div class="form-group"><label class="form-label">Monto (S/)</label><input type="number" class="form-input" id="edMonto" value="${monto}" step="0.01" min="0"></div>`;document.getElementById('mEdit').classList.remove('hidden');}
+async function saveEdit(){await api({action:'editRegistro',fila:editRow,monto:document.getElementById('edMonto').value,detalle:document.getElementById('edDet').value});toast('✅ Actualizado');closeModal('mEdit');await loadHist();updateDashboard();}
+async function delReg(f){if(!confirm('¿Eliminar?'))return;await api({action:'deleteRegistro',fila:f});toast('✅ Eliminado');await loadHist();updateDashboard();}
+
+// USER MODAL
+function openUserModal(){document.getElementById('mUserTitle').textContent='➕ Agregar Usuario';document.getElementById('iUserName').value='';document.querySelectorAll('#mUser .toggle').forEach(el=>{const s=el.dataset.s;el.dataset.on=s==='luz'?'1':'0';el.className='toggle'+(s==='luz'?' on-'+s:'');el.querySelector('.t-check').textContent=s==='luz'?'✓':'';});document.getElementById('mUser').classList.remove('hidden');}
+function closeModal(id){document.getElementById(id).classList.add('hidden');}
+function tgl(el,s){if(s==='luz')return;const on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.className='toggle'+(!on?` on-${s}`:'');el.querySelector('.t-check').textContent=!on?'✓':'';}
+async function saveUser(){const n=document.getElementById('iUserName').value.trim();if(!n)return toast('❌ Escribe nombre','error');const sv=[];document.querySelectorAll('#mUser .toggle').forEach(el=>{if(el.dataset.on==='1')sv.push(el.dataset.s);});await api({action:'addUsuario',nombre:n,servicios:sv.join(',')});toast('✅ Agregado');closeModal('mUser');await loadUsers();}
+async function delUser(n){if(!confirm(`¿Eliminar "${n}"?`))return;await api({action:'deleteUsuario',nombre:n});toast('✅ Eliminado');await loadUsers();}
+
+// NAV
+function go(name,btn){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[id^="p-"]').forEach(p=>p.classList.add('hidden'));btn.classList.add('active');document.getElementById(`p-${name}`).classList.remove('hidden');if(name==='dashboard'){updateDashboard();}if(name==='historial')loadHist();if(name==='lecturas')loadLect();if(name==='usuarios')loadUsers();}
+
+function toast(m,t='success'){const e=document.querySelector('.toast');if(e)e.remove();const d=document.createElement('div');d.className=`toast toast-${t}`;d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),3000);}
+
+init();
 </script>
 </body>
 </html>
