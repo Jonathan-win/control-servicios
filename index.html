@@ -417,7 +417,7 @@ function renderLect(){
     let d=lects;if(f)d=d.filter(l=>l.usuario===f);
     if(!d.length){c.innerHTML='';emp.classList.remove('hidden');return;}emp.classList.add('hidden');
     d.sort((a,b)=>(parseInt(b.anio)*12+MS.indexOf(b.mes))-(parseInt(a.anio)*12+MS.indexOf(a.mes)));
-    c.innerHTML=d.map(l=>`<div class="lect-card"><div><div class="lect-user">👤 ${l.usuario} — ${l.mes} ${l.anio}</div><div class="lect-detail">📖 ${l.lectAnterior} → ${l.lectActual} &nbsp;|&nbsp; <strong style="color:var(--yellow)">${l.consumo} kW</strong></div></div><div><div class="lect-amount">S/ ${parseFloat(l.monto).toFixed(2)}</div><div class="lect-kw">${l.consumo} kW</div></div></div>`).join('');
+    c.innerHTML=d.map(l=>`<div class="lect-card"><div><div class="lect-user">👤 ${l.usuario} — ${l.mes} ${l.anio}</div><div class="lect-detail">📖 ${l.lectAnterior} → ${l.lectActual} &nbsp;|&nbsp; <strong style="color:var(--yellow)">${l.consumo} kW</strong></div></div><div style="display:flex;align-items:center;gap:10px"><div><div class="lect-amount">S/ ${parseFloat(l.monto).toFixed(2)}</div><div class="lect-kw">${l.consumo} kW</div></div><button class="btn btn-danger btn-sm" onclick="delLect(${l.fila})" style="padding:6px 10px">🗑️</button></div></div>`).join('');
 }
 
 async function loadHist(){const r=await api({action:'getHistorial'});if(r.success){hist=r.registros;filtHist();}}
@@ -516,6 +516,7 @@ function exportExcel(){
 function openEdit(fila,serv,monto,det){editRow=fila;document.getElementById('editFields').innerHTML=`<div class="form-group"><label class="form-label">Servicio</label><input type="text" class="form-input" value="${serv}" disabled style="opacity:0.5"></div><div class="form-group"><label class="form-label">Detalle</label><input type="text" class="form-input" id="edDet" value="${det}"></div><div class="form-group"><label class="form-label">Monto (S/)</label><input type="number" class="form-input" id="edMonto" value="${monto}" step="0.01" min="0"></div>`;document.getElementById('mEdit').classList.remove('hidden');}
 async function saveEdit(){await api({action:'editRegistro',fila:editRow,monto:document.getElementById('edMonto').value,detalle:document.getElementById('edDet').value});toast('✅ Actualizado');closeModal('mEdit');await loadHist();updateDashboard();}
 async function delReg(f){if(!confirm('¿Eliminar?'))return;await api({action:'deleteRegistro',fila:f});toast('✅ Eliminado');await loadHist();updateDashboard();}
+async function delLect(f){if(!confirm('¿Eliminar esta lectura?'))return;await api({action:'deleteLectura',fila:f});toast('✅ Lectura eliminada');await loadLect();}
 
 // USER MODAL
 function openUserModal(){document.getElementById('mUserTitle').textContent='➕ Agregar Usuario';document.getElementById('iUserName').value='';document.querySelectorAll('#mUser .toggle').forEach(el=>{const s=el.dataset.s;el.dataset.on=s==='luz'?'1':'0';el.className='toggle'+(s==='luz'?' on-'+s:'');el.querySelector('.t-check').textContent=s==='luz'?'✓':'';});document.getElementById('mUser').classList.remove('hidden');}
