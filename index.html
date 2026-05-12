@@ -400,13 +400,14 @@ function gv(id){const el=document.getElementById(id);return el?el.value.trim():'
 async function init(){
   setTodayDate();setWeekDates();
   setConn('loading','cargando...');
+  preloadSemanaLocal();
   try{
-    const[rh,rr]=await Promise.all([apiCall({action:'getRegistros'}),apiCall({action:'getRutina'})]);
+    const rh=await apiCall({action:'getRegistros'});
     if(rh.ok)historial=Array.isArray(rh.data)?rh.data:[];
-    if(rr.ok)rutina=rr.data||{};
-    setConn('ok','sheets conectado');
+    setConn('ok','conectado');
   }catch(e){setConn('err','sin conexión');}
-  loadRespaldos();renderAll();
+  loadRespaldos();
+  renderAll();
 }
 
 function loadRespaldos(){
@@ -844,10 +845,8 @@ function showToast(msg){
   if(el){el.addEventListener('change',()=>{genReport();renderHoyProg();});el.addEventListener('input',genReport);}
 });
 
-async function preloadSemana(){
+function preloadSemanaLocal(){
   const semKey='2026-05-11';
-  // Forzar carga siempre para esta semana nueva
-  // if(rutina[semKey])return;
   rutina[semKey]={
     0:[
       {eq:'Bomba 308A',om:'100675204',desc:'INSP 1M MOTOR BOMBA 308A ELEC SERV — OM 100675204 (PM02)',done:false},
@@ -902,18 +901,10 @@ async function preloadSemana(){
     ]
   };
   document.getElementById('r-ini').value=semKey;
-  const vie=new Date('2026-05-11T12:00:00');vie.setDate(vie.getDate()+4);
-  document.getElementById('r-fin').value=fmtISO(vie);
-  await apiCall({action:'saveRutina',data:rutina});
-  showToast('Rutina semana 11–15 May cargada ✓');
-  renderWeekPills();renderWeekContent();renderHoyProg();renderHist();
+  document.getElementById('r-fin').value='2026-05-15';
 }
 
-
-
-
-
-init().then(()=>preloadSemana());
+init();
 </script>
 </body>
 </html>
