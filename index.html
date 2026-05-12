@@ -491,12 +491,9 @@ function setTodayDate(){
 }
 
 function setWeekDates(){
-  const h=new Date();
-  const diff=h.getDay()===0?-6:1-h.getDay();
-  const lun=new Date(h);lun.setDate(h.getDate()+diff);
-  const vie=new Date(lun);vie.setDate(lun.getDate()+4);
-  document.getElementById('r-ini').value=fmtISO(lun);
-  document.getElementById('r-fin').value=fmtISO(vie);
+  // Semana actual: 11-15 Mayo 2026
+  document.getElementById('r-ini').value='2026-05-11';
+  document.getElementById('r-fin').value='2026-05-15';
 }
 
 function renderAll(){
@@ -849,7 +846,8 @@ function showToast(msg){
 
 async function preloadSemana(){
   const semKey='2026-05-11';
-  if(rutina[semKey])return;
+  // Forzar carga siempre para esta semana nueva
+  // if(rutina[semKey])return;
   rutina[semKey]={
     0:[
       {eq:'Bomba 308A',om:'100675204',desc:'INSP 1M MOTOR BOMBA 308A ELEC SERV — OM 100675204 (PM02)',done:false},
