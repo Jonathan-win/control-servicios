@@ -511,11 +511,8 @@
     <div class="header-inner">
         <h1>💡 Control de Servicios del Hogar</h1>
         <div class="connect-section">
-            <span class="status-dot" id="statusDot"></span>
-            <span id="statusText" style="font-size:14px;color:var(--text-muted)">Sin conectar</span>
-            <input type="text" id="scriptUrl" placeholder="Pega aquí la URL de tu Apps Script" />
-            <button class="btn btn-primary" onclick="conectar()">Conectar</button>
-            <button class="btn btn-outline" onclick="showModal()">📄 Ver código Apps Script</button>
+            <span class="status-dot connected" id="statusDot"></span>
+            <span id="statusText" style="font-size:14px;color:var(--accent-green)">Conectado</span>
         </div>
     </div>
 </div>
@@ -648,7 +645,7 @@
 // ============================
 
 let config = {
-    scriptUrl: '',
+    scriptUrl: 'https://script.google.com/macros/s/AKfycby2gEOPHYVQSe09deoVft7gWN4HlguLvvk_gSx-Xtpkxhw2LAxPuDGv73Kzsp2E_00zRA/exec',
     preciokw: 0.80,
     usuarios: [
         { nombre: 'Jonathan', servicios: ['luz', 'agua', 'cable', 'internet'] },
@@ -1187,11 +1184,9 @@ function toast(msg, error=false) {
 
 window.onload = () => {
     cargarConfigLocal();
-    if (config.scriptUrl) {
-        document.getElementById('scriptUrl').value = config.scriptUrl;
-        actualizarEstadoConexion(true);
-    }
+    actualizarEstadoConexion(true);
     renderUsuarios();
+    cargarHistorial();
 };
 
 // Cerrar modal al hacer clic fuera
