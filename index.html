@@ -1,689 +1,750 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 Control de Servicios del Hogar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #0f1923;
-            --bg-card: #1a2733;
-            --bg-input: #0d1520;
-            --accent: #00d4ff;
-            --accent-water: #4fc3f7;
-            --accent-cable: #ff8a65;
-            --accent-internet: #ab47bc;
-            --green: #66bb6a;
-            --yellow: #ffd54f;
-            --red: #ef5350;
-            --text: #e8f0f8;
-            --text2: #8da4b8;
-            --text3: #5a7a92;
-            --border: #2a3f52;
-            --radius: 14px;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Nunito',sans-serif; background:var(--bg-main); color:var(--text); min-height:100vh; font-size:17px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💡 Control de Servicios</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1520;
+  --bg2: #111e2d;
+  --bg3: #162434;
+  --card: #1a2d40;
+  --input: #0d1a27;
+  --border: #253d55;
+  --accent: #00d4ff;
+  --green: #4ade80;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --orange: #fb923c;
+  --purple: #c084fc;
+  --text: #e2edf7;
+  --text2: #7da0bb;
+  --text3: #4a6a80;
+  --r: 14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;}
 
-        /* HEADER */
-        .header {
-            background:linear-gradient(135deg,#0a1828,#1a3a5c,#0a1828);
-            border-bottom:2px solid var(--accent);
-            padding:16px 24px;
-            position:sticky; top:0; z-index:100;
-            box-shadow:0 4px 20px rgba(0,212,255,0.15);
-        }
-        .header-inner { max-width:980px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-        .header h1 { font-family:'Fredoka One',cursive; font-size:24px; color:var(--accent); text-shadow:0 0 20px rgba(0,212,255,0.4); }
-        .status-indicator { display:flex; align-items:center; gap:8px; font-size:15px; }
-        .dot { width:10px; height:10px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); }
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#081320,#0f2540,#081320);border-bottom:2px solid var(--accent);padding:14px 20px;position:sticky;top:0;z-index:200;box-shadow:0 4px 24px rgba(0,212,255,0.12);}
+.hdr-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.hdr h1{font-family:'Fredoka One',cursive;font-size:22px;color:var(--accent);text-shadow:0 0 16px rgba(0,212,255,0.5);}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.dot-status{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+.dot-status.off{background:var(--red);box-shadow:0 0 8px var(--red);}
+#statusTxt{font-size:13px;font-weight:700;color:var(--green);}
 
-        /* TABS */
-        .tabs { max-width:980px; margin:22px auto 0; padding:0 16px; display:flex; gap:6px; }
-        .tab { padding:10px 22px; border-radius:12px 12px 0 0; font-weight:700; font-size:16px; cursor:pointer; background:var(--bg-card); color:var(--text3); border:1.5px solid var(--border); border-bottom:none; transition:all 0.2s; }
-        .tab:hover { color:var(--text); }
-        .tab.active { background:#1a2f42; color:var(--accent); border-color:var(--accent); }
+/* NAV */
+.nav{max-width:1000px;margin:20px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav::-webkit-scrollbar{height:0;}
+.ntab{padding:9px 18px;border-radius:10px 10px 0 0;font-weight:800;font-size:14px;cursor:pointer;background:var(--card);color:var(--text3);border:1.5px solid var(--border);border-bottom:none;white-space:nowrap;transition:all 0.18s;}
+.ntab:hover{color:var(--text2);}
+.ntab.active{background:#152840;color:var(--accent);border-color:var(--accent);}
 
-        /* PANEL */
-        .main { max-width:980px; margin:0 auto; padding:0 16px 50px; }
-        .panel { background:var(--bg-card); border:1.5px solid var(--border); border-radius:0 var(--radius) var(--radius) var(--radius); padding:26px; }
-        .section-title { font-family:'Fredoka One',cursive; font-size:21px; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+/* MAIN */
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px 60px;}
+.panel{background:var(--card);border:1.5px solid var(--border);border-radius:0 var(--r) var(--r) var(--r);padding:22px;}
+.ptitle{font-family:'Fredoka One',cursive;font-size:20px;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
 
-        /* USERS */
-        .users-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-bottom:26px; }
-        .user-card { background:var(--bg-input); border:1.5px solid var(--border); border-radius:var(--radius); padding:18px; cursor:pointer; transition:all 0.2s; }
-        .user-card:hover, .user-card.selected { border-color:var(--accent); background:#142030; }
-        .user-card.selected { box-shadow:0 0 0 2px var(--accent); }
-        .user-name { font-size:21px; font-weight:800; margin-bottom:8px; }
-        .badges { display:flex; flex-wrap:wrap; gap:5px; }
-        .badge { padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
-        .b-luz { background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); }
-        .b-agua { background:rgba(79,195,247,0.15); color:var(--accent-water); border:1px solid rgba(79,195,247,0.3); }
-        .b-cable { background:rgba(255,138,101,0.15); color:var(--accent-cable); border:1px solid rgba(255,138,101,0.3); }
-        .b-internet { background:rgba(171,71,188,0.15); color:var(--accent-internet); border:1px solid rgba(171,71,188,0.3); }
+/* DASHBOARD */
+.month-selector{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.month-selector select{background:var(--input);border:1.5px solid var(--border);color:var(--text);padding:9px 14px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;}
+.month-selector select:focus{outline:none;border-color:var(--accent);}
+.month-selector select option{background:#1a2d40;}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:22px;}
+.user-summary{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;transition:all 0.2s;cursor:default;}
+.user-summary:hover{border-color:var(--accent);transform:translateY(-2px);}
+.us-name{font-size:18px;font-weight:900;margin-bottom:2px;}
+.us-total{font-family:'Fredoka One',cursive;font-size:30px;color:var(--yellow);margin:8px 0 10px;}
+.us-total.paid{color:var(--green);}
+.us-breakdown{display:flex;flex-direction:column;gap:4px;}
+.us-line{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);}
+.us-line span:last-child{font-weight:700;color:var(--text);}
+.paid-btn{margin-top:10px;width:100%;padding:7px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;border:none;transition:all 0.2s;}
+.paid-btn.unpaid{background:rgba(251,191,36,0.15);color:var(--yellow);border:1.5px solid rgba(251,191,36,0.4);}
+.paid-btn.paid{background:rgba(74,222,128,0.15);color:var(--green);border:1.5px solid rgba(74,222,128,0.4);}
 
-        /* FORM */
-        .form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px; margin-bottom:18px; }
-        .fg { display:flex; flex-direction:column; gap:5px; }
-        .fg label { font-size:13px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; }
-        .fg input, .fg select { background:var(--bg-input); border:1.5px solid var(--border); color:var(--text); padding:11px 14px; border-radius:10px; font-size:17px; font-family:inherit; transition:border-color 0.2s; }
-        .fg input:focus, .fg select:focus { outline:none; border-color:var(--accent); }
-        .fg select option { background:#1a2733; }
+/* GLOBAL SUMMARY */
+.global-bar{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;margin-bottom:22px;}
+.gb-item{text-align:center;}
+.gb-label{font-size:12px;color:var(--text3);margin-bottom:4px;}
+.gb-value{font-family:'Fredoka One',cursive;font-size:22px;}
 
-        .monto-preview { background:linear-gradient(135deg,#0a2030,#142840); border:1.5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:12px; }
-        .monto-preview .label { font-size:15px; color:var(--text2); }
-        .monto-preview .amount { font-family:'Fredoka One',cursive; font-size:34px; color:var(--yellow); text-shadow:0 0 20px rgba(255,213,79,0.4); }
+/* REGISTRAR */
+.users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px;}
+.ucard{background:var(--input);border:1.5px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all 0.18s;}
+.ucard:hover,.ucard.sel{border-color:var(--accent);background:#0f2035;}
+.ucard.sel{box-shadow:0 0 0 2px var(--accent);}
+.ucard-name{font-size:17px;font-weight:800;margin-bottom:6px;}
+.badges{display:flex;flex-wrap:wrap;gap:4px;}
+.badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;}
+.b-luz{background:rgba(0,212,255,0.12);color:var(--accent);border:1px solid rgba(0,212,255,0.25);}
+.b-agua{background:rgba(79,195,247,0.12);color:#67d5f7;border:1px solid rgba(79,195,247,0.25);}
+.b-cable{background:rgba(251,146,60,0.12);color:var(--orange);border:1px solid rgba(251,146,60,0.25);}
+.b-internet{background:rgba(192,132,252,0.12);color:var(--purple);border:1px solid rgba(192,132,252,0.25);}
+.b-arbitrios{background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.25);}
 
-        /* BUTTONS */
-        .btn { padding:9px 20px; border-radius:10px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; border:none; transition:all 0.2s; }
-        .btn:hover { transform:translateY(-1px); }
-        .btn-primary { background:var(--accent); color:#0a1828; }
-        .btn-green { background:var(--green); color:#0a1828; }
-        .btn-red { background:var(--red); color:white; }
-        .btn-orange { background:var(--accent-cable); color:#0a1828; }
-        .btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--text2); }
-        .btn-outline:hover { border-color:var(--accent); color:var(--accent); }
-        .btn-sm { padding:5px 12px; font-size:13px; }
+.form-block{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;margin-top:4px;}
+.form-block-title{font-weight:800;font-size:17px;margin-bottom:14px;color:var(--text2);}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:14px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;}
+.fg input,.fg select{background:var(--input);border:1.5px solid var(--border);color:var(--text);padding:10px 13px;border-radius:9px;font-size:16px;font-family:inherit;transition:border-color 0.18s;}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--accent);}
+.fg select option{background:#1a2d40;}
+.fg .hint{font-size:11px;color:var(--text3);margin-top:2px;}
 
-        /* HISTORIAL */
-        .filters { display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
-        .filters select { background:var(--bg-input); border:1.5px solid var(--border); color:var(--text); padding:9px 13px; border-radius:10px; font-family:inherit; font-size:15px; }
-        .filters select:focus { outline:none; border-color:var(--accent); }
-        .filters select option { background:#1a2733; }
+.svc-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.stab{padding:8px 16px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;border:1.5px solid var(--border);background:var(--input);color:var(--text3);transition:all 0.18s;}
+.stab:hover{color:var(--text2);}
+.stab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.08);}
 
-        .summary-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:22px; }
-        .sc { background:var(--bg-input); border:1.5px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
-        .sc .sl { font-size:12px; color:var(--text3); margin-bottom:5px; }
-        .sc .sv { font-family:'Fredoka One',cursive; font-size:24px; }
+.preview-box{background:linear-gradient(135deg,#081a2a,#0f2540);border:1.5px solid var(--accent);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin:14px 0;flex-wrap:wrap;gap:10px;}
+.preview-box .plabel{font-size:13px;color:var(--text2);}
+.preview-box .pamount{font-family:'Fredoka One',cursive;font-size:32px;color:var(--yellow);text-shadow:0 0 16px rgba(251,191,36,0.3);}
+.preview-box .pdetail{font-size:13px;color:var(--text2);text-align:right;}
 
-        table { width:100%; border-collapse:collapse; font-size:15px; }
-        thead th { background:#0d1e2d; padding:11px 13px; text-align:left; color:var(--text2); font-size:12px; text-transform:uppercase; letter-spacing:0.5px; }
-        tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
-        tbody tr:hover { background:#1e2f3d; }
-        tbody td { padding:11px 13px; }
-        .td-monto { font-weight:800; color:var(--yellow); }
+/* HISTORIAL */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.filters select{background:var(--input);border:1.5px solid var(--border);color:var(--text);padding:8px 13px;border-radius:9px;font-family:inherit;font-size:14px;}
+.filters select:focus{outline:none;border-color:var(--accent);}
+.filters select option{background:#1a2d40;}
+.sum-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
+.sc{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.sc-l{font-size:11px;color:var(--text3);margin-bottom:3px;}
+.sc-v{font-family:'Fredoka One',cursive;font-size:22px;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+thead th{background:#0a1a28;padding:10px 12px;text-align:left;color:var(--text3);font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.12s;}
+tbody tr:hover{background:#1e3045;}
+tbody td{padding:10px 12px;}
+.td-m{font-weight:800;color:var(--yellow);}
 
-        /* LECTURAS */
-        .lect-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-bottom:22px; }
-        .lect-card { background:var(--bg-input); border:1.5px solid var(--border); border-radius:var(--radius); padding:18px; }
-        .lect-card h3 { font-size:18px; font-weight:800; margin-bottom:12px; color:var(--accent); }
-        .lect-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:15px; }
-        .lect-row:last-child { border-bottom:none; }
+/* CONFIG */
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:640px){.cfg-grid{grid-template-columns:1fr;}}
+.cfg-sec{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;}
+.cfg-sec h3{font-size:15px;font-weight:800;color:var(--text2);margin-bottom:12px;}
+.cfg-user-card{background:var(--input);border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+.cfg-user-name{font-size:16px;font-weight:800;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.cfg-prices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.cfg-price-item{display:flex;flex-direction:column;gap:3px;}
+.cfg-price-item label{font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;}
+.cfg-price-item input{background:var(--bg3);border:1.5px solid var(--border);color:var(--text);padding:6px 10px;border-radius:7px;font-family:inherit;font-size:14px;font-weight:700;width:100%;}
+.cfg-price-item input:focus{outline:none;border-color:var(--accent);}
+.cfg-svcs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.svc-chk{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;cursor:pointer;padding:3px 8px;border-radius:6px;border:1.5px solid var(--border);background:var(--bg3);transition:all 0.15s;}
+.svc-chk input{width:14px;height:14px;cursor:pointer;}
+.svc-chk:has(input:checked){border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.07);}
 
-        /* CONFIG */
-        .config-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
-        @media(max-width:600px){ .config-grid{grid-template-columns:1fr;} }
-        .config-sec { background:var(--bg-input); border:1.5px solid var(--border); border-radius:var(--radius); padding:18px; }
-        .config-sec h3 { font-size:16px; font-weight:800; margin-bottom:14px; color:var(--text2); }
-        .user-row { display:flex; align-items:center; gap:8px; padding:9px 0; border-bottom:1px solid var(--border); flex-wrap:wrap; }
-        .user-row:last-child { border-bottom:none; }
-        .user-row input[type=text] { background:var(--bg-card); border:1.5px solid var(--border); color:var(--text); padding:7px 11px; border-radius:8px; font-family:inherit; font-size:15px; flex:1; min-width:110px; }
-        .cbg { display:flex; gap:6px; flex-wrap:wrap; }
-        .cbl { display:flex; align-items:center; gap:3px; font-size:12px; cursor:pointer; }
-        .cbl input { width:15px; height:15px; cursor:pointer; }
+/* BTN */
+.btn{padding:9px 18px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all 0.18s;}
+.btn:hover{transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+.btn-p{background:var(--accent);color:#081320;}
+.btn-g{background:var(--green);color:#081320;}
+.btn-r{background:var(--red);color:white;}
+.btn-o{background:transparent;border:1.5px solid var(--border);color:var(--text2);}
+.btn-o:hover{border-color:var(--accent);color:var(--accent);}
+.btn-sm{padding:4px 11px;font-size:12px;}
 
-        /* TOAST */
-        .toast { position:fixed; bottom:22px; right:22px; background:var(--bg-card); border:1.5px solid var(--green); color:var(--text); padding:13px 20px; border-radius:12px; font-weight:700; font-size:15px; z-index:9999; transform:translateY(80px); opacity:0; transition:all 0.3s; box-shadow:0 8px 32px rgba(0,0,0,0.3); }
-        .toast.show { transform:translateY(0); opacity:1; }
-        .toast.err { border-color:var(--red); }
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1.5px solid var(--green);color:var(--text);padding:12px 20px;border-radius:11px;font-weight:700;font-size:14px;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.28s;box-shadow:0 8px 32px rgba(0,0,0,0.35);max-width:320px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.err{border-color:var(--red);}
 
-        .loading { text-align:center; padding:36px; color:var(--text3); }
-        .empty { text-align:center; padding:36px; color:var(--text3); font-size:16px; }
-        .divider { height:1px; background:var(--border); margin:20px 0; }
-    </style>
+.divider{height:1px;background:var(--border);margin:18px 0;}
+.loading{text-align:center;padding:32px;color:var(--text3);}
+.empty{text-align:center;padding:32px;color:var(--text3);font-size:15px;}
+
+/* MOBILE */
+@media(max-width:480px){
+  .hdr h1{font-size:18px;}
+  .panel{padding:14px;}
+  .fgrid{grid-template-columns:1fr 1fr;}
+  .dash-grid{grid-template-columns:1fr 1fr;}
+  .users-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
 </head>
 <body>
 
-<div class="header">
-    <div class="header-inner">
-        <h1>💡 Control de Servicios del Hogar</h1>
-        <div class="status-indicator">
-            <div class="dot" id="dot"></div>
-            <span id="statusTxt" style="color:var(--green)">Conectado</span>
-        </div>
+<div class="hdr">
+  <div class="hdr-inner">
+    <h1>🏠 Control de Servicios</h1>
+    <div class="hdr-right">
+      <div class="dot-status" id="dot"></div>
+      <span id="statusTxt">Conectando...</span>
     </div>
+  </div>
 </div>
 
-<div class="tabs">
-    <div class="tab active" onclick="showTab('registrar')">📝 Registrar</div>
-    <div class="tab" onclick="showTab('historial')">📊 Historial</div>
-    <div class="tab" onclick="showTab('lecturas')">⚡ Lecturas</div>
-    <div class="tab" onclick="showTab('config')">⚙️ Config</div>
+<div class="nav">
+  <div class="ntab active" onclick="showTab('dashboard')">🏠 Resumen</div>
+  <div class="ntab" onclick="showTab('registrar')">📝 Registrar</div>
+  <div class="ntab" onclick="showTab('historial')">📊 Historial</div>
+  <div class="ntab" onclick="showTab('config')">⚙️ Config</div>
 </div>
 
-<div class="main">
+<div class="wrap">
 
-    <!-- REGISTRAR -->
-    <div id="tab-registrar" class="panel">
-        <div class="section-title">👤 Selecciona usuario</div>
-        <div class="users-grid" id="usersGrid"><div class="loading">Cargando usuarios...</div></div>
-        <div id="formSection" style="display:none">
-            <div class="divider"></div>
-            <div class="section-title" id="formTitle">📋 Registrar servicio</div>
-            <div class="form-grid">
-                <div class="fg">
-                    <label>📅 Mes</label>
-                    <select id="f_mes"></select>
-                </div>
-                <div class="fg">
-                    <label>📅 Año</label>
-                    <select id="f_anio">
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026" selected>2026</option>
-                    </select>
-                </div>
-                <div class="fg">
-                    <label>🔧 Servicio</label>
-                    <select id="f_servicio" onchange="renderCamposServicio()"></select>
-                </div>
-            </div>
-            <div id="camposServicio"></div>
-            <div class="monto-preview">
-                <div>
-                    <div class="label">💰 Monto a registrar</div>
-                    <div class="amount" id="montoPreview">S/ 0.00</div>
-                </div>
-                <div id="montoDetalle" style="font-size:13px;color:var(--text2);text-align:right"></div>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <button class="btn btn-green" onclick="guardarRegistro()" style="font-size:17px;padding:12px 28px">💾 Guardar registro</button>
-                <button class="btn btn-outline" onclick="cancelarForm()">Cancelar</button>
-            </div>
-        </div>
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard" class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+      <div class="ptitle" style="margin-bottom:0">🏠 Resumen del mes</div>
+      <div class="month-selector">
+        <select id="dash_mes" onchange="renderDashboard()"></select>
+        <select id="dash_anio" onchange="renderDashboard()">
+          <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option>
+        </select>
+        <button class="btn btn-o" onclick="cargarTodo()">🔄</button>
+      </div>
     </div>
+    <div class="global-bar" id="globalBar"></div>
+    <div class="dash-grid" id="dashGrid"><div class="loading">Cargando...</div></div>
+  </div>
 
-    <!-- HISTORIAL -->
-    <div id="tab-historial" class="panel" style="display:none">
-        <div class="section-title">📊 Historial de pagos</div>
-        <div class="filters">
-            <select id="filtU" onchange="filtrar()"><option value="">Todos los usuarios</option></select>
-            <select id="filtM" onchange="filtrar()">
-                <option value="">Todos los meses</option>
-                <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
-                <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
-                <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Setiembre</option>
-                <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+  <!-- REGISTRAR -->
+  <div id="tab-registrar" class="panel" style="display:none">
+    <div class="ptitle">📝 Registrar servicio</div>
+    <div class="users-grid" id="usersGrid"><div class="loading">Cargando usuarios...</div></div>
+    <div id="formWrap" style="display:none">
+      <div class="form-block">
+        <div class="form-block-title" id="formTitle">Selecciona servicio</div>
+        <div class="fgrid">
+          <div class="fg">
+            <label>📅 Mes</label>
+            <select id="f_mes"></select>
+          </div>
+          <div class="fg">
+            <label>📅 Año</label>
+            <select id="f_anio">
+              <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option>
             </select>
-            <select id="filtA" onchange="filtrar()">
-                <option value="">Todos los años</option>
-                <option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option>
-            </select>
-            <button class="btn btn-outline" onclick="cargarHistorial()">🔄 Actualizar</button>
+          </div>
         </div>
-        <div class="summary-cards" id="summaryCards"></div>
-        <div id="tablaHistorial"><div class="loading">Cargando...</div></div>
-    </div>
-
-    <!-- LECTURAS -->
-    <div id="tab-lecturas" class="panel" style="display:none">
-        <div class="section-title">⚡ Lecturas del medidor de luz</div>
-
-        <!-- form nueva lectura -->
-        <div style="background:var(--bg-input);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px">
-            <div style="font-weight:800;font-size:17px;margin-bottom:14px;color:var(--text2)">➕ Registrar nueva lectura</div>
-            <div class="form-grid">
-                <div class="fg">
-                    <label>👤 Usuario</label>
-                    <select id="l_usuario"></select>
-                </div>
-                <div class="fg">
-                    <label>📅 Mes</label>
-                    <select id="l_mes"></select>
-                </div>
-                <div class="fg">
-                    <label>📅 Año</label>
-                    <select id="l_anio">
-                        <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option>
-                    </select>
-                </div>
-                <div class="fg">
-                    <label>⚡ Lectura anterior (kWh)</label>
-                    <input type="number" id="l_ant" placeholder="Ej: 1250" min="0" oninput="calcLectura()">
-                </div>
-                <div class="fg">
-                    <label>⚡ Lectura actual (kWh)</label>
-                    <input type="number" id="l_act" placeholder="Ej: 1370" min="0" oninput="calcLectura()">
-                </div>
-            </div>
-            <div class="monto-preview" style="margin-bottom:14px">
-                <div>
-                    <div class="label">Consumo: <span id="l_consumo_txt" style="color:var(--accent);font-weight:800">0 kWh</span></div>
-                    <div class="amount" id="l_monto_txt">S/ 0.00</div>
-                </div>
-                <div style="font-size:13px;color:var(--text2)" id="l_detalle_txt"></div>
-            </div>
-            <button class="btn btn-green" onclick="guardarLectura()" style="font-size:16px;padding:11px 26px">💾 Guardar lectura</button>
+        <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Servicio</div>
+        <div class="svc-tabs" id="svcTabs"></div>
+        <div id="svcFields"></div>
+        <div class="preview-box">
+          <div>
+            <div class="plabel">Monto a registrar</div>
+            <div class="pamount" id="prevMonto">S/ 0.00</div>
+          </div>
+          <div class="pdetail" id="prevDetalle"></div>
         </div>
-
-        <div class="section-title" style="font-size:18px">📋 Historial de lecturas</div>
-        <div id="tablaLecturas"><div class="loading">Cargando...</div></div>
-    </div>
-
-    <!-- CONFIG -->
-    <div id="tab-config" class="panel" style="display:none">
-        <div class="section-title">⚙️ Configuración</div>
-        <div class="config-grid">
-            <div class="config-sec">
-                <h3>💡 Precio por kWh (S/)</h3>
-                <div class="fg">
-                    <input type="number" id="cfgPrecio" value="0.80" step="0.01" min="0" style="font-size:28px;font-weight:800;text-align:center">
-                </div>
-                <button class="btn btn-primary" onclick="guardarPrecio()" style="margin-top:12px;width:100%">💾 Guardar precio</button>
-                <p style="font-size:12px;color:var(--text3);margin-top:8px">Se aplica al calcular kWh × precio</p>
-            </div>
-            <div class="config-sec">
-                <h3>👥 Usuarios registrados</h3>
-                <div id="cfgUsuarios"><div class="loading">Cargando...</div></div>
-                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                    <input type="text" id="nuevoNombre" placeholder="Nombre nuevo usuario" style="background:var(--bg-card);border:1.5px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-family:inherit;font-size:15px;flex:1">
-                    <button class="btn btn-primary" onclick="agregarUsuario()">+ Agregar</button>
-                </div>
-            </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-g" onclick="guardarRegistro()" style="font-size:16px;padding:12px 26px">💾 Guardar</button>
+          <button class="btn btn-o" onclick="cancelarForm()">Cancelar</button>
         </div>
+      </div>
     </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div id="tab-historial" class="panel" style="display:none">
+    <div class="ptitle">📊 Historial de pagos</div>
+    <div class="filters">
+      <select id="fU" onchange="filtrar()"><option value="">Todos los usuarios</option></select>
+      <select id="fM" onchange="filtrar()">
+        <option value="">Todos los meses</option>
+        <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
+        <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+        <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Setiembre</option>
+        <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+      </select>
+      <select id="fA" onchange="filtrar()">
+        <option value="">Todos los años</option>
+        <option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option>
+      </select>
+      <select id="fS" onchange="filtrar()">
+        <option value="">Todos los servicios</option>
+        <option value="luz">⚡ Luz</option><option value="agua">💧 Agua</option>
+        <option value="arbitrios">🏛️ Arbitrios</option><option value="cable">📺 Cable</option><option value="internet">🌐 Internet</option>
+      </select>
+      <button class="btn btn-o" onclick="cargarHistorial()">🔄 Actualizar</button>
+    </div>
+    <div class="sum-cards" id="sumCards"></div>
+    <div id="tblHistorial"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <!-- CONFIG -->
+  <div id="tab-config" class="panel" style="display:none">
+    <div class="ptitle">⚙️ Configuración de usuarios</div>
+    <div id="cfgUsuarios"><div class="loading">Cargando...</div></div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:flex-end;">
+      <div class="fg" style="flex:1;min-width:160px">
+        <label>Nombre del nuevo usuario</label>
+        <input type="text" id="nuevoNombre" placeholder="Ej: Principal">
+      </div>
+      <button class="btn btn-p" onclick="agregarUsuario()">+ Agregar usuario</button>
+    </div>
+    <div class="divider"></div>
+    <button class="btn btn-g" onclick="guardarConfigUsuarios()" style="font-size:16px;padding:12px 26px;width:100%">💾 Guardar todos los cambios</button>
+  </div>
 
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- APPS SCRIPT ACTUALIZADO (oculto, solo referencia) -->
+<script id="appsScriptRef" type="text/plain">
+// NUEVO Apps Script — reemplaza el anterior completo
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyipB9u2LvUXSegKn5OC2AFPYD-ZukQ_-whekwlQYlucQszG2jB9BVWP25cK2qjw4LxRg/exec';
+</script>
+
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby2gEOPHYVQSe09deoVft7gWN4HlguLvvk_gSx-Xtpkxhw2LAxPuDGv73Kzsp2E_00zRA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyipB9u2LvUXSegKn5OC2AFPYD-ZukQ_-whekwlQYlucQszG2jB9BVWP25cK2qjw4LxRg/exec';
 
 const MESES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
-const MESES_PAD = ['','01','02','03','04','05','06','07','08','09','10','11','12'];
+const SVCS = ['luz','agua','arbitrios','cable','internet'];
+const SVC_ICON = {luz:'⚡',agua:'💧',arbitrios:'🏛️',cable:'📺',internet:'🌐'};
+const SVC_COLOR = {luz:'var(--accent)',agua:'#67d5f7',arbitrios:'var(--green)',cable:'var(--orange)',internet:'var(--purple)'};
 
 let usuarios = [];
 let historialData = [];
-let lecturasData = [];
-let precioKw = 0.80;
-let usuarioSel = null;
+let pagosData = {}; // {usuario_mes_anio: true/false}
+let userSel = null;
+let svcSel = null;
 
 // ====== API ======
 async function api(params) {
-    const url = SCRIPT_URL + '?' + new URLSearchParams(params);
-    const res = await fetch(url);
-    return res.json();
+  const url = SCRIPT_URL + '?' + new URLSearchParams(params);
+  const r = await fetch(url);
+  return r.json();
 }
 
 // ====== INIT ======
 window.onload = async () => {
-    rellenarMeses();
-    await cargarTodo();
-    showTab('registrar');
+  fillMeses(['f_mes','dash_mes']);
+  setDefaultMonth();
+  await cargarTodo();
 };
 
-async function cargarTodo() {
-    try {
-        const [ru, rc] = await Promise.all([api({action:'getUsuarios'}), api({action:'getConfig'})]);
-        if (ru.success) usuarios = ru.usuarios;
-        if (rc.success && rc.config.precioKw) precioKw = parseFloat(rc.config.precioKw);
-        document.getElementById('cfgPrecio').value = precioKw;
-        renderUsuariosGrid();
-        renderConfigUsuarios();
-        actualizarSelectUsuarios();
-    } catch(e) {
-        toast('❌ Error al conectar con Google Sheets', true);
-        document.getElementById('dot').style.background = 'var(--red)';
-        document.getElementById('dot').style.boxShadow = '0 0 8px var(--red)';
-        document.getElementById('statusTxt').textContent = 'Error de conexión';
-        document.getElementById('statusTxt').style.color = 'var(--red)';
+function fillMeses(ids) {
+  const now = new Date();
+  const m = now.getMonth()+1;
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    for (let i=1;i<=12;i++) {
+      const o = document.createElement('option');
+      o.value = String(i).padStart(2,'0');
+      o.textContent = MESES[i];
+      if (i===m) o.selected=true;
+      el.appendChild(o);
     }
+  });
 }
 
-function rellenarMeses() {
-    ['f_mes','l_mes'].forEach(id => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        const now = new Date();
-        const mesAct = now.getMonth() + 1;
-        for (let i = 1; i <= 12; i++) {
-            const o = document.createElement('option');
-            o.value = String(i).padStart(2,'0');
-            o.textContent = MESES[i];
-            if (i === mesAct) o.selected = true;
-            sel.appendChild(o);
-        }
-    });
+function setDefaultMonth() {
+  const now = new Date();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const a = String(now.getFullYear());
+  const fM=document.getElementById('fM'), fA=document.getElementById('fA');
+  if(fM) fM.value=m;
+  if(fA) fA.value=a;
+}
+
+async function cargarTodo() {
+  try {
+    const [ru, rh] = await Promise.all([api({action:'getUsuarios'}), api({action:'getHistorial'})]);
+    if (ru.success) {
+      // Migrar usuarios: agregar precios si no tienen
+      usuarios = (ru.usuarios||[]).map(u => ({
+        ...u,
+        precioKw: parseFloat(u.precioKw)||0.80,
+        precioAgua: parseFloat(u.precioAgua)||0,
+        servicios: u.servicios||'luz,agua,arbitrios,cable,internet'
+      }));
+    }
+    if (rh.success) historialData = rh.registros||[];
+    setStatus(true);
+    renderUsuariosGrid();
+    renderDashboard();
+    renderFiltroUsuarios();
+    renderConfigUsuarios();
+  } catch(e) {
+    setStatus(false);
+    toast('❌ Error de conexión', true);
+  }
+}
+
+function setStatus(ok) {
+  document.getElementById('dot').className = 'dot-status'+(ok?'':' off');
+  document.getElementById('statusTxt').textContent = ok ? 'Conectado' : 'Sin conexión';
+  document.getElementById('statusTxt').style.color = ok ? 'var(--green)' : 'var(--red)';
 }
 
 // ====== TABS ======
-function showTab(tab) {
-    ['registrar','historial','lecturas','config'].forEach(t => {
-        document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
-    });
-    document.querySelectorAll('.tab').forEach((el,i) => {
-        el.classList.toggle('active', ['registrar','historial','lecturas','config'][i] === tab);
-    });
-    if (tab==='historial') cargarHistorial();
-    if (tab==='lecturas') cargarLecturas();
-    if (tab==='config') renderConfigUsuarios();
+function showTab(t) {
+  ['dashboard','registrar','historial','config'].forEach(x => {
+    document.getElementById('tab-'+x).style.display = x===t?'block':'none';
+  });
+  document.querySelectorAll('.ntab').forEach((el,i) => {
+    el.classList.toggle('active', ['dashboard','registrar','historial','config'][i]===t);
+  });
+  if (t==='historial') cargarHistorial();
+  if (t==='config') renderConfigUsuarios();
 }
 
-// ====== USUARIOS GRID ======
-function renderUsuariosGrid() {
-    const grid = document.getElementById('usersGrid');
-    if (!usuarios.length) { grid.innerHTML = '<div class="empty">No hay usuarios. Ve a Configuración para agregar.</div>'; return; }
-    grid.innerHTML = usuarios.map((u,i) => {
-        const servicios = u.servicios ? u.servicios.split(',').map(s=>s.trim()) : ['luz'];
-        return `<div class="user-card" id="uc-${i}" onclick="selUser(${i})">
-            <div class="user-name">${u.nombre}</div>
-            <div class="badges">
-                ${servicios.includes('luz') ? '<span class="badge b-luz">⚡ Luz</span>' : ''}
-                ${servicios.includes('agua') ? '<span class="badge b-agua">💧 Agua</span>' : ''}
-                ${servicios.includes('cable') ? '<span class="badge b-cable">📺 Cable</span>' : ''}
-                ${servicios.includes('internet') ? '<span class="badge b-internet">🌐 Internet</span>' : ''}
-            </div>
-        </div>`;
+// ====== DASHBOARD ======
+function renderDashboard() {
+  const mes = document.getElementById('dash_mes').value;
+  const anio = document.getElementById('dash_anio').value;
+  const mesData = historialData.filter(r => String(r.mes).padStart(2,'0')===mes && String(r.anio)===anio);
+
+  // Global
+  const totalMes = mesData.reduce((s,r)=>s+(r.monto||0),0);
+  const totalPagado = mesData.filter(r=>r.pagado).reduce((s,r)=>s+(r.monto||0),0);
+  const totalPendiente = totalMes - totalPagado;
+  const porSvc = {};
+  SVCS.forEach(s => { porSvc[s] = mesData.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0); });
+
+  document.getElementById('globalBar').innerHTML = `
+    <div class="gb-item"><div class="gb-label">💰 Total mes</div><div class="gb-value" style="color:var(--yellow)">S/ ${totalMes.toFixed(2)}</div></div>
+    <div class="gb-item"><div class="gb-label">✅ Cobrado</div><div class="gb-value" style="color:var(--green)">S/ ${totalPagado.toFixed(2)}</div></div>
+    <div class="gb-item"><div class="gb-label">⏳ Pendiente</div><div class="gb-value" style="color:var(--red)">S/ ${totalPendiente.toFixed(2)}</div></div>
+    ${SVCS.filter(s=>porSvc[s]>0).map(s=>`<div class="gb-item"><div class="gb-label">${SVC_ICON[s]} ${s.charAt(0).toUpperCase()+s.slice(1)}</div><div class="gb-value" style="color:${SVC_COLOR[s]}">S/ ${porSvc[s].toFixed(2)}</div></div>`).join('')}
+  `;
+
+  if (!usuarios.length) { document.getElementById('dashGrid').innerHTML='<div class="empty">No hay usuarios configurados</div>'; return; }
+
+  document.getElementById('dashGrid').innerHTML = usuarios.map(u => {
+    const uData = mesData.filter(r => r.usuario===u.nombre);
+    const uTotal = uData.reduce((s,r)=>s+(r.monto||0),0);
+    const uPagado = uData.filter(r=>r.pagado).reduce((s,r)=>s+(r.monto||0),0);
+    const isPaid = uTotal>0 && uPagado>=uTotal;
+    const breakdown = SVCS.map(s => {
+      const v = uData.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);
+      return v>0 ? `<div class="us-line"><span>${SVC_ICON[s]} ${s}</span><span>S/ ${v.toFixed(2)}</span></div>` : '';
     }).join('');
+
+    return `<div class="user-summary">
+      <div class="us-name">${u.nombre}</div>
+      <div class="us-total ${isPaid?'paid'}">${uTotal>0 ? 'S/ '+uTotal.toFixed(2) : '—'}</div>
+      <div class="us-breakdown">${breakdown||'<div style="font-size:13px;color:var(--text3)">Sin registros este mes</div>'}</div>
+      ${uTotal>0 ? `<button class="paid-btn ${isPaid?'paid':'unpaid'}" onclick="togglePago('${u.nombre}','${mes}','${anio}')">${isPaid?'✅ Cobrado':'⏳ Marcar cobrado'}</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function togglePago(usuario, mes, anio) {
+  // Marca todos los registros del usuario en ese mes como pagados
+  const uData = historialData.filter(r => r.usuario===usuario && String(r.mes).padStart(2,'0')===mes && String(r.anio)===anio);
+  const yaEstaPagado = uData.length>0 && uData.every(r=>r.pagado);
+  try {
+    await api({action:'setPagado', usuario, mes, anio, pagado: yaEstaPagado ? '0' : '1'});
+    await cargarTodo();
+    toast(yaEstaPagado ? '↩️ Marcado como pendiente' : '✅ Marcado como cobrado');
+  } catch(e) { toast('❌ Error', true); }
+}
+
+// ====== REGISTRAR ======
+function renderUsuariosGrid() {
+  const grid = document.getElementById('usersGrid');
+  if (!usuarios.length) { grid.innerHTML='<div class="empty">Sin usuarios. Ve a Config.</div>'; return; }
+  grid.innerHTML = usuarios.map((u,i) => {
+    const svcs = (u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
+    return `<div class="ucard" id="uc${i}" onclick="selUser(${i})">
+      <div class="ucard-name">${u.nombre}</div>
+      <div class="badges">
+        ${svcs.includes('luz')?'<span class="badge b-luz">⚡ Luz</span>':''}
+        ${svcs.includes('agua')?'<span class="badge b-agua">💧 Agua</span>':''}
+        ${svcs.includes('arbitrios')?'<span class="badge b-arbitrios">🏛️ Arb.</span>':''}
+        ${svcs.includes('cable')?'<span class="badge b-cable">📺 Cable</span>':''}
+        ${svcs.includes('internet')?'<span class="badge b-internet">🌐 Internet</span>':''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function selUser(i) {
-    usuarioSel = i;
-    document.querySelectorAll('.user-card').forEach((c,j) => c.classList.toggle('selected', j===i));
-    const u = usuarios[i];
-    document.getElementById('formTitle').textContent = `📋 Registrar servicio — ${u.nombre}`;
-    document.getElementById('formSection').style.display = 'block';
-    // Llenar select servicio
-    const servicios = u.servicios ? u.servicios.split(',').map(s=>s.trim()) : ['luz'];
-    const sel = document.getElementById('f_servicio');
-    sel.innerHTML = '';
-    const labels = {luz:'⚡ Luz',agua:'💧 Agua',cable:'📺 Cable TV',internet:'🌐 Internet'};
-    servicios.forEach(s => { const o=document.createElement('option'); o.value=s; o.textContent=labels[s]||s; sel.appendChild(o); });
-    renderCamposServicio();
-    document.getElementById('formSection').scrollIntoView({behavior:'smooth',block:'start'});
+  userSel = i;
+  svcSel = null;
+  document.querySelectorAll('.ucard').forEach((c,j) => c.classList.toggle('sel', j===i));
+  const u = usuarios[i];
+  document.getElementById('formTitle').textContent = `Registrando para: ${u.nombre}`;
+  // Tabs servicios
+  const svcs = (u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('svcTabs').innerHTML = svcs.map(s =>
+    `<div class="stab" id="stab_${s}" onclick="selSvc('${s}')">${SVC_ICON[s]} ${s.charAt(0).toUpperCase()+s.slice(1)}</div>`
+  ).join('');
+  document.getElementById('svcFields').innerHTML = '';
+  document.getElementById('prevMonto').textContent = 'S/ 0.00';
+  document.getElementById('prevDetalle').textContent = '';
+  document.getElementById('formWrap').style.display = 'block';
+  if (svcs.length>0) selSvc(svcs[0]);
+  document.getElementById('formWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function selSvc(svc) {
+  svcSel = svc;
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById('stab_'+svc);
+  if (tab) tab.classList.add('active');
+  renderSvcFields(svc);
+}
+
+function renderSvcFields(svc) {
+  const u = usuarios[userSel];
+  let html = '';
+  if (svc === 'luz') {
+    html = `<div class="fgrid">
+      <div class="fg">
+        <label>📟 Lectura anterior (kWh)</label>
+        <input type="number" id="s_lant" placeholder="Ej: 1250" min="0" step="0.1" oninput="calcSvc()">
+        <span class="hint">Última lectura del medidor</span>
+      </div>
+      <div class="fg">
+        <label>📟 Lectura actual (kWh)</label>
+        <input type="number" id="s_lact" placeholder="Ej: 1370" min="0" step="0.1" oninput="calcSvc()">
+        <span class="hint">Lectura de hoy</span>
+      </div>
+      <div class="fg">
+        <label>💰 Precio por kWh (S/)</label>
+        <input type="number" id="s_precio" value="${u.precioKw||0.80}" step="0.01" min="0" oninput="calcSvc()">
+        <span class="hint">Precio personal de ${u.nombre}</span>
+      </div>
+    </div>`;
+  } else if (svc === 'agua') {
+    html = `<div class="fgrid">
+      <div class="fg">
+        <label>💰 Monto a pagar (S/)</label>
+        <input type="number" id="s_monto" placeholder="Ej: 35.00" min="0" step="0.01" oninput="calcSvc()">
+      </div>
+      <div class="fg">
+        <label>📝 Detalle (opcional)</label>
+        <input type="text" id="s_detalle" placeholder="Ej: Mayo 2026">
+      </div>
+    </div>`;
+  } else {
+    const labels = {arbitrios:'🏛️ Arbitrios municipales',cable:'📺 Cable TV',internet:'🌐 Internet'};
+    html = `<div class="fgrid">
+      <div class="fg">
+        <label>💰 Monto (S/)</label>
+        <input type="number" id="s_monto" placeholder="Ej: 89.90" min="0" step="0.01" oninput="calcSvc()">
+      </div>
+      <div class="fg">
+        <label>📝 Detalle</label>
+        <input type="text" id="s_detalle" placeholder="Ej: ${labels[svc]||svc}">
+      </div>
+    </div>`;
+  }
+  document.getElementById('svcFields').innerHTML = html;
+  calcSvc();
+}
+
+function calcSvc() {
+  if (!svcSel) return;
+  let monto=0, detalle='';
+  if (svcSel==='luz') {
+    const ant = parseFloat(document.getElementById('s_lant')?.value)||0;
+    const act = parseFloat(document.getElementById('s_lact')?.value)||0;
+    const precio = parseFloat(document.getElementById('s_precio')?.value)||0.80;
+    const consumo = Math.max(0, act-ant);
+    monto = consumo * precio;
+    if (consumo>0) detalle = `Consumo: ${consumo.toFixed(1)} kWh × S/${precio.toFixed(2)}`;
+    else if (act>0 && ant>0 && act<ant) detalle = '⚠️ Lectura actual menor que anterior';
+    else detalle = consumo===0 && act>0 ? 'Consumo = 0 kWh' : '';
+  } else {
+    monto = parseFloat(document.getElementById('s_monto')?.value)||0;
+  }
+  document.getElementById('prevMonto').textContent = `S/ ${monto.toFixed(2)}`;
+  document.getElementById('prevDetalle').textContent = detalle;
 }
 
 function cancelarForm() {
-    usuarioSel = null;
-    document.getElementById('formSection').style.display = 'none';
-    document.querySelectorAll('.user-card').forEach(c => c.classList.remove('selected'));
+  userSel=null; svcSel=null;
+  document.getElementById('formWrap').style.display='none';
+  document.querySelectorAll('.ucard').forEach(c=>c.classList.remove('sel'));
 }
 
-// ====== CAMPOS SERVICIO ======
-function renderCamposServicio() {
-    const servicio = document.getElementById('f_servicio').value;
-    let html = '';
-    if (servicio === 'luz') {
-        html = `
-        <div class="form-grid" style="margin-bottom:12px">
-            <div class="fg"><label>⚡ Consumo (kWh)</label>
-                <input type="number" id="c_kwh" placeholder="Ej: 120" min="0" step="0.1" oninput="calcMonto()">
-            </div>
-            <div class="fg"><label>💰 Precio por kWh (S/)</label>
-                <input type="number" id="c_precio" value="${precioKw}" step="0.01" min="0" oninput="calcMonto()">
-            </div>
-        </div>`;
-    } else {
-        html = `
-        <div class="form-grid" style="margin-bottom:12px">
-            <div class="fg"><label>💰 Monto a pagar (S/)</label>
-                <input type="number" id="c_monto" placeholder="Ej: 45.00" min="0" step="0.01" oninput="calcMonto()">
-            </div>
-            <div class="fg"><label>📝 Detalle (opcional)</label>
-                <input type="text" id="c_detalle" placeholder="Ej: Mes de mayo">
-            </div>
-        </div>`;
-    }
-    document.getElementById('camposServicio').innerHTML = html;
-    calcMonto();
-}
-
-function calcMonto() {
-    const servicio = document.getElementById('f_servicio')?.value;
-    let monto = 0, detalle = '';
-    if (servicio === 'luz') {
-        const kwh = parseFloat(document.getElementById('c_kwh')?.value)||0;
-        const precio = parseFloat(document.getElementById('c_precio')?.value)||precioKw;
-        monto = kwh * precio;
-        if (kwh > 0) detalle = `${kwh} kWh × S/${precio.toFixed(2)}`;
-    } else {
-        monto = parseFloat(document.getElementById('c_monto')?.value)||0;
-    }
-    document.getElementById('montoPreview').textContent = `S/ ${monto.toFixed(2)}`;
-    document.getElementById('montoDetalle').textContent = detalle;
-}
-
-// ====== GUARDAR REGISTRO ======
 async function guardarRegistro() {
-    const u = usuarios[usuarioSel];
-    const mes = document.getElementById('f_mes').value;
-    const anio = document.getElementById('f_anio').value;
-    const servicio = document.getElementById('f_servicio').value;
+  const u = usuarios[userSel];
+  const mes = document.getElementById('f_mes').value;
+  const anio = document.getElementById('f_anio').value;
+  const svc = svcSel;
+  let monto=0, detalle='';
 
-    let monto = 0, detalle = '';
-    if (servicio === 'luz') {
-        const kwh = parseFloat(document.getElementById('c_kwh')?.value)||0;
-        const precio = parseFloat(document.getElementById('c_precio')?.value)||precioKw;
-        monto = kwh * precio;
-        detalle = `${kwh} kWh × S/${precio.toFixed(2)}`;
-    } else {
-        monto = parseFloat(document.getElementById('c_monto')?.value)||0;
-        detalle = document.getElementById('c_detalle')?.value || '';
-    }
+  if (svc==='luz') {
+    const ant = parseFloat(document.getElementById('s_lant')?.value)||0;
+    const act = parseFloat(document.getElementById('s_lact')?.value)||0;
+    const precio = parseFloat(document.getElementById('s_precio')?.value)||0.80;
+    if (act<=0) { toast('⚠️ Ingresa la lectura actual', true); return; }
+    if (act<ant) { toast('⚠️ Lectura actual menor que anterior', true); return; }
+    const consumo = act-ant;
+    monto = consumo*precio;
+    detalle = `Lect. ant: ${ant} | Lect. act: ${act} | Consumo: ${consumo.toFixed(1)} kWh × S/${precio.toFixed(2)}`;
+  } else {
+    monto = parseFloat(document.getElementById('s_monto')?.value)||0;
+    detalle = document.getElementById('s_detalle')?.value||'';
+  }
 
-    if (monto <= 0) { toast('⚠️ Ingresa un monto válido', true); return; }
+  if (monto<=0) { toast('⚠️ El monto debe ser mayor a 0', true); return; }
 
-    try {
-        const r = await api({ action:'addConsumo', usuario:u.nombre, mes, anio, servicio, detalle, monto:monto.toFixed(2) });
-        if (r.success) {
-            toast(`✅ Guardado — S/ ${monto.toFixed(2)}`);
-            cancelarForm();
-        } else toast('❌ Error: ' + r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
+  try {
+    const r = await api({action:'addConsumo', usuario:u.nombre, mes, anio, servicio:svc, detalle, monto:monto.toFixed(2)});
+    if (r.success) {
+      toast(`✅ ${SVC_ICON[svc]} ${svc} — S/ ${monto.toFixed(2)} guardado`);
+      cancelarForm();
+      historialData = (await api({action:'getHistorial'})).registros||[];
+      renderDashboard();
+    } else toast('❌ Error: '+r.message, true);
+  } catch(e) { toast('❌ Error de conexión', true); }
 }
 
 // ====== HISTORIAL ======
 async function cargarHistorial() {
-    document.getElementById('tablaHistorial').innerHTML = '<div class="loading">⏳ Cargando historial...</div>';
-    try {
-        const r = await api({action:'getHistorial'});
-        if (r.success) { historialData = r.registros; renderHistorial(); }
-        else toast('❌ Error al cargar historial', true);
-    } catch(e) { document.getElementById('tablaHistorial').innerHTML = '<div class="empty">❌ Error de conexión</div>'; }
+  document.getElementById('tblHistorial').innerHTML='<div class="loading">⏳ Cargando...</div>';
+  try {
+    const r = await api({action:'getHistorial'});
+    if (r.success) { historialData=r.registros||[]; renderHistorial(); }
+  } catch(e) { document.getElementById('tblHistorial').innerHTML='<div class="empty">❌ Error</div>'; }
 }
 
 function filtrar() { renderHistorial(); }
 
+function renderFiltroUsuarios() {
+  const sel = document.getElementById('fU');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Todos los usuarios</option>' +
+    usuarios.map(u=>`<option value="${u.nombre}" ${u.nombre===cur?'selected':''}>${u.nombre}</option>`).join('');
+}
+
 function renderHistorial() {
-    const fU = document.getElementById('filtU').value;
-    const fM = document.getElementById('filtM').value;
-    const fA = document.getElementById('filtA').value;
+  const fU=document.getElementById('fU').value;
+  const fM=document.getElementById('fM').value;
+  const fA=document.getElementById('fA').value;
+  const fS=document.getElementById('fS').value;
 
-    let data = historialData.filter(r => {
-        const mesStr = String(r.mes).padStart(2,'0');
-        if (fU && r.usuario !== fU) return false;
-        if (fM && mesStr !== fM) return false;
-        if (fA && String(r.anio) !== fA) return false;
-        return true;
-    });
+  let data = historialData.filter(r=>{
+    if(fU && r.usuario!==fU) return false;
+    if(fM && String(r.mes).padStart(2,'0')!==fM) return false;
+    if(fA && String(r.anio)!==fA) return false;
+    if(fS && r.servicio!==fS) return false;
+    return true;
+  });
 
-    const total = data.reduce((s,r)=>s+(r.monto||0),0);
-    const totalLuz = data.filter(r=>r.servicio==='luz').reduce((s,r)=>s+(r.monto||0),0);
-    const totalAgua = data.filter(r=>r.servicio==='agua').reduce((s,r)=>s+(r.monto||0),0);
-    const totalOtros = data.filter(r=>r.servicio!=='luz'&&r.servicio!=='agua').reduce((s,r)=>s+(r.monto||0),0);
+  const tot = data.reduce((s,r)=>s+(r.monto||0),0);
+  const bySvc = {};
+  SVCS.forEach(s=>{ bySvc[s]=data.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0); });
 
-    document.getElementById('summaryCards').innerHTML = `
-        <div class="sc"><div class="sl">💰 Total</div><div class="sv" style="color:var(--yellow)">S/ ${total.toFixed(2)}</div></div>
-        <div class="sc"><div class="sl">⚡ Luz</div><div class="sv" style="color:var(--accent)">S/ ${totalLuz.toFixed(2)}</div></div>
-        <div class="sc"><div class="sl">💧 Agua</div><div class="sv" style="color:var(--accent-water)">S/ ${totalAgua.toFixed(2)}</div></div>
-        <div class="sc"><div class="sl">📺🌐 Otros</div><div class="sv" style="color:var(--accent-cable)">S/ ${totalOtros.toFixed(2)}</div></div>
-        <div class="sc"><div class="sl">📋 Registros</div><div class="sv" style="color:var(--text)">${data.length}</div></div>
-    `;
+  document.getElementById('sumCards').innerHTML = `
+    <div class="sc"><div class="sc-l">💰 Total</div><div class="sc-v" style="color:var(--yellow)">S/ ${tot.toFixed(2)}</div></div>
+    ${SVCS.filter(s=>bySvc[s]>0).map(s=>`<div class="sc"><div class="sc-l">${SVC_ICON[s]} ${s}</div><div class="sc-v" style="color:${SVC_COLOR[s]}">S/ ${bySvc[s].toFixed(2)}</div></div>`).join('')}
+    <div class="sc"><div class="sc-l">📋 Registros</div><div class="sc-v">${data.length}</div></div>
+  `;
 
-    // Actualizar filtro usuarios
-    const selU = document.getElementById('filtU');
-    const cur = selU.value;
-    selU.innerHTML = '<option value="">Todos los usuarios</option>' +
-        usuarios.map(u=>`<option value="${u.nombre}" ${u.nombre===cur?'selected':''}>${u.nombre}</option>`).join('');
+  renderFiltroUsuarios();
 
-    if (!data.length) { document.getElementById('tablaHistorial').innerHTML = '<div class="empty">No hay registros para los filtros seleccionados</div>'; return; }
+  if (!data.length) { document.getElementById('tblHistorial').innerHTML='<div class="empty">Sin registros para estos filtros</div>'; return; }
 
-    const svcIcon = {luz:'⚡',agua:'💧',cable:'📺',internet:'🌐'};
-    const rows = [...data].reverse().map(r => `
-        <tr>
-            <td><strong>${r.usuario}</strong></td>
-            <td>${MESES[parseInt(r.mes)] || r.mes} ${r.anio}</td>
-            <td>${svcIcon[r.servicio]||''} ${r.servicio}</td>
-            <td style="color:var(--text2);font-size:13px">${r.detalle||'-'}</td>
-            <td class="td-monto">S/ ${(r.monto||0).toFixed(2)}</td>
-            <td>
-                <button class="btn btn-red btn-sm" onclick="eliminarRegistro(${r.fila})">🗑️</button>
-            </td>
-        </tr>
-    `).join('');
+  const rows = [...data].reverse().map(r=>`
+    <tr>
+      <td><strong>${r.usuario}</strong></td>
+      <td>${MESES[parseInt(r.mes)]||r.mes} ${r.anio}</td>
+      <td style="color:${SVC_COLOR[r.servicio]||'var(--text)'}">${SVC_ICON[r.servicio]||''} ${r.servicio}</td>
+      <td style="color:var(--text2);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.detalle||'-'}</td>
+      <td class="td-m">S/ ${(r.monto||0).toFixed(2)}</td>
+      <td style="color:${r.pagado?'var(--green)':'var(--text3)'};font-size:12px;font-weight:700">${r.pagado?'✅ Cobrado':'—'}</td>
+      <td><button class="btn btn-r btn-sm" onclick="elimReg(${r.fila})">🗑️</button></td>
+    </tr>
+  `).join('');
 
-    document.getElementById('tablaHistorial').innerHTML = `
-        <div style="overflow-x:auto">
-        <table>
-            <thead><tr><th>Usuario</th><th>Período</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th></th></tr></thead>
-            <tbody>${rows}</tbody>
-        </table></div>`;
+  document.getElementById('tblHistorial').innerHTML=`<div style="overflow-x:auto">
+    <table><thead><tr><th>Usuario</th><th>Período</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
 }
 
-async function eliminarRegistro(fila) {
-    if (!confirm('¿Eliminar este registro?')) return;
-    try {
-        const r = await api({action:'deleteRegistro', fila});
-        if (r.success) { toast('🗑️ Eliminado'); cargarHistorial(); }
-        else toast('❌ Error: '+r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
-}
-
-// ====== LECTURAS ======
-function actualizarSelectUsuarios() {
-    const sel = document.getElementById('l_usuario');
-    if (!sel) return;
-    sel.innerHTML = usuarios.map(u=>`<option value="${u.nombre}">${u.nombre}</option>`).join('');
-}
-
-function calcLectura() {
-    const ant = parseFloat(document.getElementById('l_ant')?.value)||0;
-    const act = parseFloat(document.getElementById('l_act')?.value)||0;
-    const consumo = Math.max(0, act - ant);
-    const monto = consumo * precioKw;
-    document.getElementById('l_consumo_txt').textContent = `${consumo.toFixed(1)} kWh`;
-    document.getElementById('l_monto_txt').textContent = `S/ ${monto.toFixed(2)}`;
-    document.getElementById('l_detalle_txt').textContent = consumo > 0 ? `${consumo.toFixed(1)} kWh × S/${precioKw}` : '';
-}
-
-async function guardarLectura() {
-    const usuario = document.getElementById('l_usuario').value;
-    const mes = document.getElementById('l_mes').value;
-    const anio = document.getElementById('l_anio').value;
-    const ant = parseFloat(document.getElementById('l_ant').value)||0;
-    const act = parseFloat(document.getElementById('l_act').value)||0;
-    if (act <= 0) { toast('⚠️ Ingresa la lectura actual', true); return; }
-    if (act < ant) { toast('⚠️ La lectura actual no puede ser menor que la anterior', true); return; }
-    const consumo = act - ant;
-    const monto = consumo * precioKw;
-    try {
-        const r = await api({ action:'addLectura', usuario, mes, anio, lectAnterior:ant, lectActual:act, consumo, monto:monto.toFixed(2) });
-        if (r.success) {
-            toast(`✅ Lectura guardada — ${consumo.toFixed(1)} kWh = S/${monto.toFixed(2)}`);
-            document.getElementById('l_ant').value = '';
-            document.getElementById('l_act').value = '';
-            calcLectura();
-            cargarLecturas();
-        } else toast('❌ Error: '+r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
-}
-
-async function cargarLecturas() {
-    document.getElementById('tablaLecturas').innerHTML = '<div class="loading">⏳ Cargando...</div>';
-    try {
-        const r = await api({action:'getLecturas'});
-        if (r.success) { lecturasData = r.lecturas; renderLecturas(); }
-    } catch(e) { document.getElementById('tablaLecturas').innerHTML = '<div class="empty">❌ Error de conexión</div>'; }
-}
-
-function renderLecturas() {
-    if (!lecturasData.length) { document.getElementById('tablaLecturas').innerHTML = '<div class="empty">No hay lecturas registradas</div>'; return; }
-    const rows = [...lecturasData].reverse().map(l => `
-        <tr>
-            <td><strong>${l.usuario}</strong></td>
-            <td>${MESES[parseInt(l.mes)]||l.mes} ${l.anio}</td>
-            <td style="color:var(--text2)">${l.lectAnterior.toFixed(1)}</td>
-            <td style="color:var(--accent)">${l.lectActual.toFixed(1)}</td>
-            <td style="color:var(--yellow);font-weight:700">${l.consumo.toFixed(1)} kWh</td>
-            <td class="td-monto">S/ ${l.monto.toFixed(2)}</td>
-            <td><button class="btn btn-red btn-sm" onclick="eliminarLectura(${l.fila})">🗑️</button></td>
-        </tr>
-    `).join('');
-    document.getElementById('tablaLecturas').innerHTML = `
-        <div style="overflow-x:auto">
-        <table>
-            <thead><tr><th>Usuario</th><th>Período</th><th>Lect. anterior</th><th>Lect. actual</th><th>Consumo</th><th>Monto</th><th></th></tr></thead>
-            <tbody>${rows}</tbody>
-        </table></div>`;
-}
-
-async function eliminarLectura(fila) {
-    if (!confirm('¿Eliminar esta lectura?')) return;
-    try {
-        const r = await api({action:'deleteLectura', fila});
-        if (r.success) { toast('🗑️ Eliminado'); cargarLecturas(); }
-        else toast('❌ Error: '+r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
+async function elimReg(fila) {
+  if (!confirm('¿Eliminar este registro?')) return;
+  try {
+    const r = await api({action:'deleteRegistro', fila});
+    if (r.success) { toast('🗑️ Eliminado'); cargarHistorial(); historialData=(await api({action:'getHistorial'})).registros||[]; renderDashboard(); }
+    else toast('❌ '+r.message, true);
+  } catch(e) { toast('❌ Error', true); }
 }
 
 // ====== CONFIG ======
 function renderConfigUsuarios() {
-    const div = document.getElementById('cfgUsuarios');
-    if (!usuarios.length) { div.innerHTML = '<div class="empty" style="padding:14px">Sin usuarios</div>'; return; }
-    const servicios = ['luz','agua','cable','internet'];
-    const labels = {luz:'⚡',agua:'💧',cable:'📺',internet:'🌐'};
-    div.innerHTML = usuarios.map((u,i) => {
-        const svcs = u.servicios ? u.servicios.split(',').map(s=>s.trim()) : ['luz'];
-        return `<div class="user-row">
-            <span style="font-weight:800;font-size:16px;min-width:80px">${u.nombre}</span>
-            <div class="cbg">
-                ${servicios.map(s=>`<label class="cbl"><input type="checkbox" id="cfg_${i}_${s}" ${svcs.includes(s)?'checked':''}> ${labels[s]}</label>`).join('')}
-            </div>
-            <button class="btn btn-red btn-sm" onclick="eliminarUsuario('${u.nombre}')">✕</button>
-        </div>`;
-    }).join('');
+  if (!usuarios.length) { document.getElementById('cfgUsuarios').innerHTML='<div class="empty">Sin usuarios</div>'; return; }
+  document.getElementById('cfgUsuarios').innerHTML = usuarios.map((u,i) => {
+    const svcs = (u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
+    return `<div class="cfg-user-card">
+      <div class="cfg-user-name">
+        <span>${u.nombre}</span>
+        <button class="btn btn-r btn-sm" onclick="eliminarUsuario('${u.nombre}')">✕ Eliminar</button>
+      </div>
+      <div class="cfg-prices">
+        <div class="cfg-price-item">
+          <label>⚡ Precio kWh (S/)</label>
+          <input type="number" id="cfg_kw_${i}" value="${u.precioKw||0.80}" step="0.01" min="0" placeholder="0.80">
+        </div>
+        <div class="cfg-price-item">
+          <label>💧 Precio Agua (S/mes)</label>
+          <input type="number" id="cfg_agua_${i}" value="${u.precioAgua||0}" step="0.01" min="0" placeholder="0">
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Servicios activos</div>
+      <div class="cfg-svcs">
+        ${SVCS.map(s=>`<label class="svc-chk"><input type="checkbox" id="cfg_svc_${i}_${s}" ${svcs.includes(s)?'checked':''}> ${SVC_ICON[s]} ${s}</label>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-async function guardarPrecio() {
-    const precio = parseFloat(document.getElementById('cfgPrecio').value)||0.80;
-    try {
-        const r = await api({action:'setConfig', precioKw:precio});
-        if (r.success) { precioKw = precio; toast('✅ Precio guardado: S/'+precio); }
-        else toast('❌ Error: '+r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
+async function guardarConfigUsuarios() {
+  const actualizados = usuarios.map((u,i) => {
+    const kw = parseFloat(document.getElementById(`cfg_kw_${i}`)?.value)||0.80;
+    const agua = parseFloat(document.getElementById(`cfg_agua_${i}`)?.value)||0;
+    const svcs = SVCS.filter(s => document.getElementById(`cfg_svc_${i}_${s}`)?.checked).join(',');
+    return {...u, precioKw:kw, precioAgua:agua, servicios:svcs};
+  });
+
+  try {
+    // Guardar cada usuario actualizado
+    await Promise.all(actualizados.map(u =>
+      api({action:'updateUsuario', nombre:u.nombre, servicios:u.servicios, precioKw:u.precioKw, precioAgua:u.precioAgua})
+    ));
+    usuarios = actualizados;
+    renderUsuariosGrid();
+    renderConfigUsuarios();
+    toast('✅ Configuración guardada');
+  } catch(e) { toast('❌ Error al guardar', true); }
 }
 
 async function agregarUsuario() {
-    const nombre = document.getElementById('nuevoNombre').value.trim();
-    if (!nombre) { toast('⚠️ Escribe un nombre', true); return; }
-    try {
-        const r = await api({action:'addUsuario', nombre, servicios:'luz', precioKw});
-        if (r.success) {
-            toast('✅ Usuario agregado');
-            document.getElementById('nuevoNombre').value = '';
-            await cargarTodo();
-        } else toast('❌ Error: '+r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
+  const nombre = document.getElementById('nuevoNombre').value.trim();
+  if (!nombre) { toast('⚠️ Escribe un nombre', true); return; }
+  try {
+    const r = await api({action:'addUsuario', nombre, servicios:'luz,agua,arbitrios,cable,internet', precioKw:0.80, precioAgua:0});
+    if (r.success) {
+      toast('✅ Usuario agregado');
+      document.getElementById('nuevoNombre').value='';
+      await cargarTodo();
+    } else toast('❌ '+r.message, true);
+  } catch(e) { toast('❌ Error', true); }
 }
 
 async function eliminarUsuario(nombre) {
-    if (!confirm(`¿Eliminar usuario "${nombre}"?`)) return;
-    try {
-        const r = await api({action:'deleteUsuario', nombre});
-        if (r.success) { toast('🗑️ Usuario eliminado'); await cargarTodo(); }
-        else toast('❌ Error: '+r.message, true);
-    } catch(e) { toast('❌ Error de conexión', true); }
+  if (!confirm(`¿Eliminar usuario "${nombre}"? Se eliminarán todos sus registros.`)) return;
+  try {
+    const r = await api({action:'deleteUsuario', nombre});
+    if (r.success) { toast('🗑️ Usuario eliminado'); await cargarTodo(); }
+    else toast('❌ '+r.message, true);
+  } catch(e) { toast('❌ Error', true); }
 }
 
 // ====== TOAST ======
 function toast(msg, err=false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.toggle('err', err);
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'), 3500);
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.toggle('err',err);
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
 }
 </script>
 </body>
