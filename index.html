@@ -3,27 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🏠 Control de Servicios</title>
+<title>Control de Servicios del Hogar</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b1520;--bg2:#111e2d;--bg3:#162434;--card:#1a2d40;--inp:#0d1a27;--bor:#253d55;--acc:#00d4ff;--grn:#4ade80;--yel:#fbbf24;--red:#f87171;--ora:#fb923c;--pur:#c084fc;--tx:#e2edf7;--tx2:#7da0bb;--tx3:#4a6a80;--r:14px;}
+:root{--bg:#0b1520;--bg3:#162434;--card:#1a2d40;--inp:#0d1a27;--bor:#253d55;--acc:#00d4ff;--grn:#4ade80;--yel:#fbbf24;--red:#f87171;--ora:#fb923c;--pur:#c084fc;--tx:#e2edf7;--tx2:#7da0bb;--tx3:#4a6a80;--r:14px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:16px;}
-.hdr{background:linear-gradient(135deg,#081320,#0f2540,#081320);border-bottom:2px solid var(--acc);padding:14px 20px;position:sticky;top:0;z-index:200;box-shadow:0 4px 24px rgba(0,212,255,.12);}
-.hdr-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.hdr h1{font-family:'Fredoka One',cursive;font-size:22px;color:var(--acc);text-shadow:0 0 16px rgba(0,212,255,.5);}
+.hdr{background:linear-gradient(135deg,#081320,#0f2540,#081320);border-bottom:2px solid var(--acc);padding:14px 20px;position:sticky;top:0;z-index:200;}
+.hdr-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.hdr h1{font-family:'Fredoka One',cursive;font-size:22px;color:var(--acc);}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--yel);box-shadow:0 0 8px var(--yel);display:inline-block;}
 .dot.ok{background:var(--grn);box-shadow:0 0 8px var(--grn);}
 .dot.err{background:var(--red);box-shadow:0 0 8px var(--red);}
 #stxt{font-size:13px;font-weight:700;color:var(--yel);}
 .nav{max-width:1000px;margin:20px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;}
 .nav::-webkit-scrollbar{height:0;}
-.ntab{padding:9px 18px;border-radius:10px 10px 0 0;font-weight:800;font-size:14px;cursor:pointer;background:var(--card);color:var(--tx3);border:1.5px solid var(--bor);border-bottom:none;white-space:nowrap;transition:all .18s;}
+.ntab{padding:9px 18px;border-radius:10px 10px 0 0;font-weight:800;font-size:14px;cursor:pointer;background:var(--card);color:var(--tx3);border:1.5px solid var(--bor);border-bottom:none;white-space:nowrap;}
 .ntab.active{background:#152840;color:var(--acc);border-color:var(--acc);}
 .wrap{max-width:1000px;margin:0 auto;padding:0 16px 60px;}
 .panel{background:var(--card);border:1.5px solid var(--bor);border-radius:0 var(--r) var(--r) var(--r);padding:22px;}
 .ptitle{font-family:'Fredoka One',cursive;font-size:20px;color:var(--acc);margin-bottom:18px;}
-/* DASH */
 .ms{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
 .ms select{background:var(--inp);border:1.5px solid var(--bor);color:var(--tx);padding:9px 14px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;}
 .ms select option{background:#1a2d40;}
@@ -31,22 +30,19 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-he
 .gi .gl{font-size:12px;color:var(--tx3);margin-bottom:4px;}
 .gi .gv{font-family:'Fredoka One',cursive;font-size:22px;}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-.usum{background:var(--bg3);border:1.5px solid var(--bor);border-radius:var(--r);padding:16px;transition:all .2s;}
-.usum:hover{border-color:var(--acc);transform:translateY(-2px);}
+.usum{background:var(--bg3);border:1.5px solid var(--bor);border-radius:var(--r);padding:16px;}
 .un{font-size:18px;font-weight:900;margin-bottom:2px;}
 .utot{font-family:'Fredoka One',cursive;font-size:30px;color:var(--yel);margin:8px 0 10px;}
 .utot.paid{color:var(--grn);}
 .ubr{display:flex;flex-direction:column;gap:4px;}
 .ul{display:flex;justify-content:space-between;font-size:13px;color:var(--tx2);}
 .ul span:last-child{font-weight:700;color:var(--tx);}
-.pbtn{margin-top:10px;width:100%;padding:7px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;border:none;transition:all .2s;}
+.pbtn{margin-top:10px;width:100%;padding:7px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;border:none;}
 .pbtn.unp{background:rgba(251,191,36,.15);color:var(--yel);border:1.5px solid rgba(251,191,36,.4);}
 .pbtn.pd{background:rgba(74,222,128,.15);color:var(--grn);border:1.5px solid rgba(74,222,128,.4);}
-/* REGISTRAR */
 .ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin-bottom:20px;}
-.uc{background:var(--inp);border:1.5px solid var(--bor);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .18s;}
-.uc:hover,.uc.sel{border-color:var(--acc);background:#0f2035;}
-.uc.sel{box-shadow:0 0 0 2px var(--acc);}
+.uc{background:var(--inp);border:1.5px solid var(--bor);border-radius:var(--r);padding:14px;cursor:pointer;}
+.uc.sel{border-color:var(--acc);background:#0f2035;box-shadow:0 0 0 2px var(--acc);}
 .ucn{font-size:17px;font-weight:800;margin-bottom:6px;}
 .bgs{display:flex;flex-wrap:wrap;gap:4px;}
 .bg{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;}
@@ -60,18 +56,17 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-he
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px;margin-bottom:14px;}
 .fg{display:flex;flex-direction:column;gap:5px;}
 .fg label{font-size:12px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;}
-.fg input,.fg select{background:var(--inp);border:1.5px solid var(--bor);color:var(--tx);padding:10px 13px;border-radius:9px;font-size:16px;font-family:inherit;transition:border-color .18s;}
+.fg input,.fg select{background:var(--inp);border:1.5px solid var(--bor);color:var(--tx);padding:10px 13px;border-radius:9px;font-size:16px;font-family:inherit;}
 .fg input:focus,.fg select:focus{outline:none;border-color:var(--acc);}
 .fg select option{background:#1a2d40;}
 .fg .hint{font-size:11px;color:var(--tx3);}
 .stabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
-.stab{padding:8px 16px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;border:1.5px solid var(--bor);background:var(--inp);color:var(--tx3);transition:all .18s;}
+.stab{padding:8px 16px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;border:1.5px solid var(--bor);background:var(--inp);color:var(--tx3);}
 .stab.active{border-color:var(--acc);color:var(--acc);background:rgba(0,212,255,.08);}
 .prev{background:linear-gradient(135deg,#081a2a,#0f2540);border:1.5px solid var(--acc);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin:14px 0;flex-wrap:wrap;gap:10px;}
 .pl{font-size:13px;color:var(--tx2);}
 .pa{font-family:'Fredoka One',cursive;font-size:32px;color:var(--yel);}
 .pd2{font-size:13px;color:var(--tx2);text-align:right;}
-/* HISTORIAL */
 .fils{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
 .fils select{background:var(--inp);border:1.5px solid var(--bor);color:var(--tx);padding:8px 13px;border-radius:9px;font-family:inherit;font-size:14px;}
 .fils select option{background:#1a2d40;}
@@ -81,15 +76,10 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-he
 .scv{font-family:'Fredoka One',cursive;font-size:22px;}
 table{width:100%;border-collapse:collapse;font-size:14px;}
 thead th{background:#0a1a28;padding:10px 12px;text-align:left;color:var(--tx3);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
-tbody tr{border-bottom:1px solid var(--bor);transition:background .12s;}
+tbody tr{border-bottom:1px solid var(--bor);}
 tbody tr:hover{background:#1e3045;}
 tbody td{padding:10px 12px;}
 .tdm{font-weight:800;color:var(--yel);}
-/* CONFIG */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-@media(max-width:640px){.cgrid{grid-template-columns:1fr;}}
-.csec{background:var(--bg3);border:1.5px solid var(--bor);border-radius:var(--r);padding:16px;}
-.csec h3{font-size:15px;font-weight:800;color:var(--tx2);margin-bottom:12px;}
 .cuc{background:var(--inp);border:1.5px solid var(--bor);border-radius:10px;padding:14px;margin-bottom:10px;}
 .cun{font-size:16px;font-weight:800;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
 .cpg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
@@ -98,30 +88,27 @@ tbody td{padding:10px 12px;}
 .cpi input{background:var(--bg3);border:1.5px solid var(--bor);color:var(--tx);padding:6px 10px;border-radius:7px;font-family:inherit;font-size:14px;font-weight:700;width:100%;}
 .cpi input:focus{outline:none;border-color:var(--acc);}
 .csvcs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.schk{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;cursor:pointer;padding:3px 8px;border-radius:6px;border:1.5px solid var(--bor);background:var(--bg3);transition:all .15s;}
+.schk{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;cursor:pointer;padding:3px 8px;border-radius:6px;border:1.5px solid var(--bor);background:var(--bg3);}
 .schk input{width:14px;height:14px;cursor:pointer;}
-/* BTN */
-.btn{padding:9px 18px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all .18s;}
-.btn:hover{transform:translateY(-1px);}
+.btn{padding:9px 18px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;border:none;}
 .btnp{background:var(--acc);color:#081320;}
 .btng{background:var(--grn);color:#081320;}
 .btnr{background:var(--red);color:white;}
 .btno{background:transparent;border:1.5px solid var(--bor);color:var(--tx2);}
-.btno:hover{border-color:var(--acc);color:var(--acc);}
 .btnsm{padding:4px 11px;font-size:12px;}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1.5px solid var(--grn);color:var(--tx);padding:12px 20px;border-radius:11px;font-weight:700;font-size:14px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .28s;box-shadow:0 8px 32px rgba(0,0,0,.35);max-width:300px;}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1.5px solid var(--grn);color:var(--tx);padding:12px 20px;border-radius:11px;font-weight:700;font-size:14px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .28s;max-width:300px;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.err{border-color:var(--red);}
 .div{height:1px;background:var(--bor);margin:18px 0;}
 .load{text-align:center;padding:32px;color:var(--tx3);}
 .empty{text-align:center;padding:32px;color:var(--tx3);font-size:15px;}
-@media(max-width:480px){.hdr h1{font-size:18px;}.panel{padding:14px;}.fgrid{grid-template-columns:1fr 1fr;}.dgrid{grid-template-columns:1fr 1fr;}.ugrid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.hdr h1{font-size:18px;}.panel{padding:14px;}.dgrid{grid-template-columns:1fr 1fr;}.ugrid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
 <div class="hdr">
   <div class="hdr-in">
-    <h1>🏠 Control de Servicios</h1>
+    <h1>Control de Servicios del Hogar</h1>
     <div style="display:flex;align-items:center;gap:8px;">
       <div class="dot" id="dot"></div>
       <span id="stxt">Conectando...</span>
@@ -129,37 +116,35 @@ tbody td{padding:10px 12px;}
   </div>
 </div>
 <div class="nav">
-  <div class="ntab active" onclick="showTab('dashboard')">🏠 Resumen</div>
-  <div class="ntab" onclick="showTab('registrar')">📝 Registrar</div>
-  <div class="ntab" onclick="showTab('historial')">📊 Historial</div>
-  <div class="ntab" onclick="showTab('config')">⚙️ Config</div>
+  <div class="ntab active" id="t0" onclick="showTab('dashboard')">Resumen</div>
+  <div class="ntab" id="t1" onclick="showTab('registrar')">Registrar</div>
+  <div class="ntab" id="t2" onclick="showTab('historial')">Historial</div>
+  <div class="ntab" id="t3" onclick="showTab('config')">Config</div>
 </div>
 <div class="wrap">
-  <!-- DASHBOARD -->
   <div id="tab-dashboard" class="panel">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
-      <div class="ptitle" style="margin-bottom:0">🏠 Resumen del mes</div>
+      <div class="ptitle" style="margin-bottom:0">Resumen del mes</div>
       <div class="ms">
         <select id="dmes"></select>
         <select id="danio"><option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option></select>
-        <button class="btn btno" onclick="cargarTodo()">🔄</button>
+        <button class="btn btno" onclick="cargarTodo()">Actualizar</button>
       </div>
     </div>
     <div class="gbar" id="gbar"></div>
     <div class="dgrid" id="dgrid"><div class="load">Cargando...</div></div>
   </div>
-  <!-- REGISTRAR -->
   <div id="tab-registrar" class="panel" style="display:none">
-    <div class="ptitle">📝 Registrar servicio</div>
+    <div class="ptitle">Registrar servicio</div>
     <div class="ugrid" id="ugrid"><div class="load">Cargando...</div></div>
     <div id="fwrap" style="display:none">
       <div class="fblk">
         <div class="fbtitle" id="ftitle">Selecciona servicio</div>
         <div class="fgrid">
-          <div class="fg"><label>📅 Mes</label><select id="fmes"></select></div>
-          <div class="fg"><label>📅 Año</label><select id="fanio"><option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option></select></div>
+          <div class="fg"><label>Mes</label><select id="fmes"></select></div>
+          <div class="fg"><label>Anio</label><select id="fanio"><option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option></select></div>
         </div>
-        <div style="font-size:12px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Servicio</div>
+        <div style="font-size:12px;font-weight:800;color:var(--tx3);text-transform:uppercase;margin-bottom:8px;">Servicio</div>
         <div class="stabs" id="stabs"></div>
         <div id="sfields"></div>
         <div class="prev">
@@ -167,17 +152,16 @@ tbody td{padding:10px 12px;}
           <div class="pd2" id="pdet"></div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btng" onclick="guardarRegistro()" style="font-size:16px;padding:12px 26px">💾 Guardar</button>
+          <button class="btn btng" onclick="guardarRegistro()" style="font-size:16px;padding:12px 26px">Guardar</button>
           <button class="btn btno" onclick="cancelForm()">Cancelar</button>
         </div>
       </div>
     </div>
   </div>
-  <!-- HISTORIAL -->
   <div id="tab-historial" class="panel" style="display:none">
-    <div class="ptitle">📊 Historial</div>
+    <div class="ptitle">Historial de pagos</div>
     <div class="fils">
-      <select id="fu" onchange="filtrar()"><option value="">Todos</option></select>
+      <select id="fu" onchange="filtrar()"><option value="">Todos los usuarios</option></select>
       <select id="fm" onchange="filtrar()">
         <option value="">Todos los meses</option>
         <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
@@ -185,393 +169,429 @@ tbody td{padding:10px 12px;}
         <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Setiembre</option>
         <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
       </select>
-      <select id="fa" onchange="filtrar()"><option value="">Todos los años</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+      <select id="fa" onchange="filtrar()"><option value="">Todos los anios</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
       <select id="fs" onchange="filtrar()">
         <option value="">Todos los servicios</option>
-        <option value="luz">⚡ Luz</option><option value="agua">💧 Agua</option>
-        <option value="arbitrios">🏛️ Arbitrios</option><option value="cable">📺 Cable</option><option value="internet">🌐 Internet</option>
+        <option value="luz">Luz</option><option value="agua">Agua</option>
+        <option value="arbitrios">Arbitrios</option><option value="cable">Cable</option><option value="internet">Internet</option>
       </select>
-      <button class="btn btno" onclick="loadHist()">🔄</button>
+      <button class="btn btno" onclick="loadHist()">Actualizar</button>
     </div>
     <div class="scards" id="scards"></div>
     <div id="tbl"><div class="load">Cargando...</div></div>
   </div>
-  <!-- CONFIG -->
   <div id="tab-config" class="panel" style="display:none">
-    <div class="ptitle">⚙️ Configuración de usuarios</div>
+    <div class="ptitle">Configuracion de usuarios</div>
     <div id="cfgu"><div class="load">Cargando...</div></div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:flex-end;">
       <div class="fg" style="flex:1;min-width:160px"><label>Nombre nuevo usuario</label><input type="text" id="nnombre" placeholder="Ej: Principal"></div>
       <button class="btn btnp" onclick="addUser()">+ Agregar</button>
     </div>
     <div class="div"></div>
-    <button class="btn btng" onclick="saveConfig()" style="font-size:16px;padding:12px 26px;width:100%">💾 Guardar todos los cambios</button>
+    <button class="btn btng" onclick="saveConfig()" style="font-size:16px;padding:12px 26px;width:100%">Guardar todos los cambios</button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
-
 <script>
-const URL = 'https://script.google.com/macros/s/AKfycbx41x2e3iQt6Tm53dZayJLk4wx_cPCo9CsA6vC_ZnT9CBOv-oTwf4XdVA1fHz-tnQhJsQ/exec';
-const MES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
-const SVCS = ['luz','agua','arbitrios','cable','internet'];
-const ICON = {luz:'Luz',agua:'Agua',arbitrios:'Arb',cable:'Cable',internet:'Internet'};
-const CLR = {luz:'var(--acc)',agua:'#67d5f7',arbitrios:'var(--grn)',cable:'var(--ora)',internet:'var(--pur)'};
+var SURL = 'https://script.google.com/macros/s/AKfycbx41x2e3iQt6Tm53dZayJLk4wx_cPCo9CsA6vC_ZnT9CBOv-oTwf4XdVA1fHz-tnQhJsQ/exec';
+var MES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
+var SVCS = ['luz','agua','arbitrios','cable','internet'];
+var ICON = {luz:'[L]',agua:'[A]',arbitrios:'[Arb]',cable:'[C]',internet:'[I]'};
+var CLR = {luz:'var(--acc)',agua:'#67d5f7',arbitrios:'var(--grn)',cable:'var(--ora)',internet:'var(--pur)'};
+var usuarios = [], historial = [], uSel = null, sSel = null;
 
-let usuarios=[], historial=[], uSel=null, sSel=null;
-
-// ====== JSONP API ======
 function api(params) {
-  return new Promise((res, rej) => {
-    const cb = '__cb' + Date.now() + Math.floor(Math.random()*1000);
-    const s = document.createElement('script');
-    const t = setTimeout(() => {
-      cleanup(); rej(new Error('Timeout'));
-    }, 15000);
-    function cleanup() {
-      clearTimeout(t);
-      delete window[cb];
-      if (s.parentNode) s.parentNode.removeChild(s);
-    }
-    window[cb] = (data) => { cleanup(); res(data); };
-    s.onerror = () => { cleanup(); rej(new Error('Error de red')); };
-    const p = new URLSearchParams({...params, callback: cb});
-    s.src = URL + '?' + p.toString();
+  return new Promise(function(res, rej) {
+    var cb = 'cb' + Date.now() + Math.floor(Math.random()*9999);
+    var s = document.createElement('script');
+    var t = setTimeout(function(){ cleanup(); rej(new Error('Timeout')); }, 15000);
+    function cleanup(){ clearTimeout(t); delete window[cb]; if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = function(data){ cleanup(); res(data); };
+    s.onerror = function(){ cleanup(); rej(new Error('Error de red')); };
+    var p = [];
+    for(var k in params) p.push(encodeURIComponent(k)+'='+encodeURIComponent(params[k]));
+    p.push('callback='+cb);
+    s.src = SURL + '?' + p.join('&');
     document.head.appendChild(s);
   });
 }
 
-// ====== INIT ======
-window.onload = () => {
-  fillMes(['dmes','fmes']);
+window.onload = function(){
+  fillMes('dmes'); fillMes('fmes');
   setMesActual();
   cargarTodo();
 };
 
-function fillMes(ids) {
-  const m = new Date().getMonth()+1;
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    for (let i=1;i<=12;i++) {
-      const o = document.createElement('option');
-      o.value = String(i).padStart(2,'0');
-      o.textContent = MES[i];
-      if (i===m) o.selected=true;
-      el.appendChild(o);
-    }
-  });
-}
-
-function setMesActual() {
-  const m = String(new Date().getMonth()+1).padStart(2,'0');
-  const a = String(new Date().getFullYear());
-  const fm=document.getElementById('fm'), fa=document.getElementById('fa');
-  if(fm) fm.value=m;
-  if(fa) fa.value=a;
-}
-
-async function cargarTodo() {
-  setSt('Conectando...','var(--yel)','');
-  try {
-    const [ru, rh] = await Promise.all([api({action:'getUsuarios'}), api({action:'getHistorial'})]);
-    if (!ru.success) throw new Error(ru.message);
-    usuarios = (ru.usuarios||[]).map(u=>({...u, precioKw:parseFloat(u.precioKw)||0.80, precioAgua:parseFloat(u.precioAgua)||0, servicios:u.servicios||'luz,agua,arbitrios,cable,internet'}));
-    historial = rh.success ? (rh.registros||[]) : [];
-    setSt('Conectado','var(--grn)','ok');
-    renderUgrid(); renderDash(); renderFU(); renderCfg();
-  } catch(e) {
-    setSt('Sin conexion','var(--red)','err');
-    toast('Error Error: '+e.message, true);
+function fillMes(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  var m = new Date().getMonth()+1;
+  for(var i=1;i<=12;i++){
+    var o = document.createElement('option');
+    o.value = i<10?'0'+i:''+i;
+    o.textContent = MES[i];
+    if(i===m) o.selected = true;
+    el.appendChild(o);
   }
 }
 
-function setSt(txt, color, cls) {
+function setMesActual(){
+  var m = new Date().getMonth()+1;
+  var a = new Date().getFullYear();
+  var fm=document.getElementById('fm'), fa=document.getElementById('fa');
+  if(fm) fm.value = m<10?'0'+m:''+m;
+  if(fa) fa.value = ''+a;
+}
+
+function cargarTodo(){
+  setSt('Conectando...','var(--yel)','');
+  Promise.all([api({action:'getUsuarios'}), api({action:'getHistorial'})]).then(function(results){
+    var ru=results[0], rh=results[1];
+    if(!ru.success) throw new Error(ru.message||'Error usuarios');
+    usuarios = (ru.usuarios||[]).map(function(u){
+      return {nombre:u.nombre, servicios:u.servicios||'luz,agua,arbitrios,cable,internet',
+              precioKw:parseFloat(u.precioKw)||0.80, precioAgua:parseFloat(u.precioAgua)||0, fila:u.fila};
+    });
+    historial = rh.success?(rh.registros||[]):[];
+    setSt('Conectado','var(--grn)','ok');
+    renderUgrid(); renderDash(); renderFU(); renderCfg();
+  }).catch(function(e){
+    setSt('Sin conexion','var(--red)','err');
+    toast('Error: '+e.message);
+  });
+}
+
+function setSt(txt,color,cls){
   document.getElementById('stxt').textContent=txt;
   document.getElementById('stxt').style.color=color;
   document.getElementById('dot').className='dot'+(cls?' '+cls:'');
 }
 
-// ====== TABS ======
-function showTab(t) {
-  ['dashboard','registrar','historial','config'].forEach(x=>document.getElementById('tab-'+x).style.display=x===t?'block':'none');
-  document.querySelectorAll('.ntab').forEach((el,i)=>el.classList.toggle('active',['dashboard','registrar','historial','config'][i]===t));
+function showTab(t){
+  var tabs=['dashboard','registrar','historial','config'];
+  for(var i=0;i<tabs.length;i++){
+    document.getElementById('tab-'+tabs[i]).style.display=tabs[i]===t?'block':'none';
+    document.getElementById('t'+i).className='ntab'+(tabs[i]===t?' active':'');
+  }
   if(t==='historial') loadHist();
   if(t==='config') renderCfg();
 }
 
-// ====== DASHBOARD ======
-function renderDash() {
-  const mes=document.getElementById('dmes').value, anio=document.getElementById('danio').value;
-  const md = historial.filter(r=>String(r.mes).padStart(2,'0')===mes && String(r.anio)===anio);
-  const tot=md.reduce((s,r)=>s+(r.monto||0),0);
-  const pag=md.filter(r=>r.pagado).reduce((s,r)=>s+(r.monto||0),0);
-  const pnd=tot-pag;
-  const bySvc={};
-  SVCS.forEach(s=>{bySvc[s]=md.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);});
-  document.getElementById('gbar').innerHTML=`
-    <div class="gi"><div class="gl">S/ Total</div><div class="gv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
-    <div class="gi"><div class="gl">Cobrado</div><div class="gv" style="color:var(--grn)">S/ ${pag.toFixed(2)}</div></div>
-    <div class="gi"><div class="gl">... Pendiente</div><div class="gv" style="color:var(--red)">S/ ${pnd.toFixed(2)}</div></div>
-    ${SVCS.filter(s=>bySvc[s]>0).map(s=>`<div class="gi"><div class="gl">${ICON[s]} ${s}</div><div class="gv" style="color:${CLR[s]}">S/ ${bySvc[s].toFixed(2)}</div></div>`).join('')}
-  `;
-  if (!usuarios.length) { document.getElementById('dgrid').innerHTML='<div class="empty">Sin usuarios - Ve a Config</div>'; return; }
-  document.getElementById('dgrid').innerHTML=usuarios.map(u=>{
-    const ud=md.filter(r=>r.usuario===u.nombre);
-    const ut=ud.reduce((s,r)=>s+(r.monto||0),0);
-    const up=ud.filter(r=>r.pagado).reduce((s,r)=>s+(r.monto||0),0);
-    const isPaid=ut>0&&up>=ut;
-    const br=SVCS.map(s=>{const v=ud.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);return v>0?`<div class="ul"><span>${ICON[s]} ${s}</span><span>S/ ${v.toFixed(2)}</span></div>`:''}).join('');
-    return `<div class="usum">
-      <div class="un">${u.nombre}</div>
-      <div class="utot ${isPaid?'paid'}">${ut>0?'S/ '+ut.toFixed(2):'---'}</div>
-      <div class="ubr">${br||'<div style="font-size:13px;color:var(--tx3)">Sin registros</div>'}</div>
-      ${ut>0?`<button class="pbtn ${isPaid?'pd':'unp'}" onclick="togglePago('${u.nombre}','${mes}','${anio}')">${isPaid?'Cobrado':'... Marcar cobrado'}</button>`:''}
-    </div>`;
-  }).join('');
+function renderDash(){
+  var mes=document.getElementById('dmes').value;
+  var anio=document.getElementById('danio').value;
+  var md=historial.filter(function(r){ return String(r.mes).length===1?'0'+r.mes===mes:String(r.mes)===mes; });
+  md=md.filter(function(r){ return String(r.anio)===anio; });
+  var tot=0,pag=0;
+  for(var i=0;i<md.length;i++){ tot+=md[i].monto||0; if(md[i].pagado) pag+=md[i].monto||0; }
+  var bySvc={};
+  for(var j=0;j<SVCS.length;j++){
+    var sv=SVCS[j]; bySvc[sv]=0;
+    for(var k=0;k<md.length;k++){ if(md[k].servicio===sv) bySvc[sv]+=md[k].monto||0; }
+  }
+  var ghtml='<div class="gi"><div class="gl">Total</div><div class="gv" style="color:var(--yel)">S/ '+tot.toFixed(2)+'</div></div>';
+  ghtml+='<div class="gi"><div class="gl">Cobrado</div><div class="gv" style="color:var(--grn)">S/ '+pag.toFixed(2)+'</div></div>';
+  ghtml+='<div class="gi"><div class="gl">Pendiente</div><div class="gv" style="color:var(--red)">S/ '+(tot-pag).toFixed(2)+'</div></div>';
+  for(var s=0;s<SVCS.length;s++){
+    if(bySvc[SVCS[s]]>0) ghtml+='<div class="gi"><div class="gl">'+SVCS[s]+'</div><div class="gv" style="color:'+CLR[SVCS[s]]+'">S/ '+bySvc[SVCS[s]].toFixed(2)+'</div></div>';
+  }
+  document.getElementById('gbar').innerHTML=ghtml;
+  if(!usuarios.length){ document.getElementById('dgrid').innerHTML='<div class="empty">Sin usuarios - Ve a Config</div>'; return; }
+  var dhtml='';
+  for(var u=0;u<usuarios.length;u++){
+    var usr=usuarios[u];
+    var ud=md.filter(function(r){ return r.usuario===usr.nombre; });
+    var ut=0,up=0;
+    for(var x=0;x<ud.length;x++){ ut+=ud[x].monto||0; if(ud[x].pagado) up+=ud[x].monto||0; }
+    var isPaid=ut>0&&up>=ut;
+    var br='';
+    for(var sv2=0;sv2<SVCS.length;sv2++){
+      var v=0; for(var y=0;y<ud.length;y++){ if(ud[y].servicio===SVCS[sv2]) v+=ud[y].monto||0; }
+      if(v>0) br+='<div class="ul"><span>'+SVCS[sv2]+'</span><span>S/ '+v.toFixed(2)+'</span></div>';
+    }
+    dhtml+='<div class="usum">';
+    dhtml+='<div class="un">'+usr.nombre+'</div>';
+    dhtml+='<div class="utot'+(isPaid?' paid':'')+'">'+( ut>0?'S/ '+ut.toFixed(2):'---')+'</div>';
+    dhtml+='<div class="ubr">'+(br||'<div style="font-size:13px;color:#4a6a80">Sin registros</div>')+'</div>';
+    if(ut>0){
+      var nm=usr.nombre.replace(/'/g,"\\'");
+      dhtml+='<button class="pbtn '+(isPaid?'pd':'unp')+'" onclick="togglePago(\''+nm+'\',\''+mes+'\',\''+anio+'\')">'+(isPaid?'Cobrado':'Marcar cobrado')+'</button>';
+    }
+    dhtml+='</div>';
+  }
+  document.getElementById('dgrid').innerHTML=dhtml;
 }
 
-async function togglePago(nombre, mes, anio) {
-  const ud=historial.filter(r=>r.usuario===nombre&&String(r.mes).padStart(2,'0')===mes&&String(r.anio)===anio);
-  const yaPagado=ud.length>0&&ud.every(r=>r.pagado);
-  try {
-    await api({action:'setPagado',usuario:nombre,mes,anio,pagado:yaPagado?'0':'1'});
-    const rh=await api({action:'getHistorial'});
+function togglePago(nombre,mes,anio){
+  var ud=historial.filter(function(r){ return r.usuario===nombre&&(String(r.mes).length===1?'0'+r.mes:String(r.mes))===mes&&String(r.anio)===anio; });
+  var yaPagado=ud.length>0;
+  for(var i=0;i<ud.length;i++){ if(!ud[i].pagado){ yaPagado=false; break; } }
+  api({action:'setPagado',usuario:nombre,mes:mes,anio:anio,pagado:yaPagado?'0':'1'}).then(function(){
+    return api({action:'getHistorial'});
+  }).then(function(rh){
     if(rh.success) historial=rh.registros||[];
     renderDash();
-    toast(yaPagado?'Pendiente':'Cobrado');
-  } catch(e){toast('Error Error',true);}
+    toast(yaPagado?'Marcado pendiente':'Marcado cobrado');
+  }).catch(function(){ toast('Error'); });
 }
 
-// ====== REGISTRAR ======
-function renderUgrid() {
-  const g=document.getElementById('ugrid');
-  if(!usuarios.length){g.innerHTML='<div class="empty">Sin usuarios. Ve a Config.</div>';return;}
-  g.innerHTML=usuarios.map((u,i)=>{
-    const sv=(u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
-    return `<div class="uc" id="uc${i}" onclick="selUser(${i})">
-      <div class="ucn">${u.nombre}</div>
-      <div class="bgs">
-        ${sv.includes('luz')?'<span class="bg bluz">Luz Luz</span>':''}
-        ${sv.includes('agua')?'<span class="bg bagua">Agua Agua</span>':''}
-        ${sv.includes('arbitrios')?'<span class="bg barbitrios">Arb</span>':''}
-        ${sv.includes('cable')?'<span class="bg bcable">Cable</span>':''}
-        ${sv.includes('internet')?'<span class="bg binternet">Internet</span>':''}
-      </div>
-    </div>`;
-  }).join('');
+function renderUgrid(){
+  var g=document.getElementById('ugrid');
+  if(!usuarios.length){ g.innerHTML='<div class="empty">Sin usuarios. Ve a Config.</div>'; return; }
+  var h='';
+  for(var i=0;i<usuarios.length;i++){
+    var u=usuarios[i];
+    var sv=u.servicios.split(',');
+    h+='<div class="uc" id="uc'+i+'" onclick="selUser('+i+')">';
+    h+='<div class="ucn">'+u.nombre+'</div><div class="bgs">';
+    if(sv.indexOf('luz')>=0) h+='<span class="bg bluz">Luz</span>';
+    if(sv.indexOf('agua')>=0) h+='<span class="bg bagua">Agua</span>';
+    if(sv.indexOf('arbitrios')>=0) h+='<span class="bg barbitrios">Arb.</span>';
+    if(sv.indexOf('cable')>=0) h+='<span class="bg bcable">Cable</span>';
+    if(sv.indexOf('internet')>=0) h+='<span class="bg binternet">Net</span>';
+    h+='</div></div>';
+  }
+  g.innerHTML=h;
 }
 
-function selUser(i) {
+function selUser(i){
   uSel=i; sSel=null;
-  document.querySelectorAll('.uc').forEach((c,j)=>c.classList.toggle('sel',j===i));
-  const u=usuarios[i];
+  var cards=document.querySelectorAll('.uc');
+  for(var j=0;j<cards.length;j++) cards[j].className='uc'+(j===i?' sel':'');
+  var u=usuarios[i];
   document.getElementById('ftitle').textContent='Registrando para: '+u.nombre;
-  const sv=(u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
-  document.getElementById('stabs').innerHTML=sv.map(s=>`<div class="stab" id="stab_${s}" onclick="selSvc('${s}')">${ICON[s]} ${s.charAt(0).toUpperCase()+s.slice(1)}</div>`).join('');
+  var sv=u.servicios.split(',');
+  var h='';
+  for(var s=0;s<sv.length;s++){
+    var svc=sv[s].trim();
+    if(svc) h+='<div class="stab" id="stab_'+svc+'" onclick="selSvc(\''+svc+'\')">'+svc.charAt(0).toUpperCase()+svc.slice(1)+'</div>';
+  }
+  document.getElementById('stabs').innerHTML=h;
   document.getElementById('sfields').innerHTML='';
   document.getElementById('pmonto').textContent='S/ 0.00';
   document.getElementById('pdet').textContent='';
   document.getElementById('fwrap').style.display='block';
-  if(sv.length>0) selSvc(sv[0]);
+  if(sv.length>0) selSvc(sv[0].trim());
   document.getElementById('fwrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function selSvc(s) {
+function selSvc(s){
   sSel=s;
-  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
-  const tab=document.getElementById('stab_'+s);
-  if(tab) tab.classList.add('active');
+  var tabs=document.querySelectorAll('.stab');
+  for(var i=0;i<tabs.length;i++) tabs[i].className='stab'+(tabs[i].id==='stab_'+s?' active':'');
   renderSvcFields(s);
 }
 
-function renderSvcFields(s) {
-  const u=usuarios[uSel];
-  let h='';
-  if(s==='luz') {
-    h=`<div class="fgrid">
-      <div class="fg"><label> Lectura anterior (kWh)</label><input type="number" id="slant" placeholder="Ej: 1250" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura del mes pasado</span></div>
-      <div class="fg"><label> Lectura actual (kWh)</label><input type="number" id="slact" placeholder="Ej: 1370" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura de hoy</span></div>
-      <div class="fg"><label>S/ Precio por kWh (S/)</label><input type="number" id="sprecio" value="${u.precioKw||0.80}" step="0.01" min="0" oninput="calcSvc()"><span class="hint">Precio de ${u.nombre}</span></div>
-    </div>`;
+function renderSvcFields(s){
+  var u=usuarios[uSel];
+  var h='';
+  if(s==='luz'){
+    h='<div class="fgrid">';
+    h+='<div class="fg"><label>Lectura anterior (kWh)</label><input type="number" id="slant" placeholder="Ej: 1250" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura del mes pasado</span></div>';
+    h+='<div class="fg"><label>Lectura actual (kWh)</label><input type="number" id="slact" placeholder="Ej: 1370" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura de hoy</span></div>';
+    h+='<div class="fg"><label>Precio por kWh (S/)</label><input type="number" id="sprecio" value="'+(u.precioKw||0.80)+'" step="0.01" min="0" oninput="calcSvc()"><span class="hint">Precio de '+u.nombre+'</span></div>';
+    h+='</div>';
   } else {
-    const lbl={agua:'Mayo 2026',arbitrios:'Arbitrios municipales',cable:'Cable TV mensual',internet:'Internet mensual'};
-    h=`<div class="fgrid">
-      <div class="fg"><label>S/ Monto (S/)</label><input type="number" id="smonto" placeholder="Ej: 45.00" min="0" step="0.01" oninput="calcSvc()"></div>
-      <div class="fg"><label> Detalle</label><input type="text" id="sdet" placeholder="${lbl[s]||s}"></div>
-    </div>`;
+    var lbl={agua:'Mayo 2026',arbitrios:'Arbitrios municipales',cable:'Cable TV mensual',internet:'Internet mensual'};
+    h='<div class="fgrid">';
+    h+='<div class="fg"><label>Monto (S/)</label><input type="number" id="smonto" placeholder="Ej: 45.00" min="0" step="0.01" oninput="calcSvc()"></div>';
+    h+='<div class="fg"><label>Detalle</label><input type="text" id="sdet" placeholder="'+(lbl[s]||s)+'"></div>';
+    h+='</div>';
   }
   document.getElementById('sfields').innerHTML=h;
   calcSvc();
 }
 
-function calcSvc() {
+function calcSvc(){
   if(!sSel) return;
-  let monto=0, det='';
-  if(sSel==='luz') {
-    const ant=parseFloat(document.getElementById('slant')?.value)||0;
-    const act=parseFloat(document.getElementById('slact')?.value)||0;
-    const p=parseFloat(document.getElementById('sprecio')?.value)||0.80;
-    const c=Math.max(0,act-ant);
+  var monto=0, det='';
+  if(sSel==='luz'){
+    var ant=parseFloat(document.getElementById('slant')?document.getElementById('slant').value:0)||0;
+    var act=parseFloat(document.getElementById('slact')?document.getElementById('slact').value:0)||0;
+    var p=parseFloat(document.getElementById('sprecio')?document.getElementById('sprecio').value:0.80)||0.80;
+    var c=act>ant?act-ant:0;
     monto=c*p;
-    if(c>0) det=`Consumo: ${c.toFixed(1)} kWh x S/${p.toFixed(2)}`;
-    else if(act>0&&ant>0&&act<ant) det='(!) Lectura actual menor que anterior';
+    if(c>0) det='Consumo: '+c.toFixed(1)+' kWh x S/'+p.toFixed(2);
+    else if(act>0&&ant>0&&act<ant) det='Aviso: lectura actual menor que anterior';
   } else {
-    monto=parseFloat(document.getElementById('smonto')?.value)||0;
+    var mel=document.getElementById('smonto');
+    monto=mel?parseFloat(mel.value)||0:0;
   }
-  document.getElementById('pmonto').textContent=`S/ ${monto.toFixed(2)}`;
+  document.getElementById('pmonto').textContent='S/ '+monto.toFixed(2);
   document.getElementById('pdet').textContent=det;
 }
 
-function cancelForm() {
+function cancelForm(){
   uSel=null; sSel=null;
   document.getElementById('fwrap').style.display='none';
-  document.querySelectorAll('.uc').forEach(c=>c.classList.remove('sel'));
+  var cards=document.querySelectorAll('.uc');
+  for(var i=0;i<cards.length;i++) cards[i].className='uc';
 }
 
-async function guardarRegistro() {
-  const u=usuarios[uSel];
-  const mes=document.getElementById('fmes').value;
-  const anio=document.getElementById('fanio').value;
-  let monto=0, det='';
-  if(sSel==='luz') {
-    const ant=parseFloat(document.getElementById('slant')?.value)||0;
-    const act=parseFloat(document.getElementById('slact')?.value)||0;
-    const p=parseFloat(document.getElementById('sprecio')?.value)||0.80;
-    if(act<=0){toast('(!) Ingresa la lectura actual',true);return;}
-    if(act<ant){toast('(!) Lectura actual menor que anterior',true);return;}
-    const c=act-ant;
-    monto=c*p;
-    det=`Ant:${ant} Act:${act} Consumo:${c.toFixed(1)}kWh x S/${p.toFixed(2)}`;
+function guardarRegistro(){
+  var u=usuarios[uSel];
+  var mes=document.getElementById('fmes').value;
+  var anio=document.getElementById('fanio').value;
+  var monto=0, det='';
+  if(sSel==='luz'){
+    var ant=parseFloat(document.getElementById('slant')?document.getElementById('slant').value:0)||0;
+    var act=parseFloat(document.getElementById('slact')?document.getElementById('slact').value:0)||0;
+    var p=parseFloat(document.getElementById('sprecio')?document.getElementById('sprecio').value:0.80)||0.80;
+    if(act<=0){ toast('Ingresa la lectura actual'); return; }
+    if(act<ant){ toast('Lectura actual menor que anterior'); return; }
+    monto=(act-ant)*p;
+    det='Ant:'+ant+' Act:'+act+' Consumo:'+( act-ant).toFixed(1)+'kWh x S/'+p.toFixed(2);
   } else {
-    monto=parseFloat(document.getElementById('smonto')?.value)||0;
-    det=document.getElementById('sdet')?.value||'';
+    var mel=document.getElementById('smonto');
+    monto=mel?parseFloat(mel.value)||0:0;
+    var del=document.getElementById('sdet');
+    det=del?del.value:'';
   }
-  if(monto<=0){toast('(!) Monto debe ser mayor a 0',true);return;}
-  try {
-    const r=await api({action:'addConsumo',usuario:u.nombre,mes,anio,servicio:sSel,detalle:det,monto:monto.toFixed(2)});
+  if(monto<=0){ toast('Monto debe ser mayor a 0'); return; }
+  api({action:'addConsumo',usuario:u.nombre,mes:mes,anio:anio,servicio:sSel,detalle:det,monto:monto.toFixed(2)}).then(function(r){
     if(r.success){
-      toast(`OK ${ICON[sSel]} S/ ${monto.toFixed(2)} guardado`);
+      toast('Guardado S/ '+monto.toFixed(2));
       cancelForm();
-      const rh=await api({action:'getHistorial'});
-      if(rh.success) historial=rh.registros||[];
-      renderDash();
-    } else toast('Error '+r.message,true);
-  } catch(e){toast('Error Error de conexion',true);}
+      api({action:'getHistorial'}).then(function(rh){ if(rh.success) historial=rh.registros||[]; renderDash(); });
+    } else toast('Error: '+(r.message||''));
+  }).catch(function(){ toast('Error de conexion'); });
 }
 
-// ====== HISTORIAL ======
-async function loadHist() {
-  document.getElementById('tbl').innerHTML='<div class="load">... Cargando...</div>';
-  try {
-    const r=await api({action:'getHistorial'});
-    if(r.success){historial=r.registros||[];renderHist();}
-  } catch(e){document.getElementById('tbl').innerHTML='<div class="empty">Error Error de conexion</div>';}
+function loadHist(){
+  document.getElementById('tbl').innerHTML='<div class="load">Cargando...</div>';
+  api({action:'getHistorial'}).then(function(r){
+    if(r.success){ historial=r.registros||[]; renderHist(); }
+  }).catch(function(){ document.getElementById('tbl').innerHTML='<div class="empty">Error de conexion</div>'; });
 }
 
-function filtrar(){renderHist();}
+function filtrar(){ renderHist(); }
 
-function renderFU() {
-  const s=document.getElementById('fu');
-  const cur=s.value;
-  s.innerHTML='<option value="">Todos los usuarios</option>'+usuarios.map(u=>`<option value="${u.nombre}" ${u.nombre===cur?'selected':''}>${u.nombre}</option>`).join('');
+function renderFU(){
+  var s=document.getElementById('fu');
+  var cur=s.value;
+  var h='<option value="">Todos los usuarios</option>';
+  for(var i=0;i<usuarios.length;i++) h+='<option value="'+usuarios[i].nombre+'"'+(usuarios[i].nombre===cur?' selected':'')+'>'+usuarios[i].nombre+'</option>';
+  s.innerHTML=h;
 }
 
-function renderHist() {
-  const fU=document.getElementById('fu').value, fM=document.getElementById('fm').value;
-  const fA=document.getElementById('fa').value, fS=document.getElementById('fs').value;
-  let data=historial.filter(r=>{
-    if(fU&&r.usuario!==fU)return false;
-    if(fM&&String(r.mes).padStart(2,'0')!==fM)return false;
-    if(fA&&String(r.anio)!==fA)return false;
-    if(fS&&r.servicio!==fS)return false;
+function renderHist(){
+  var fU=document.getElementById('fu').value;
+  var fM=document.getElementById('fm').value;
+  var fA=document.getElementById('fa').value;
+  var fS=document.getElementById('fs').value;
+  var data=historial.filter(function(r){
+    if(fU&&r.usuario!==fU) return false;
+    if(fM&&(String(r.mes).length===1?'0'+r.mes:String(r.mes))!==fM) return false;
+    if(fA&&String(r.anio)!==fA) return false;
+    if(fS&&r.servicio!==fS) return false;
     return true;
   });
-  const tot=data.reduce((s,r)=>s+(r.monto||0),0);
-  const bS={};SVCS.forEach(s=>{bS[s]=data.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);});
-  document.getElementById('scards').innerHTML=`
-    <div class="sc"><div class="scl">S/ Total</div><div class="scv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
-    ${SVCS.filter(s=>bS[s]>0).map(s=>`<div class="sc"><div class="scl">${ICON[s]} ${s}</div><div class="scv" style="color:${CLR[s]}">S/ ${bS[s].toFixed(2)}</div></div>`).join('')}
-    <div class="sc"><div class="scl"> Registros</div><div class="scv">${data.length}</div></div>
-  `;
+  var tot=0;
+  var bS={};
+  for(var i=0;i<SVCS.length;i++) bS[SVCS[i]]=0;
+  for(var j=0;j<data.length;j++){ tot+=data[j].monto||0; if(bS[data[j].servicio]!==undefined) bS[data[j].servicio]+=data[j].monto||0; }
+  var sc='<div class="sc"><div class="scl">Total</div><div class="scv" style="color:var(--yel)">S/ '+tot.toFixed(2)+'</div></div>';
+  for(var s=0;s<SVCS.length;s++){ if(bS[SVCS[s]]>0) sc+='<div class="sc"><div class="scl">'+SVCS[s]+'</div><div class="scv" style="color:'+CLR[SVCS[s]]+'">S/ '+bS[SVCS[s]].toFixed(2)+'</div></div>'; }
+  sc+='<div class="sc"><div class="scl">Registros</div><div class="scv">'+data.length+'</div></div>';
+  document.getElementById('scards').innerHTML=sc;
   renderFU();
-  if(!data.length){document.getElementById('tbl').innerHTML='<div class="empty">Sin registros</div>';return;}
-  const rows=[...data].reverse().map(r=>`<tr>
-    <td><strong>${r.usuario}</strong></td>
-    <td>${MES[parseInt(r.mes)]||r.mes} ${r.anio}</td>
-    <td style="color:${CLR[r.servicio]||'var(--tx)'}">${ICON[r.servicio]||''} ${r.servicio}</td>
-    <td style="color:var(--tx2);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.detalle||'-'}</td>
-    <td class="tdm">S/ ${(r.monto||0).toFixed(2)}</td>
-    <td style="color:${r.pagado?'var(--grn)':'var(--tx3)'};font-size:12px;font-weight:700">${r.pagado?'OK':'---'}</td>
-    <td><button class="btn btnr btnsm" onclick="delReg(${r.fila})">X</button></td>
-  </tr>`).join('');
-  document.getElementById('tbl').innerHTML=`<div style="overflow-x:auto"><table>
-    <thead><tr><th>Usuario</th><th>Periodo</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
-    <tbody>${rows}</tbody></table></div>`;
+  if(!data.length){ document.getElementById('tbl').innerHTML='<div class="empty">Sin registros</div>'; return; }
+  var sorted=data.slice().reverse();
+  var rows='';
+  for(var k=0;k<sorted.length;k++){
+    var r=sorted[k];
+    var mesNom=MES[parseInt(r.mes)]||r.mes;
+    rows+='<tr>';
+    rows+='<td><strong>'+r.usuario+'</strong></td>';
+    rows+='<td>'+mesNom+' '+r.anio+'</td>';
+    rows+='<td style="color:'+(CLR[r.servicio]||'var(--tx)')+'">'+r.servicio+'</td>';
+    rows+='<td style="color:var(--tx2);font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.detalle||'-')+'</td>';
+    rows+='<td class="tdm">S/ '+(r.monto||0).toFixed(2)+'</td>';
+    rows+='<td style="color:'+(r.pagado?'var(--grn)':'var(--tx3)')+';font-size:12px;font-weight:700">'+(r.pagado?'Cobrado':'-')+'</td>';
+    rows+='<td><button class="btn btnr btnsm" onclick="delReg('+r.fila+')">X</button></td>';
+    rows+='</tr>';
+  }
+  document.getElementById('tbl').innerHTML='<div style="overflow-x:auto"><table><thead><tr><th>Usuario</th><th>Periodo</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th>Estado</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 
-async function delReg(fila) {
-  if(!confirm('?Eliminar registro?'))return;
-  try{
-    const r=await api({action:'deleteRegistro',fila});
-    if(r.success){toast('X Eliminado');const rh=await api({action:'getHistorial'});if(rh.success)historial=rh.registros||[];renderHist();renderDash();}
-    else toast('Error '+r.message,true);
-  }catch(e){toast('Error Error',true);}
+function delReg(fila){
+  if(!confirm('Eliminar este registro?')) return;
+  api({action:'deleteRegistro',fila:fila}).then(function(r){
+    if(r.success){
+      toast('Eliminado');
+      api({action:'getHistorial'}).then(function(rh){ if(rh.success) historial=rh.registros||[]; renderHist(); renderDash(); });
+    } else toast('Error: '+(r.message||''));
+  }).catch(function(){ toast('Error'); });
 }
 
-// ====== CONFIG ======
-function renderCfg() {
-  if(!usuarios.length){document.getElementById('cfgu').innerHTML='<div class="empty">Sin usuarios</div>';return;}
-  document.getElementById('cfgu').innerHTML=usuarios.map((u,i)=>{
-    const sv=(u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
-    return `<div class="cuc">
-      <div class="cun"><span>${u.nombre}</span><button class="btn btnr btnsm" onclick="delUser('${u.nombre}')">X Eliminar</button></div>
-      <div class="cpg">
-        <div class="cpi"><label>Luz Precio kWh (S/)</label><input type="number" id="ckw${i}" value="${u.precioKw||0.80}" step="0.01" min="0" placeholder="0.80"></div>
-        <div class="cpi"><label>Agua Precio Agua (S/)</label><input type="number" id="cagua${i}" value="${u.precioAgua||0}" step="0.01" min="0" placeholder="0"></div>
-      </div>
-      <div style="font-size:11px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Servicios activos</div>
-      <div class="csvcs">${SVCS.map(s=>`<label class="schk"><input type="checkbox" id="cs${i}_${s}" ${sv.includes(s)?'checked':''}> ${ICON[s]} ${s}</label>`).join('')}</div>
-    </div>`;
-  }).join('');
+function renderCfg(){
+  if(!usuarios.length){ document.getElementById('cfgu').innerHTML='<div class="empty">Sin usuarios</div>'; return; }
+  var h='';
+  for(var i=0;i<usuarios.length;i++){
+    var u=usuarios[i];
+    var sv=u.servicios.split(',');
+    h+='<div class="cuc">';
+    h+='<div class="cun"><span>'+u.nombre+'</span><button class="btn btnr btnsm" onclick="delUser(\''+u.nombre.replace(/'/g,"\\'")+'\')">Eliminar</button></div>';
+    h+='<div class="cpg">';
+    h+='<div class="cpi"><label>Precio kWh (S/)</label><input type="number" id="ckw'+i+'" value="'+(u.precioKw||0.80)+'" step="0.01" min="0" placeholder="0.80"></div>';
+    h+='<div class="cpi"><label>Precio Agua (S/)</label><input type="number" id="cagua'+i+'" value="'+(u.precioAgua||0)+'" step="0.01" min="0" placeholder="0"></div>';
+    h+='</div>';
+    h+='<div style="font-size:11px;font-weight:800;color:var(--tx3);text-transform:uppercase;margin-bottom:6px">Servicios activos</div>';
+    h+='<div class="csvcs">';
+    for(var s=0;s<SVCS.length;s++){
+      var checked=sv.indexOf(SVCS[s])>=0?'checked':'';
+      h+='<label class="schk"><input type="checkbox" id="cs'+i+'_'+SVCS[s]+'" '+checked+'> '+SVCS[s]+'</label>';
+    }
+    h+='</div></div>';
+  }
+  document.getElementById('cfgu').innerHTML=h;
 }
 
-async function saveConfig() {
-  const updated=usuarios.map((u,i)=>{
-    const kw=parseFloat(document.getElementById(`ckw${i}`)?.value)||0.80;
-    const agua=parseFloat(document.getElementById(`cagua${i}`)?.value)||0;
-    const sv=SVCS.filter(s=>document.getElementById(`cs${i}_${s}`)?.checked).join(',');
-    return {...u,precioKw:kw,precioAgua:agua,servicios:sv};
-  });
-  try{
-    await Promise.all(updated.map(u=>api({action:'updateUsuario',nombre:u.nombre,servicios:u.servicios,precioKw:u.precioKw,precioAgua:u.precioAgua})));
+function saveConfig(){
+  var reqs=[];
+  var updated=[];
+  for(var i=0;i<usuarios.length;i++){
+    var u=usuarios[i];
+    var kwEl=document.getElementById('ckw'+i);
+    var aguaEl=document.getElementById('cagua'+i);
+    var kw=kwEl?parseFloat(kwEl.value)||0.80:0.80;
+    var agua=aguaEl?parseFloat(aguaEl.value)||0:0;
+    var sv=[];
+    for(var s=0;s<SVCS.length;s++){
+      var el=document.getElementById('cs'+i+'_'+SVCS[s]);
+      if(el&&el.checked) sv.push(SVCS[s]);
+    }
+    updated.push({nombre:u.nombre,precioKw:kw,precioAgua:agua,servicios:sv.join(','),fila:u.fila});
+    reqs.push(api({action:'updateUsuario',nombre:u.nombre,servicios:sv.join(','),precioKw:kw,precioAgua:agua}));
+  }
+  Promise.all(reqs).then(function(){
     usuarios=updated; renderUgrid(); renderCfg();
-    toast('OK Configuracion guardada');
-  }catch(e){toast('Error Error al guardar',true);}
+    toast('Configuracion guardada');
+  }).catch(function(){ toast('Error al guardar'); });
 }
 
-async function addUser() {
-  const n=document.getElementById('nnombre').value.trim();
-  if(!n){toast('(!) Escribe un nombre',true);return;}
-  try{
-    const r=await api({action:'addUsuario',nombre:n,servicios:'luz,agua,arbitrios,cable,internet',precioKw:0.80,precioAgua:0});
-    if(r.success){toast('OK Usuario agregado');document.getElementById('nnombre').value='';await cargarTodo();}
-    else toast('Error '+r.message,true);
-  }catch(e){toast('Error Error',true);}
+function addUser(){
+  var n=document.getElementById('nnombre').value.trim();
+  if(!n){ toast('Escribe un nombre'); return; }
+  api({action:'addUsuario',nombre:n,servicios:'luz,agua,arbitrios,cable,internet',precioKw:0.80,precioAgua:0}).then(function(r){
+    if(r.success){ toast('Usuario agregado'); document.getElementById('nnombre').value=''; cargarTodo(); }
+    else toast('Error: '+(r.message||''));
+  }).catch(function(){ toast('Error'); });
 }
 
-async function delUser(nombre) {
-  if(!confirm(`?Eliminar "${nombre}"?`))return;
-  try{
-    const r=await api({action:'deleteUsuario',nombre});
-    if(r.success){toast('X Eliminado');await cargarTodo();}
-    else toast('Error '+r.message,true);
-  }catch(e){toast('Error Error',true);}
+function delUser(nombre){
+  if(!confirm('Eliminar usuario "'+nombre+'"?')) return;
+  api({action:'deleteUsuario',nombre:nombre}).then(function(r){
+    if(r.success){ toast('Usuario eliminado'); cargarTodo(); }
+    else toast('Error: '+(r.message||''));
+  }).catch(function(){ toast('Error'); });
 }
 
-function toast(msg,err=false){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.toggle('err',err);
-  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show';
+  setTimeout(function(){ t.className='toast'; },3500);
 }
 </script>
 </body>
