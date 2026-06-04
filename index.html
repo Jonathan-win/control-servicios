@@ -293,11 +293,11 @@ tbody td{padding:10px 12px;}
 <!-- APPS SCRIPT ACTUALIZADO (oculto, solo referencia) -->
 <script id="appsScriptRef" type="text/plain">
 // NUEVO Apps Script — reemplaza el anterior completo
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpPoAEVeoQl6Dii9jDvRzvicsQr8u56dsVhJrILzRDcyxDWaq4BGF-_RycW_NLCJaY_A/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx41x2e3iQt6Tm53dZayJLk4wx_cPCo9CsA6vC_ZnT9CBOv-oTwf4XdVA1fHz-tnQhJsQ/exec';
 </script>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpPoAEVeoQl6Dii9jDvRzvicsQr8u56dsVhJrILzRDcyxDWaq4BGF-_RycW_NLCJaY_A/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx41x2e3iQt6Tm53dZayJLk4wx_cPCo9CsA6vC_ZnT9CBOv-oTwf4XdVA1fHz-tnQhJsQ/exec';
 
 const MESES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
 const SVCS = ['luz','agua','arbitrios','cable','internet'];
@@ -311,20 +311,17 @@ let userSel = null;
 let svcSel = null;
 
 // ====== API ======
-function api(params) {
-  return new Promise((resolve, reject) => {
-    const cbName = 'cb_' + Math.random().toString(36).slice(2);
-    const url = SCRIPT_URL + '?' + new URLSearchParams({...params, callback: cbName});
-    window[cbName] = (data) => {
-      delete window[cbName];
-      document.head.removeChild(script);
-      resolve(data);
-    };
-    const script = document.createElement('script');
-    script.src = url;
-    script.onerror = () => { delete window[cbName]; reject(new Error('Error de red')); };
-    document.head.appendChild(script);
-  });
+async function api(params) {
+  const url = SCRIPT_URL + '?' + new URLSearchParams(params);
+  const r = await fetch(url, {redirect: 'follow'});
+  const text = await r.text();
+  try { return JSON.parse(text); }
+  catch(e) {
+    // limpiar JSONP si viene con callback wrapper
+    const m = text.match(/^[^(]+\(([\s\S]*)\)\s*;?\s*$/);
+    if (m) return JSON.parse(m[1]);
+    throw new Error('Respuesta inválida: ' + text.slice(0,100));
+  }
 }
 
 // ====== INIT ======
