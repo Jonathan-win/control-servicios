@@ -323,7 +323,14 @@ function renderDash(){
 }
 
 function togglePago(nombre,mes,anio){
-  var ud=historial.filter(function(r){ return r.usuario===nombre&&(String(r.mes).length===1?'0'+r.mes:String(r.mes))===mes&&String(r.anio)===anio; });
+  var ud=historial.filter(function(r){
+    var rm3=String(r.mes).trim();
+    var mN2=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
+    var rmN3='';
+    for(var miii=1;miii<=12;miii++){ if(mN2[miii].toLowerCase()===rm3.toLowerCase()){ rmN3=miii<10?'0'+miii:''+miii; break; } }
+    if(!rmN3){ rmN3=rm3.length===1?'0'+rm3:rm3; }
+    return r.usuario===nombre&&rmN3===mes&&String(r.anio)===anio;
+  });
   var yaPagado=ud.length>0;
   for(var i=0;i<ud.length;i++){ if(!ud[i].pagado){ yaPagado=false; break; } }
   api({action:'setPagado',usuario:nombre,mes:mes,anio:anio,pagado:yaPagado?'0':'1'}).then(function(){
@@ -481,7 +488,12 @@ function renderHist(){
   var fS=document.getElementById('fs').value;
   var data=historial.filter(function(r){
     if(fU&&r.usuario!==fU) return false;
-    if(fM&&(String(r.mes).length===1?'0'+r.mes:String(r.mes))!==fM) return false;
+    var rm2=String(r.mes).trim();
+    var mN=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
+    var rmN2='';
+    for(var mii=1;mii<=12;mii++){ if(mN[mii].toLowerCase()===rm2.toLowerCase()){ rmN2=mii<10?'0'+mii:''+mii; break; } }
+    if(!rmN2){ rmN2=rm2.length===1?'0'+rm2:rm2; }
+    if(fM&&rmN2!==fM) return false;
     if(fA&&String(r.anio)!==fA) return false;
     if(fS&&r.servicio!==fS) return false;
     return true;
