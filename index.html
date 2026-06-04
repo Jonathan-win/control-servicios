@@ -252,7 +252,10 @@ function cargarTodo(){
       return {nombre:u.nombre, servicios:u.servicios||'luz,agua,arbitrios,cable,internet',
               precioKw:parseFloat(u.precioKw)||0.80, precioAgua:parseFloat(u.precioAgua)||0, fila:u.fila};
     });
-    historial = rh.success?(rh.registros||[]):[];
+    historial = rh.success?(rh.registros||[]).map(function(r){
+      r.servicio = r.servicio ? r.servicio.toLowerCase().trim() : r.servicio;
+      return r;
+    }):[];
     setSt('Conectado','var(--grn)','ok');
     renderUgrid(); renderDash(); renderFU(); renderCfg();
   }).catch(function(e){
@@ -405,7 +408,7 @@ function renderSvcFields(s){
     var lastMes='', lastAnio='';
     for(var li=0;li<historial.length;li++){
       var lr=historial[li];
-      if(lr.usuario===u.nombre && lr.servicio==='luz' && lr.detalle){
+      if(lr.usuario===u.nombre && lr.servicio.toLowerCase()==='luz' && lr.detalle){
         var d=lr.detalle;
         var m=null;
         // Formato nuevo: "Ant:X Act:Y Consumo:..."
@@ -489,7 +492,7 @@ function guardarRegistro(){
     det=del?del.value:'';
   }
   if(monto<=0){ toast('Monto debe ser mayor a 0'); return; }
-  api({action:'addConsumo',usuario:u.nombre,mes:mes,anio:anio,servicio:sSel,detalle:det,monto:monto.toFixed(2)}).then(function(r){
+  api({action:'addConsumo',usuario:u.nombre,mes:MES[parseInt(mes,10)],anio:anio,servicio:sSel,detalle:det,monto:monto.toFixed(2)}).then(function(r){
     if(r.success){
       toast('Guardado S/ '+monto.toFixed(2));
       cancelForm();
