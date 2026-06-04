@@ -277,11 +277,18 @@ function showTab(t){
   if(t==='config') renderCfg();
 }
 
+
+function mesPad(m){
+  var n=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
+  var s=String(m).trim();
+  for(var i=1;i<=12;i++){ if(n[i].toLowerCase()===s.toLowerCase()) return i<10?'0'+i:''+i; }
+  return s.length===1?'0'+s:s;
+}
+
 function renderDash(){
   var mes=document.getElementById('dmes').value;
   var anio=document.getElementById('danio').value;
-  var md=historial.filter(function(r){ return String(r.mes).length===1?'0'+r.mes===mes:String(r.mes)===mes; });
-  md=md.filter(function(r){ return String(r.anio)===anio; });
+  var md=historial.filter(function(r){ return mesPad(r.mes)===mes && String(r.anio)===anio; });
   var tot=0,pag=0;
   for(var i=0;i<md.length;i++){ tot+=md[i].monto||0; if(md[i].pagado) pag+=md[i].monto||0; }
   var bySvc={};
@@ -488,12 +495,7 @@ function renderHist(){
   var fS=document.getElementById('fs').value;
   var data=historial.filter(function(r){
     if(fU&&r.usuario!==fU) return false;
-    var rm2=String(r.mes).trim();
-    var mN=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
-    var rmN2='';
-    for(var mii=1;mii<=12;mii++){ if(mN[mii].toLowerCase()===rm2.toLowerCase()){ rmN2=mii<10?'0'+mii:''+mii; break; } }
-    if(!rmN2){ rmN2=rm2.length===1?'0'+rm2:rm2; }
-    if(fM&&rmN2!==fM) return false;
+    if(fM&&mesPad(r.mes)!==fM) return false;
     if(fA&&String(r.anio)!==fA) return false;
     if(fS&&r.servicio!==fS) return false;
     return true;
