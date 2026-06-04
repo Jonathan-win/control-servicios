@@ -214,7 +214,7 @@ tbody td{padding:10px 12px;}
 const URL = 'https://script.google.com/macros/s/AKfycbx41x2e3iQt6Tm53dZayJLk4wx_cPCo9CsA6vC_ZnT9CBOv-oTwf4XdVA1fHz-tnQhJsQ/exec';
 const MES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
 const SVCS = ['luz','agua','arbitrios','cable','internet'];
-const ICON = {luz:'⚡',agua:'💧',arbitrios:'🏛️',cable:'📺',internet:'🌐'};
+const ICON = {luz:'Luz',agua:'Agua',arbitrios:'Arb',cable:'Cable',internet:'Internet'};
 const CLR = {luz:'var(--acc)',agua:'#67d5f7',arbitrios:'var(--grn)',cable:'var(--ora)',internet:'var(--pur)'};
 
 let usuarios=[], historial=[], uSel=null, sSel=null;
@@ -280,8 +280,8 @@ async function cargarTodo() {
     setSt('Conectado','var(--grn)','ok');
     renderUgrid(); renderDash(); renderFU(); renderCfg();
   } catch(e) {
-    setSt('Sin conexión','var(--red)','err');
-    toast('❌ Error: '+e.message, true);
+    setSt('Sin conexion','var(--red)','err');
+    toast('Error Error: '+e.message, true);
   }
 }
 
@@ -309,12 +309,12 @@ function renderDash() {
   const bySvc={};
   SVCS.forEach(s=>{bySvc[s]=md.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);});
   document.getElementById('gbar').innerHTML=`
-    <div class="gi"><div class="gl">💰 Total</div><div class="gv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
+    <div class="gi"><div class="gl">S/ Total</div><div class="gv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
     <div class="gi"><div class="gl">Cobrado</div><div class="gv" style="color:var(--grn)">S/ ${pag.toFixed(2)}</div></div>
-    <div class="gi"><div class="gl">⏳ Pendiente</div><div class="gv" style="color:var(--red)">S/ ${pnd.toFixed(2)}</div></div>
+    <div class="gi"><div class="gl">... Pendiente</div><div class="gv" style="color:var(--red)">S/ ${pnd.toFixed(2)}</div></div>
     ${SVCS.filter(s=>bySvc[s]>0).map(s=>`<div class="gi"><div class="gl">${ICON[s]} ${s}</div><div class="gv" style="color:${CLR[s]}">S/ ${bySvc[s].toFixed(2)}</div></div>`).join('')}
   `;
-  if (!usuarios.length) { document.getElementById('dgrid').innerHTML='<div class="empty">Sin usuarios — Ve a Config</div>'; return; }
+  if (!usuarios.length) { document.getElementById('dgrid').innerHTML='<div class="empty">Sin usuarios - Ve a Config</div>'; return; }
   document.getElementById('dgrid').innerHTML=usuarios.map(u=>{
     const ud=md.filter(r=>r.usuario===u.nombre);
     const ut=ud.reduce((s,r)=>s+(r.monto||0),0);
@@ -325,7 +325,7 @@ function renderDash() {
       <div class="un">${u.nombre}</div>
       <div class="utot ${isPaid?'paid'}">${ut>0?'S/ '+ut.toFixed(2):'---'}</div>
       <div class="ubr">${br||'<div style="font-size:13px;color:var(--tx3)">Sin registros</div>'}</div>
-      ${ut>0?`<button class="pbtn ${isPaid?'pd':'unp'}" onclick="togglePago('${u.nombre}','${mes}','${anio}')">${isPaid?'Cobrado':'⏳ Marcar cobrado'}</button>`:''}
+      ${ut>0?`<button class="pbtn ${isPaid?'pd':'unp'}" onclick="togglePago('${u.nombre}','${mes}','${anio}')">${isPaid?'Cobrado':'... Marcar cobrado'}</button>`:''}
     </div>`;
   }).join('');
 }
@@ -339,7 +339,7 @@ async function togglePago(nombre, mes, anio) {
     if(rh.success) historial=rh.registros||[];
     renderDash();
     toast(yaPagado?'Pendiente':'Cobrado');
-  } catch(e){toast('❌ Error',true);}
+  } catch(e){toast('Error Error',true);}
 }
 
 // ====== REGISTRAR ======
@@ -351,11 +351,11 @@ function renderUgrid() {
     return `<div class="uc" id="uc${i}" onclick="selUser(${i})">
       <div class="ucn">${u.nombre}</div>
       <div class="bgs">
-        ${sv.includes('luz')?'<span class="bg bluz">⚡ Luz</span>':''}
-        ${sv.includes('agua')?'<span class="bg bagua">💧 Agua</span>':''}
-        ${sv.includes('arbitrios')?'<span class="bg barbitrios">🏛️</span>':''}
-        ${sv.includes('cable')?'<span class="bg bcable">📺</span>':''}
-        ${sv.includes('internet')?'<span class="bg binternet">🌐</span>':''}
+        ${sv.includes('luz')?'<span class="bg bluz">Luz Luz</span>':''}
+        ${sv.includes('agua')?'<span class="bg bagua">Agua Agua</span>':''}
+        ${sv.includes('arbitrios')?'<span class="bg barbitrios">Arb</span>':''}
+        ${sv.includes('cable')?'<span class="bg bcable">Cable</span>':''}
+        ${sv.includes('internet')?'<span class="bg binternet">Internet</span>':''}
       </div>
     </div>`;
   }).join('');
@@ -389,15 +389,15 @@ function renderSvcFields(s) {
   let h='';
   if(s==='luz') {
     h=`<div class="fgrid">
-      <div class="fg"><label>📟 Lectura anterior (kWh)</label><input type="number" id="slant" placeholder="Ej: 1250" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura del mes pasado</span></div>
-      <div class="fg"><label>📟 Lectura actual (kWh)</label><input type="number" id="slact" placeholder="Ej: 1370" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura de hoy</span></div>
-      <div class="fg"><label>💰 Precio por kWh (S/)</label><input type="number" id="sprecio" value="${u.precioKw||0.80}" step="0.01" min="0" oninput="calcSvc()"><span class="hint">Precio de ${u.nombre}</span></div>
+      <div class="fg"><label> Lectura anterior (kWh)</label><input type="number" id="slant" placeholder="Ej: 1250" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura del mes pasado</span></div>
+      <div class="fg"><label> Lectura actual (kWh)</label><input type="number" id="slact" placeholder="Ej: 1370" min="0" step="0.1" oninput="calcSvc()"><span class="hint">Lectura de hoy</span></div>
+      <div class="fg"><label>S/ Precio por kWh (S/)</label><input type="number" id="sprecio" value="${u.precioKw||0.80}" step="0.01" min="0" oninput="calcSvc()"><span class="hint">Precio de ${u.nombre}</span></div>
     </div>`;
   } else {
     const lbl={agua:'Mayo 2026',arbitrios:'Arbitrios municipales',cable:'Cable TV mensual',internet:'Internet mensual'};
     h=`<div class="fgrid">
-      <div class="fg"><label>💰 Monto (S/)</label><input type="number" id="smonto" placeholder="Ej: 45.00" min="0" step="0.01" oninput="calcSvc()"></div>
-      <div class="fg"><label>📝 Detalle</label><input type="text" id="sdet" placeholder="${lbl[s]||s}"></div>
+      <div class="fg"><label>S/ Monto (S/)</label><input type="number" id="smonto" placeholder="Ej: 45.00" min="0" step="0.01" oninput="calcSvc()"></div>
+      <div class="fg"><label> Detalle</label><input type="text" id="sdet" placeholder="${lbl[s]||s}"></div>
     </div>`;
   }
   document.getElementById('sfields').innerHTML=h;
@@ -413,8 +413,8 @@ function calcSvc() {
     const p=parseFloat(document.getElementById('sprecio')?.value)||0.80;
     const c=Math.max(0,act-ant);
     monto=c*p;
-    if(c>0) det=`Consumo: ${c.toFixed(1)} kWh × S/${p.toFixed(2)}`;
-    else if(act>0&&ant>0&&act<ant) det='⚠️ Lectura actual menor que anterior';
+    if(c>0) det=`Consumo: ${c.toFixed(1)} kWh x S/${p.toFixed(2)}`;
+    else if(act>0&&ant>0&&act<ant) det='(!) Lectura actual menor que anterior';
   } else {
     monto=parseFloat(document.getElementById('smonto')?.value)||0;
   }
@@ -437,8 +437,8 @@ async function guardarRegistro() {
     const ant=parseFloat(document.getElementById('slant')?.value)||0;
     const act=parseFloat(document.getElementById('slact')?.value)||0;
     const p=parseFloat(document.getElementById('sprecio')?.value)||0.80;
-    if(act<=0){toast('⚠️ Ingresa la lectura actual',true);return;}
-    if(act<ant){toast('⚠️ Lectura actual menor que anterior',true);return;}
+    if(act<=0){toast('(!) Ingresa la lectura actual',true);return;}
+    if(act<ant){toast('(!) Lectura actual menor que anterior',true);return;}
     const c=act-ant;
     monto=c*p;
     det=`Ant:${ant} Act:${act} Consumo:${c.toFixed(1)}kWh x S/${p.toFixed(2)}`;
@@ -446,26 +446,26 @@ async function guardarRegistro() {
     monto=parseFloat(document.getElementById('smonto')?.value)||0;
     det=document.getElementById('sdet')?.value||'';
   }
-  if(monto<=0){toast('⚠️ Monto debe ser mayor a 0',true);return;}
+  if(monto<=0){toast('(!) Monto debe ser mayor a 0',true);return;}
   try {
     const r=await api({action:'addConsumo',usuario:u.nombre,mes,anio,servicio:sSel,detalle:det,monto:monto.toFixed(2)});
     if(r.success){
-      toast(`✅ ${ICON[sSel]} S/ ${monto.toFixed(2)} guardado`);
+      toast(`OK ${ICON[sSel]} S/ ${monto.toFixed(2)} guardado`);
       cancelForm();
       const rh=await api({action:'getHistorial'});
       if(rh.success) historial=rh.registros||[];
       renderDash();
-    } else toast('❌ '+r.message,true);
-  } catch(e){toast('❌ Error de conexión',true);}
+    } else toast('Error '+r.message,true);
+  } catch(e){toast('Error Error de conexion',true);}
 }
 
 // ====== HISTORIAL ======
 async function loadHist() {
-  document.getElementById('tbl').innerHTML='<div class="load">⏳ Cargando...</div>';
+  document.getElementById('tbl').innerHTML='<div class="load">... Cargando...</div>';
   try {
     const r=await api({action:'getHistorial'});
     if(r.success){historial=r.registros||[];renderHist();}
-  } catch(e){document.getElementById('tbl').innerHTML='<div class="empty">❌ Error de conexión</div>';}
+  } catch(e){document.getElementById('tbl').innerHTML='<div class="empty">Error Error de conexion</div>';}
 }
 
 function filtrar(){renderHist();}
@@ -489,9 +489,9 @@ function renderHist() {
   const tot=data.reduce((s,r)=>s+(r.monto||0),0);
   const bS={};SVCS.forEach(s=>{bS[s]=data.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);});
   document.getElementById('scards').innerHTML=`
-    <div class="sc"><div class="scl">💰 Total</div><div class="scv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
+    <div class="sc"><div class="scl">S/ Total</div><div class="scv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
     ${SVCS.filter(s=>bS[s]>0).map(s=>`<div class="sc"><div class="scl">${ICON[s]} ${s}</div><div class="scv" style="color:${CLR[s]}">S/ ${bS[s].toFixed(2)}</div></div>`).join('')}
-    <div class="sc"><div class="scl">📋 Registros</div><div class="scv">${data.length}</div></div>
+    <div class="sc"><div class="scl"> Registros</div><div class="scv">${data.length}</div></div>
   `;
   renderFU();
   if(!data.length){document.getElementById('tbl').innerHTML='<div class="empty">Sin registros</div>';return;}
@@ -501,21 +501,21 @@ function renderHist() {
     <td style="color:${CLR[r.servicio]||'var(--tx)'}">${ICON[r.servicio]||''} ${r.servicio}</td>
     <td style="color:var(--tx2);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.detalle||'-'}</td>
     <td class="tdm">S/ ${(r.monto||0).toFixed(2)}</td>
-    <td style="color:${r.pagado?'var(--grn)':'var(--tx3)'};font-size:12px;font-weight:700">${r.pagado?'✅':'---'}</td>
-    <td><button class="btn btnr btnsm" onclick="delReg(${r.fila})">🗑️</button></td>
+    <td style="color:${r.pagado?'var(--grn)':'var(--tx3)'};font-size:12px;font-weight:700">${r.pagado?'OK':'---'}</td>
+    <td><button class="btn btnr btnsm" onclick="delReg(${r.fila})">X</button></td>
   </tr>`).join('');
   document.getElementById('tbl').innerHTML=`<div style="overflow-x:auto"><table>
-    <thead><tr><th>Usuario</th><th>Período</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
+    <thead><tr><th>Usuario</th><th>Periodo</th><th>Servicio</th><th>Detalle</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
     <tbody>${rows}</tbody></table></div>`;
 }
 
 async function delReg(fila) {
-  if(!confirm('¿Eliminar registro?'))return;
+  if(!confirm('?Eliminar registro?'))return;
   try{
     const r=await api({action:'deleteRegistro',fila});
-    if(r.success){toast('🗑️ Eliminado');const rh=await api({action:'getHistorial'});if(rh.success)historial=rh.registros||[];renderHist();renderDash();}
-    else toast('❌ '+r.message,true);
-  }catch(e){toast('❌ Error',true);}
+    if(r.success){toast('X Eliminado');const rh=await api({action:'getHistorial'});if(rh.success)historial=rh.registros||[];renderHist();renderDash();}
+    else toast('Error '+r.message,true);
+  }catch(e){toast('Error Error',true);}
 }
 
 // ====== CONFIG ======
@@ -524,10 +524,10 @@ function renderCfg() {
   document.getElementById('cfgu').innerHTML=usuarios.map((u,i)=>{
     const sv=(u.servicios||'').split(',').map(s=>s.trim()).filter(Boolean);
     return `<div class="cuc">
-      <div class="cun"><span>${u.nombre}</span><button class="btn btnr btnsm" onclick="delUser('${u.nombre}')">✕ Eliminar</button></div>
+      <div class="cun"><span>${u.nombre}</span><button class="btn btnr btnsm" onclick="delUser('${u.nombre}')">X Eliminar</button></div>
       <div class="cpg">
-        <div class="cpi"><label>⚡ Precio kWh (S/)</label><input type="number" id="ckw${i}" value="${u.precioKw||0.80}" step="0.01" min="0" placeholder="0.80"></div>
-        <div class="cpi"><label>💧 Precio Agua (S/)</label><input type="number" id="cagua${i}" value="${u.precioAgua||0}" step="0.01" min="0" placeholder="0"></div>
+        <div class="cpi"><label>Luz Precio kWh (S/)</label><input type="number" id="ckw${i}" value="${u.precioKw||0.80}" step="0.01" min="0" placeholder="0.80"></div>
+        <div class="cpi"><label>Agua Precio Agua (S/)</label><input type="number" id="cagua${i}" value="${u.precioAgua||0}" step="0.01" min="0" placeholder="0"></div>
       </div>
       <div style="font-size:11px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Servicios activos</div>
       <div class="csvcs">${SVCS.map(s=>`<label class="schk"><input type="checkbox" id="cs${i}_${s}" ${sv.includes(s)?'checked':''}> ${ICON[s]} ${s}</label>`).join('')}</div>
@@ -545,27 +545,27 @@ async function saveConfig() {
   try{
     await Promise.all(updated.map(u=>api({action:'updateUsuario',nombre:u.nombre,servicios:u.servicios,precioKw:u.precioKw,precioAgua:u.precioAgua})));
     usuarios=updated; renderUgrid(); renderCfg();
-    toast('✅ Configuración guardada');
-  }catch(e){toast('❌ Error al guardar',true);}
+    toast('OK Configuracion guardada');
+  }catch(e){toast('Error Error al guardar',true);}
 }
 
 async function addUser() {
   const n=document.getElementById('nnombre').value.trim();
-  if(!n){toast('⚠️ Escribe un nombre',true);return;}
+  if(!n){toast('(!) Escribe un nombre',true);return;}
   try{
     const r=await api({action:'addUsuario',nombre:n,servicios:'luz,agua,arbitrios,cable,internet',precioKw:0.80,precioAgua:0});
-    if(r.success){toast('✅ Usuario agregado');document.getElementById('nnombre').value='';await cargarTodo();}
-    else toast('❌ '+r.message,true);
-  }catch(e){toast('❌ Error',true);}
+    if(r.success){toast('OK Usuario agregado');document.getElementById('nnombre').value='';await cargarTodo();}
+    else toast('Error '+r.message,true);
+  }catch(e){toast('Error Error',true);}
 }
 
 async function delUser(nombre) {
-  if(!confirm(`¿Eliminar "${nombre}"?`))return;
+  if(!confirm(`?Eliminar "${nombre}"?`))return;
   try{
     const r=await api({action:'deleteUsuario',nombre});
-    if(r.success){toast('🗑️ Eliminado');await cargarTodo();}
-    else toast('❌ '+r.message,true);
-  }catch(e){toast('❌ Error',true);}
+    if(r.success){toast('X Eliminado');await cargarTodo();}
+    else toast('Error '+r.message,true);
+  }catch(e){toast('Error Error',true);}
 }
 
 function toast(msg,err=false){
