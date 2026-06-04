@@ -310,7 +310,7 @@ function renderDash() {
   SVCS.forEach(s=>{bySvc[s]=md.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);});
   document.getElementById('gbar').innerHTML=`
     <div class="gi"><div class="gl">💰 Total</div><div class="gv" style="color:var(--yel)">S/ ${tot.toFixed(2)}</div></div>
-    <div class="gi"><div class="gl">✅ Cobrado</div><div class="gv" style="color:var(--grn)">S/ ${pag.toFixed(2)}</div></div>
+    <div class="gi"><div class="gl">Cobrado</div><div class="gv" style="color:var(--grn)">S/ ${pag.toFixed(2)}</div></div>
     <div class="gi"><div class="gl">⏳ Pendiente</div><div class="gv" style="color:var(--red)">S/ ${pnd.toFixed(2)}</div></div>
     ${SVCS.filter(s=>bySvc[s]>0).map(s=>`<div class="gi"><div class="gl">${ICON[s]} ${s}</div><div class="gv" style="color:${CLR[s]}">S/ ${bySvc[s].toFixed(2)}</div></div>`).join('')}
   `;
@@ -323,9 +323,9 @@ function renderDash() {
     const br=SVCS.map(s=>{const v=ud.filter(r=>r.servicio===s).reduce((sum,r)=>sum+(r.monto||0),0);return v>0?`<div class="ul"><span>${ICON[s]} ${s}</span><span>S/ ${v.toFixed(2)}</span></div>`:''}).join('');
     return `<div class="usum">
       <div class="un">${u.nombre}</div>
-      <div class="utot ${isPaid?'paid'}">${ut>0?'S/ '+ut.toFixed(2):'—'}</div>
+      <div class="utot ${isPaid?'paid'}">${ut>0?'S/ '+ut.toFixed(2):'---'}</div>
       <div class="ubr">${br||'<div style="font-size:13px;color:var(--tx3)">Sin registros</div>'}</div>
-      ${ut>0?`<button class="pbtn ${isPaid?'pd':'unp'}" onclick="togglePago('${u.nombre}','${mes}','${anio}')">${isPaid?'✅ Cobrado':'⏳ Marcar cobrado'}</button>`:''}
+      ${ut>0?`<button class="pbtn ${isPaid?'pd':'unp'}" onclick="togglePago('${u.nombre}','${mes}','${anio}')">${isPaid?'Cobrado':'⏳ Marcar cobrado'}</button>`:''}
     </div>`;
   }).join('');
 }
@@ -338,7 +338,7 @@ async function togglePago(nombre, mes, anio) {
     const rh=await api({action:'getHistorial'});
     if(rh.success) historial=rh.registros||[];
     renderDash();
-    toast(yaPagado?'↩️ Pendiente':'✅ Cobrado');
+    toast(yaPagado?'Pendiente':'Cobrado');
   } catch(e){toast('❌ Error',true);}
 }
 
@@ -501,7 +501,7 @@ function renderHist() {
     <td style="color:${CLR[r.servicio]||'var(--tx)'}">${ICON[r.servicio]||''} ${r.servicio}</td>
     <td style="color:var(--tx2);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.detalle||'-'}</td>
     <td class="tdm">S/ ${(r.monto||0).toFixed(2)}</td>
-    <td style="color:${r.pagado?'var(--grn)':'var(--tx3)'};font-size:12px;font-weight:700">${r.pagado?'✅':'—'}</td>
+    <td style="color:${r.pagado?'var(--grn)':'var(--tx3)'};font-size:12px;font-weight:700">${r.pagado?'✅':'---'}</td>
     <td><button class="btn btnr btnsm" onclick="delReg(${r.fila})">🗑️</button></td>
   </tr>`).join('');
   document.getElementById('tbl').innerHTML=`<div style="overflow-x:auto"><table>
